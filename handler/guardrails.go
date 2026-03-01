@@ -154,7 +154,7 @@ func (h *AdminHandler) DeleteGuardrail() gofr.Handler {
 
 		affected, _ := result.RowsAffected()
 		if affected == 0 {
-			return nil, sql.ErrNoRows
+			return nil, ErrNotFound("guardrail config")
 		}
 
 		audit.Log(ctx, "delete", "guardrail_config", id, middleware.GetAuthKey(ctx), "")
