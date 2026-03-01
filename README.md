@@ -156,22 +156,18 @@ Built-in single-page admin UI at `/admin` — no separate frontend deployment ne
 
 Authenticate with your master key or a virtual key. Static assets are served directly by GoFr.
 
+#### 🔑 Virtual Keys
+
+<img src="https://github.com/user-attachments/assets/2eb3082e-183a-4289-987a-8ebe75730e76" alt="Virtual Keys" width="100%">
+
+#### 💰 Spend & Usage
+
+<img src="https://github.com/user-attachments/assets/d8f7810d-faaa-436e-a6a3-cb9d6adde408" alt="Spend & Usage" width="100%">
+
 <details>
 <summary><strong>🔐 Login</strong></summary>
 <br>
 <img src="https://github.com/user-attachments/assets/30dc1476-a0be-4fe8-99c9-cf24320fe333" alt="Login" width="100%">
-</details>
-
-<details>
-<summary><strong>🔑 Virtual Keys</strong></summary>
-<br>
-<img src="https://github.com/user-attachments/assets/2eb3082e-183a-4289-987a-8ebe75730e76" alt="Virtual Keys" width="100%">
-</details>
-
-<details>
-<summary><strong>💰 Spend & Usage</strong></summary>
-<br>
-<img src="https://github.com/user-attachments/assets/d8f7810d-faaa-436e-a6a3-cb9d6adde408" alt="Spend & Usage" width="100%">
 </details>
 
 <details>
@@ -533,6 +529,20 @@ The gateway ships with a pre-configured Grafana dashboard (54 panels) auto-provi
 **LLM Gateway panels:** Total cost/requests/tokens, average cost per request, request rate by provider, cost rate by provider, token rate by provider, cost distribution histogram, requests by model, cost by model.
 
 Access at http://localhost:3000 after starting Docker Compose (login: admin/admin).
+
+<img src="https://github.com/user-attachments/assets/b9b4573d-3cfa-4f86-9c01-15cfeeb2e34b" alt="Grafana Dashboard — App Info, System Metrics & Inbound Requests" width="100%">
+
+<details>
+<summary><strong>📊 Request Routing & HTTP Metrics</strong></summary>
+<br>
+<img src="https://github.com/user-attachments/assets/a6f28c09-9f0a-4ffa-b3e7-0379d93f4342" alt="Grafana — Inbound Request Routing & Response Codes" width="100%">
+</details>
+
+<details>
+<summary><strong>🤖 LLM Gateway Panels (Cost, Tokens, Providers)</strong></summary>
+<br>
+<img src="https://github.com/user-attachments/assets/d5064b1a-6bca-4258-8c43-4191d743e6a0" alt="Grafana — LLM Gateway Cost & Token Panels" width="100%">
+</details>
 
 ---
 
