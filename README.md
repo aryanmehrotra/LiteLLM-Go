@@ -227,6 +227,72 @@ ws.send(JSON.stringify({
 ws.onmessage = (event) => console.log(JSON.parse(event.data));
 ```
 
+### Multi-modal
+
+The gateway supports multi-modal requests through two surfaces:
+
+**Responses API — structured content blocks**
+
+The `POST /v1/responses` endpoint accepts an `input` array where each message can contain typed content blocks: `input_text`, `input_image` (URL or base-64 data URI), and `input_file` (by file ID). The gateway routes the full structured payload to the upstream model.
+
+```bash
+curl -X POST http://localhost:9000/v1/responses \
+  -H "Authorization: Bearer $KEY" -H "Content-Type: application/json" \
+  -d '{
+    "model": "openai/gpt-4o",
+    "input": [
+      {
+        "role": "user",
+        "content": [
+          {"type": "input_text",  "text": "What is in this image?"},
+          {"type": "input_image", "image_url": "https://example.com/cat.jpg"}
+        ]
+      }
+    ]
+  }'
+```
+
+Pass a base-64 encoded image using a data URI:
+
+```json
+{"type": "input_image", "image_url": "data:image/jpeg;base64,/9j/4AAQ..."}
+```
+
+**Image generation, editing and variations**
+
+```bash
+# Generate an image
+curl -X POST http://localhost:9000/v1/images/generations \
+  -H "Authorization: Bearer $KEY" -H "Content-Type: application/json" \
+  -d '{"model":"openai/dall-e-3","prompt":"A sunset over the ocean","size":"1024x1024"}'
+
+# Edit an existing image (multipart)
+curl -X POST http://localhost:9000/v1/images/edits \
+  -H "Authorization: Bearer $KEY" \
+  -F image=@photo.png -F mask=@mask.png \
+  -F 'prompt=Add a rainbow' -F model=openai/dall-e-2
+
+# Create variations (multipart)
+curl -X POST http://localhost:9000/v1/images/variations \
+  -H "Authorization: Bearer $KEY" \
+  -F image=@photo.png -F model=openai/dall-e-2 -F n=3
+```
+
+**Audio — text-to-speech and transcription**
+
+```bash
+# Text-to-speech
+curl -X POST http://localhost:9000/v1/audio/speech \
+  -H "Authorization: Bearer $KEY" -H "Content-Type: application/json" \
+  -d '{"model":"openai/tts-1","input":"Hello world","voice":"alloy"}' \
+  --output speech.mp3
+
+# Transcription (speech-to-text, multipart)
+curl -X POST http://localhost:9000/v1/audio/transcriptions \
+  -H "Authorization: Bearer $KEY" \
+  -F file=@recording.mp3 -F model=openai/whisper-1
+```
+
 ---
 
 ## Quick Start
@@ -386,6 +452,84 @@ curl -X POST http://localhost:9000/v1/chat/completions \
 ```
 
 The gateway translates OpenAI tool format to each provider's native format and back.
+
+</details>
+
+<details>
+<summary><strong>Multi-modal image input (Responses API)</strong></summary>
+
+```bash
+# URL-based image
+curl -X POST http://localhost:9000/v1/responses \
+  -H "Authorization: Bearer sk-gateway-key-1" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "model": "openai/gpt-4o",
+    "input": [
+      {
+        "role": "user",
+        "content": [
+          {"type": "input_text",  "text": "Describe what you see."},
+          {"type": "input_image", "image_url": "https://example.com/photo.jpg"}
+        ]
+      }
+    ]
+  }'
+
+# Base-64 encoded image (data URI)
+curl -X POST http://localhost:9000/v1/responses \
+  -H "Authorization: Bearer sk-gateway-key-1" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "model": "openai/gpt-4o",
+    "input": [
+      {
+        "role": "user",
+        "content": [
+          {"type": "input_text",  "text": "What breed is this cat?"},
+          {"type": "input_image", "image_url": "data:image/jpeg;base64,/9j/4AAQ..."}
+        ]
+      }
+    ]
+  }'
+```
+
+</details>
+
+<details>
+<summary><strong>Image generation</strong></summary>
+
+```bash
+curl -X POST http://localhost:9000/v1/images/generations \
+  -H "Authorization: Bearer sk-gateway-key-1" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "model": "openai/dall-e-3",
+    "prompt": "A photorealistic sunset over the ocean, golden hour",
+    "size": "1024x1024",
+    "quality": "hd"
+  }'
+```
+
+</details>
+
+<details>
+<summary><strong>Audio (TTS and transcription)</strong></summary>
+
+```bash
+# Text-to-speech → save as MP3
+curl -X POST http://localhost:9000/v1/audio/speech \
+  -H "Authorization: Bearer sk-gateway-key-1" \
+  -H "Content-Type: application/json" \
+  -d '{"model":"openai/tts-1","input":"Hello, how are you?","voice":"alloy"}' \
+  --output speech.mp3
+
+# Transcription (speech-to-text)
+curl -X POST http://localhost:9000/v1/audio/transcriptions \
+  -H "Authorization: Bearer sk-gateway-key-1" \
+  -F file=@recording.mp3 \
+  -F model=openai/whisper-1
+```
 
 </details>
 
@@ -706,8 +850,10 @@ llm-gateway/
 
 ## Testing
 
+### Unit tests
+
 ```bash
-# Run all tests
+# Run all unit tests
 go test ./...
 
 # With verbose output
@@ -728,7 +874,44 @@ go tool cover -html=coverage.out
 | `models` | 20 | JSON marshal/unmarshal, round-trip, omitempty |
 | `handler` | 14 | Tool validation |
 | `workerpool` | 10 | Submit, queue full, timeout, panic recovery, shutdown |
+| `testutil` | 8 | MockLLMServer (QueueText/ToolCall/RawResponse), MockProvider, NewGofrCtx |
 | `batch` | 1 | Processor creation |
+
+### Integration tests
+
+The integration test suite (`main_test.go`, `package main`) follows the [GoFr integration test pattern](https://gofr.dev/docs/advanced-guide/integration-test):
+
+- `TestMain` starts PostgreSQL and Redis via `docker compose` (skips when Docker is not in PATH)
+- Each run calls `go main()` in a goroutine, configures all server settings via `t.Setenv`, and polls `/health` until the gateway is ready
+- A `MockLLMServer` (`testutil.NewMockLLMServer`) acts as the upstream LLM — tests queue deterministic responses using `QueueText`, `QueueToolCall`, and `QueueRawResponse`, then make real HTTP calls to the running gateway
+
+```bash
+# Run integration tests (requires Docker for postgres + redis)
+go test -run TestIntegration -v -timeout 300s .
+```
+
+The suite contains **18 subtests** covering:
+
+| Subtest | Area |
+|---------|------|
+| `Health` | Gateway liveness |
+| `ListModels` | Model registry |
+| `ChatCompletion_Success` | Basic chat round-trip |
+| `ChatCompletion_MissingModel` | Input validation |
+| `ChatCompletion_MultiTurnHistory` | Full conversation history forwarded to LLM |
+| `ChatCompletion_ParameterForwarding` | `temperature` / `max_tokens` forwarded verbatim |
+| `AgentRun_SingleTurn` | Agent loop, single stop turn |
+| `AgentRun_ToolCall_ThenFinalAnswer` | Agent loop with webhook tool execution |
+| `AgentRun_MaxIterationsRespected` | `max_iterations` cap → `finish_reason=max_iterations` |
+| `AgentRun_ParallelToolCalls` | Two tool calls in one step; both webhooks invoked |
+| `ResponsesAPI` | Responses API basic round-trip |
+| `ResponsesAPI_MultiModal_ImageAndText` | Responses API array input with `input_text` + `input_image` blocks |
+| `ResponsesAPI_SystemInstruction` | `instructions` field → system message prepended |
+| `ResponsesAPI_MultiTurnInput` | Multi-turn conversation history via Responses API |
+| `Embeddings` | `POST /v1/embeddings` with queued embedding vector |
+| `Batch_SubmitAndStatus` | Batch submit + immediate status retrieval |
+| `Assistants_CreateListGetDelete` | Full Assistants CRUD lifecycle |
+| `Threads_CreateAndMessages` | Thread creation, message posting, and listing |
 
 ---
 
