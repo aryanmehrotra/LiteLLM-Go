@@ -47,6 +47,52 @@ var modelCapabilities = map[string]Capability{
 	"mistral":   CapStreaming,
 	"codellama": CapStreaming,
 	"gemma2":    CapStreaming,
+
+	// Together AI
+	"meta-llama/Llama-3.3-70B-Instruct-Turbo":   CapTools | CapStreaming,
+	"meta-llama/Meta-Llama-3.1-8B-Instruct-Turbo": CapTools | CapStreaming,
+	"Qwen/Qwen2.5-72B-Instruct-Turbo":            CapTools | CapStreaming,
+	"mistralai/Mixtral-8x7B-Instruct-v0.1":        CapStreaming,
+	"deepseek-ai/DeepSeek-R1":                     CapStreaming,
+
+	// Fireworks AI
+	"accounts/fireworks/models/llama-v3p3-70b-instruct": CapTools | CapStreaming,
+	"accounts/fireworks/models/llama-v3p1-8b-instruct":  CapTools | CapStreaming,
+	"accounts/fireworks/models/mixtral-8x7b-instruct":   CapStreaming,
+	"accounts/fireworks/models/qwen2p5-72b-instruct":    CapTools | CapStreaming,
+	"accounts/fireworks/models/deepseek-r1":             CapStreaming,
+
+	// Perplexity — search-augmented, streaming only (no tool calling on sonar models)
+	"sonar-pro":          CapStreaming,
+	"sonar":              CapStreaming,
+	"sonar-reasoning-pro": CapStreaming,
+	"sonar-reasoning":    CapStreaming,
+
+	// xAI (Grok)
+	"grok-3":            CapTools | CapStreaming,
+	"grok-3-mini":       CapTools | CapStreaming,
+	"grok-2-1212":       CapTools | CapStreaming,
+	"grok-2-vision-1212": CapTools | CapVision | CapStreaming,
+
+	// Mistral AI
+	"mistral-large-latest": CapTools | CapStreaming,
+	"mistral-small-latest": CapTools | CapStreaming,
+	"codestral-latest":     CapStreaming,
+	"open-mistral-nemo":    CapStreaming,
+
+	// Cohere
+	"command-r-plus":    CapTools | CapStreaming,
+	"command-r":         CapTools | CapStreaming,
+	"command-a-03-2025": CapTools | CapStreaming,
+	"command-light":     CapStreaming,
+
+	// AWS Bedrock
+	"anthropic.claude-3-5-sonnet-20241022-v2:0": CapTools | CapVision | CapStreaming,
+	"anthropic.claude-3-haiku-20240307-v1:0":    CapTools | CapVision | CapStreaming,
+	"amazon.nova-pro-v1:0":                       CapTools | CapVision | CapStreaming,
+	"amazon.nova-lite-v1:0":                      CapTools | CapStreaming,
+	"meta.llama3-70b-instruct-v1:0":              CapTools | CapStreaming,
+	"mistral.mistral-7b-instruct-v0:2":           CapStreaming,
 }
 
 // HasCapability checks if a model has a specific capability.

@@ -24,6 +24,8 @@ type OpenAICompatible struct {
 	modelList       []string
 	embeddingModels []string
 	timeout         time.Duration
+	// chatPath overrides the default "v1/chat/completions" path (e.g. Perplexity uses "chat/completions").
+	chatPath string
 }
 
 // NewOpenAICompatible creates a new OpenAI-compatible provider base.
@@ -39,6 +41,18 @@ func NewOpenAICompatible(name, serviceName, apiKey string, modelsList []string, 
 
 func (o *OpenAICompatible) Name() string    { return o.providerName }
 func (o *OpenAICompatible) Models() []string { return o.modelList }
+
+// SetChatPath overrides the default "v1/chat/completions" path.
+func (o *OpenAICompatible) SetChatPath(path string) { o.chatPath = path }
+
+// chatCompletionsPath returns the path used for chat completions requests.
+func (o *OpenAICompatible) chatCompletionsPath() string {
+	if o.chatPath != "" {
+		return o.chatPath
+	}
+
+	return "v1/chat/completions"
+}
 
 // SetEmbeddingModels sets the list of supported embedding models.
 func (o *OpenAICompatible) SetEmbeddingModels(models []string) {
@@ -82,7 +96,7 @@ func (o *OpenAICompatible) ChatCompletion(ctx *gofr.Context, req models.ChatComp
 		"Authorization": "Bearer " + o.apiKey,
 	}
 
-	resp, err := svc.PostWithHeaders(ctx, "v1/chat/completions", nil, body, headers)
+	resp, err := svc.PostWithHeaders(ctx, o.chatCompletionsPath(), nil, body, headers)
 	if err != nil {
 		return nil, fmt.Errorf("%s request: %w", o.providerName, err)
 	}
@@ -131,7 +145,7 @@ func (o *OpenAICompatible) ChatCompletionStream(ctx *gofr.Context, req models.Ch
 		"Accept":        "text/event-stream",
 	}
 
-	resp, err := svc.PostWithHeaders(ctx, "v1/chat/completions", nil, body, headers)
+	resp, err := svc.PostWithHeaders(ctx, o.chatCompletionsPath(), nil, body, headers)
 	if err != nil {
 		return fmt.Errorf("%s stream request: %w", o.providerName, err)
 	}

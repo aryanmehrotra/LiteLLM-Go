@@ -32,6 +32,19 @@ func main() {
 	groqKey := app.Config.GetOrDefault("GROQ_API_KEY", "")
 	deepseekKey := app.Config.GetOrDefault("DEEPSEEK_API_KEY", "")
 	geminiKey := app.Config.GetOrDefault("GEMINI_API_KEY", "")
+	togetherKey := app.Config.GetOrDefault("TOGETHER_API_KEY", "")
+	fireworksKey := app.Config.GetOrDefault("FIREWORKS_API_KEY", "")
+	perplexityKey := app.Config.GetOrDefault("PERPLEXITY_API_KEY", "")
+	xaiKey := app.Config.GetOrDefault("XAI_API_KEY", "")
+	mistralKey := app.Config.GetOrDefault("MISTRAL_API_KEY", "")
+	cohereKey := app.Config.GetOrDefault("COHERE_API_KEY", "")
+	azureKey := app.Config.GetOrDefault("AZURE_OPENAI_API_KEY", "")
+	azureEndpoint := app.Config.GetOrDefault("AZURE_OPENAI_ENDPOINT", "")
+	azureAPIVersion := app.Config.GetOrDefault("AZURE_OPENAI_API_VERSION", "2024-02-01")
+	azureDeployments := app.Config.GetOrDefault("AZURE_OPENAI_DEPLOYMENTS", "")
+	awsAccessKey := app.Config.GetOrDefault("AWS_ACCESS_KEY_ID", "")
+	awsSecretKey := app.Config.GetOrDefault("AWS_SECRET_ACCESS_KEY", "")
+	awsRegion := app.Config.GetOrDefault("AWS_REGION", "us-east-1")
 	openaiBaseURL := app.Config.GetOrDefault("OPENAI_BASE_URL", "https://api.openai.com")
 	ollamaBaseURL := app.Config.GetOrDefault("OLLAMA_BASE_URL", "http://localhost:11434")
 	defaultProvider := app.Config.GetOrDefault("DEFAULT_PROVIDER", "openai")
@@ -63,6 +76,14 @@ func main() {
 	deepseekTimeout, _ := strconv.Atoi(app.Config.GetOrDefault("DEEPSEEK_TIMEOUT_MS", "0"))
 	geminiTimeout, _ := strconv.Atoi(app.Config.GetOrDefault("GEMINI_TIMEOUT_MS", "0"))
 	ollamaTimeout, _ := strconv.Atoi(app.Config.GetOrDefault("OLLAMA_TIMEOUT_MS", "0"))
+	togetherTimeout, _ := strconv.Atoi(app.Config.GetOrDefault("TOGETHER_TIMEOUT_MS", "0"))
+	fireworksTimeout, _ := strconv.Atoi(app.Config.GetOrDefault("FIREWORKS_TIMEOUT_MS", "0"))
+	perplexityTimeout, _ := strconv.Atoi(app.Config.GetOrDefault("PERPLEXITY_TIMEOUT_MS", "0"))
+	xaiTimeout, _ := strconv.Atoi(app.Config.GetOrDefault("XAI_TIMEOUT_MS", "0"))
+	mistralTimeout, _ := strconv.Atoi(app.Config.GetOrDefault("MISTRAL_TIMEOUT_MS", "0"))
+	cohereTimeout, _ := strconv.Atoi(app.Config.GetOrDefault("COHERE_TIMEOUT_MS", "0"))
+	azureTimeout, _ := strconv.Atoi(app.Config.GetOrDefault("AZURE_TIMEOUT_MS", "0"))
+	bedrockTimeout, _ := strconv.Atoi(app.Config.GetOrDefault("BEDROCK_TIMEOUT_MS", "0"))
 
 	// Batch processing configuration
 	batchWorkers, _ := strconv.Atoi(app.Config.GetOrDefault("BATCH_WORKERS", "5"))
@@ -88,6 +109,21 @@ func main() {
 	app.AddHTTPService("groq", "https://api.groq.com/openai", poolCfg, cbCfg)
 	app.AddHTTPService("deepseek", "https://api.deepseek.com", poolCfg, cbCfg)
 	app.AddHTTPService("gemini", "https://generativelanguage.googleapis.com", poolCfg, cbCfg)
+	app.AddHTTPService("togetherai", "https://api.together.xyz", poolCfg, cbCfg)
+	app.AddHTTPService("fireworks", "https://api.fireworks.ai/inference", poolCfg, cbCfg)
+	app.AddHTTPService("perplexity", "https://api.perplexity.ai", poolCfg, cbCfg)
+	app.AddHTTPService("xai", "https://api.x.ai", poolCfg, cbCfg)
+	app.AddHTTPService("mistral", "https://api.mistral.ai", poolCfg, cbCfg)
+	app.AddHTTPService("cohere", "https://api.cohere.com", poolCfg, cbCfg)
+
+	if azureEndpoint != "" {
+		app.AddHTTPService("azure", azureEndpoint, poolCfg, cbCfg)
+	}
+
+	if awsRegion != "" {
+		bedrockURL := fmt.Sprintf("https://bedrock-runtime.%s.amazonaws.com", awsRegion)
+		app.AddHTTPService("bedrock", bedrockURL, poolCfg, cbCfg)
+	}
 
 	// Register web search HTTP service if enabled
 	if webSearchCfg.Enabled {
@@ -128,6 +164,38 @@ func main() {
 
 	if isValidKey(geminiKey) {
 		reg.Register(provider.NewGemini(geminiKey, time.Duration(geminiTimeout)*time.Millisecond))
+	}
+
+	if isValidKey(togetherKey) {
+		reg.Register(provider.NewTogetherAI(togetherKey, time.Duration(togetherTimeout)*time.Millisecond))
+	}
+
+	if isValidKey(fireworksKey) {
+		reg.Register(provider.NewFireworks(fireworksKey, time.Duration(fireworksTimeout)*time.Millisecond))
+	}
+
+	if isValidKey(perplexityKey) {
+		reg.Register(provider.NewPerplexity(perplexityKey, time.Duration(perplexityTimeout)*time.Millisecond))
+	}
+
+	if isValidKey(xaiKey) {
+		reg.Register(provider.NewXAI(xaiKey, time.Duration(xaiTimeout)*time.Millisecond))
+	}
+
+	if isValidKey(mistralKey) {
+		reg.Register(provider.NewMistral(mistralKey, time.Duration(mistralTimeout)*time.Millisecond))
+	}
+
+	if isValidKey(cohereKey) {
+		reg.Register(provider.NewCohere(cohereKey, time.Duration(cohereTimeout)*time.Millisecond))
+	}
+
+	if azureEndpoint != "" && isValidKey(azureKey) {
+		reg.Register(provider.NewAzure(azureKey, azureAPIVersion, azureDeployments, time.Duration(azureTimeout)*time.Millisecond))
+	}
+
+	if isValidKey(awsAccessKey) && awsSecretKey != "" {
+		reg.Register(provider.NewBedrock(awsAccessKey, awsSecretKey, awsRegion, time.Duration(bedrockTimeout)*time.Millisecond))
 	}
 
 	// Build routing components
