@@ -1,6 +1,6 @@
 <div align="center">
 
-# LLM Gateway
+# litellm-go
 
 **Go-native LLM proxy. Single binary. Zero Python.**
 
