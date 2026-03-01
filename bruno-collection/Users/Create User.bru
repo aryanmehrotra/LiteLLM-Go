@@ -1,0 +1,27 @@
+meta {
+  name: Create User
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{baseUrl}}/users
+  body: json
+  auth: none
+}
+
+headers {
+  Authorization: Bearer {{masterKey}}
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "user_id": "john-doe",
+    "email": "john@test.com",
+    "team_id": "1",
+    "org_id": "1",
+    "role": "member",
+    "max_budget": 100
+  }
+}

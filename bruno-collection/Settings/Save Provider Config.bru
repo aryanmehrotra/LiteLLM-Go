@@ -1,0 +1,22 @@
+meta {
+  name: Save Provider Config
+  type: http
+  seq: 2
+}
+
+put {
+  url: {{baseUrl}}/settings/providers
+  body: json
+  auth: none
+}
+
+headers {
+  Authorization: Bearer {{masterKey}}
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "openai_api_key": "sk-test-key"
+  }
+}

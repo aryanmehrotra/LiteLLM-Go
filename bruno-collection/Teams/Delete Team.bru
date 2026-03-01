@@ -1,0 +1,15 @@
+meta {
+  name: Delete Team
+  type: http
+  seq: 3
+}
+
+delete {
+  url: {{baseUrl}}/teams/1
+  body: none
+  auth: none
+}
+
+headers {
+  Authorization: Bearer {{masterKey}}
+}

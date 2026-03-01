@@ -1,0 +1,29 @@
+meta {
+  name: Submit Batch
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{baseUrl}}/v1/batches
+  body: json
+  auth: none
+}
+
+headers {
+  Authorization: Bearer {{masterKey}}
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "requests": [
+      {
+        "custom_id": "req-1",
+        "method": "POST",
+        "url": "/v1/chat/completions",
+        "body": "{\"model\":\"ollama/llama3\",\"messages\":[{\"role\":\"user\",\"content\":\"hello\"}]}"
+      }
+    ]
+  }
+}

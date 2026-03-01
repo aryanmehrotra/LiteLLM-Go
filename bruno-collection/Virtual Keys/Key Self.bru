@@ -1,0 +1,16 @@
+meta {
+  name: Key Self
+  type: http
+  seq: 4
+}
+
+get {
+  url: {{baseUrl}}/key/self
+  body: none
+  auth: none
+}
+
+headers {
+  Authorization: Bearer {{gatewayKey}}
+  Content-Type: application/json
+}

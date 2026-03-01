@@ -1,0 +1,26 @@
+meta {
+  name: Create Guardrail
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{baseUrl}}/guardrails
+  body: json
+  auth: none
+}
+
+headers {
+  Authorization: Bearer {{masterKey}}
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "pii_action": "redact",
+    "max_input_tokens": 4096,
+    "max_output_tokens": 2048,
+    "blocked_keywords": "hack,exploit",
+    "enabled": true
+  }
+}

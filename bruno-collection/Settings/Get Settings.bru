@@ -1,0 +1,16 @@
+meta {
+  name: Get Settings
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{baseUrl}}/settings
+  body: none
+  auth: none
+}
+
+headers {
+  Authorization: Bearer {{masterKey}}
+  Content-Type: application/json
+}

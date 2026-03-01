@@ -1,0 +1,15 @@
+meta {
+  name: Cancel Batch
+  type: http
+  seq: 5
+}
+
+post {
+  url: {{baseUrl}}/v1/batches/{{batchId}}/cancel
+  body: none
+  auth: none
+}
+
+headers {
+  Authorization: Bearer {{masterKey}}
+}

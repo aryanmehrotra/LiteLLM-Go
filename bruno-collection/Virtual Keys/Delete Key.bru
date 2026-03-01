@@ -1,0 +1,15 @@
+meta {
+  name: Delete Key
+  type: http
+  seq: 6
+}
+
+delete {
+  url: {{baseUrl}}/key/1
+  body: none
+  auth: none
+}
+
+headers {
+  Authorization: Bearer {{masterKey}}
+}

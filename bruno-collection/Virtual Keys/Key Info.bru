@@ -1,0 +1,16 @@
+meta {
+  name: Key Info
+  type: http
+  seq: 3
+}
+
+get {
+  url: {{baseUrl}}/key/info?key=sk-test-key
+  body: none
+  auth: none
+}
+
+headers {
+  Authorization: Bearer {{masterKey}}
+  Content-Type: application/json
+}

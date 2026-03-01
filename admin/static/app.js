@@ -1020,15 +1020,6 @@ async function loadSettings() {
           <div class="activity-item"><div class="activity-dot accent"></div><div class="activity-text">Gateway Keys</div><div class="activity-time" style="font-weight:500;color:var(--text-primary)">${s.auth?.key_count || 0} configured</div></div>
         </div></div>
       </div>
-      ${s.websearch ? `<div class="settings-grid">
-        <div class="card"><div class="card-header"><h3>Web Search</h3></div><div class="card-body no-pad">
-          <div class="activity-item"><div class="activity-dot ${s.websearch.enabled === 'true' ? 'success' : 'accent'}"></div><div class="activity-text">Enabled</div><div class="activity-time">${s.websearch.enabled === 'true' ? '<span class="badge badge-active">Yes</span>' : '<span class="badge badge-inactive">No</span>'}</div></div>
-          <div class="activity-item"><div class="activity-dot accent"></div><div class="activity-text">Provider</div><div class="activity-time" style="font-weight:500;color:var(--text-primary)">${esc(s.websearch.provider || '—')}</div></div>
-          <div class="activity-item"><div class="activity-dot accent"></div><div class="activity-text">Max Results</div><div class="activity-time" style="font-weight:500;color:var(--text-primary)">${s.websearch.max_results || '5'}</div></div>
-          <div class="activity-item"><div class="activity-dot accent"></div><div class="activity-text">Cache TTL</div><div class="activity-time" style="font-weight:500;color:var(--text-primary)">${s.websearch.cache_ttl || '300'}s</div></div>
-          <div class="activity-item"><div class="activity-dot accent"></div><div class="activity-text">Query Model</div><div class="activity-time" style="font-weight:500;color:var(--text-primary)">${esc(s.websearch.query_model || 'same as request')}</div></div>
-        </div></div>
-      </div>` : ''}
       <div class="card" style="margin-top:16px"><div class="card-body" style="padding:14px 20px;font-size:12px;color:var(--text-dim);line-height:1.6">
         These values are loaded from environment variables / <code>.env</code> file at startup. To change provider API keys or routing strategy, update the config and restart the gateway. Guardrail overrides can be managed from the <a style="color:var(--accent);cursor:pointer" onclick="navigate('guardrails')">Guardrails</a> page without restart.
       </div></div>

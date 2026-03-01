@@ -1,0 +1,26 @@
+meta {
+  name: Generate Key
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{baseUrl}}/key/generate
+  body: json
+  auth: none
+}
+
+headers {
+  Authorization: Bearer {{masterKey}}
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "name": "test-key",
+    "org_id": "1",
+    "tier": "default",
+    "rate_limit_rpm": 60,
+    "max_budget": 100
+  }
+}

@@ -2,6 +2,7 @@ package handler
 
 import (
 	"fmt"
+	"time"
 
 	"gofr.dev/pkg/gofr"
 	gofrHTTP "gofr.dev/pkg/gofr/http"
@@ -57,7 +58,7 @@ func (h *AdminHandler) ListOrgs() gofr.Handler {
 			return nil, err
 		}
 
-		rows, err := ctx.SQL.QueryContext(ctx, "SELECT id, name, admin_email, max_budget FROM organizations ORDER BY id")
+		rows, err := ctx.SQL.QueryContext(ctx, "SELECT id, name, admin_email, max_budget, created_at FROM organizations ORDER BY id")
 		if err != nil {
 			ctx.Errorf("list orgs: %v", err)
 			return nil, ErrInternal("failed to list organizations")
@@ -69,10 +70,11 @@ func (h *AdminHandler) ListOrgs() gofr.Handler {
 			var id int
 			var name, adminEmail string
 			var maxBudget float64
-			if err := rows.Scan(&id, &name, &adminEmail, &maxBudget); err != nil {
+			var createdAt time.Time
+			if err := rows.Scan(&id, &name, &adminEmail, &maxBudget, &createdAt); err != nil {
 				continue
 			}
-			orgs = append(orgs, map[string]any{"id": id, "name": name, "admin_email": adminEmail, "max_budget": maxBudget})
+			orgs = append(orgs, map[string]any{"id": id, "name": name, "admin_email": adminEmail, "max_budget": maxBudget, "created_at": createdAt})
 		}
 
 		return response.Raw{Data: orgs}, nil

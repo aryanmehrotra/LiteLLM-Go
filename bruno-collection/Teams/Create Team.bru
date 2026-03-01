@@ -1,0 +1,24 @@
+meta {
+  name: Create Team
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{baseUrl}}/teams
+  body: json
+  auth: none
+}
+
+headers {
+  Authorization: Bearer {{masterKey}}
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "name": "Engineering",
+    "org_id": "1",
+    "max_budget": 500
+  }
+}

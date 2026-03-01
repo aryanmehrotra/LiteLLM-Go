@@ -2,6 +2,7 @@ package handler
 
 import (
 	"fmt"
+	"time"
 
 	"gofr.dev/pkg/gofr"
 	gofrHTTP "gofr.dev/pkg/gofr/http"
@@ -68,7 +69,7 @@ func (h *AdminHandler) ListTeams() gofr.Handler {
 			return nil, err
 		}
 
-		query := "SELECT id, name, org_id, max_budget FROM teams"
+		query := "SELECT id, name, org_id, max_budget, created_at FROM teams"
 		var args []any
 
 		orgID := ctx.PathParam("org_id")
@@ -95,10 +96,11 @@ func (h *AdminHandler) ListTeams() gofr.Handler {
 			var id int
 			var name, orgID string
 			var maxBudget float64
-			if err := rows.Scan(&id, &name, &orgID, &maxBudget); err != nil {
+			var createdAt time.Time
+			if err := rows.Scan(&id, &name, &orgID, &maxBudget, &createdAt); err != nil {
 				continue
 			}
-			teams = append(teams, map[string]any{"id": id, "name": name, "org_id": orgID, "max_budget": maxBudget})
+			teams = append(teams, map[string]any{"id": id, "name": name, "org_id": orgID, "max_budget": maxBudget, "created_at": createdAt})
 		}
 
 		return response.Raw{Data: teams}, nil

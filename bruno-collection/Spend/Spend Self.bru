@@ -1,0 +1,16 @@
+meta {
+  name: Spend Self
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{baseUrl}}/spend/self?group_by=model
+  body: none
+  auth: none
+}
+
+headers {
+  Authorization: Bearer {{gatewayKey}}
+  Content-Type: application/json
+}
