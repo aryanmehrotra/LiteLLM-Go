@@ -8,6 +8,12 @@ import (
 var knownProviders = map[string]bool{
 	"openai": true, "anthropic": true, "ollama": true,
 	"groq": true, "deepseek": true, "gemini": true,
+	"togetherai": true, "fireworks": true, "perplexity": true,
+	"xai": true, "mistral": true, "cohere": true,
+	"azure": true, "bedrock": true, "cerebras": true,
+	"sambanova": true, "ai21": true, "openrouter": true,
+	"novita": true, "nvidia": true, "cloudflare": true,
+	"vertex": true, "huggingface": true,
 }
 
 var knownStrategies = map[string]bool{

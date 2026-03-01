@@ -135,6 +135,30 @@ func createProvider(name, apiKey string, timeout time.Duration) provider.Provide
 		return provider.NewDeepSeek(apiKey, timeout)
 	case "gemini":
 		return provider.NewGemini(apiKey, timeout)
+	case "togetherai":
+		return provider.NewTogetherAI(apiKey, timeout)
+	case "fireworks":
+		return provider.NewFireworks(apiKey, timeout)
+	case "perplexity":
+		return provider.NewPerplexity(apiKey, timeout)
+	case "xai":
+		return provider.NewXAI(apiKey, timeout)
+	case "mistral":
+		return provider.NewMistral(apiKey, timeout)
+	case "cohere":
+		return provider.NewCohere(apiKey, timeout)
+	case "cerebras":
+		return provider.NewCerebras(apiKey, timeout)
+	case "sambanova":
+		return provider.NewSambaNova(apiKey, timeout)
+	case "ai21":
+		return provider.NewAI21(apiKey, timeout)
+	case "openrouter":
+		return provider.NewOpenRouter(apiKey, timeout)
+	case "novita":
+		return provider.NewNovita(apiKey, timeout)
+	case "nvidia":
+		return provider.NewNvidianim(apiKey, timeout)
 	default:
 		return nil
 	}

@@ -9,7 +9,7 @@ A drop-in [LiteLLM](https://github.com/BerriAI/litellm) alternative built on [Go
 [![Go](https://img.shields.io/badge/Go-1.25+-00ADD8?style=for-the-badge&logo=go&logoColor=white)](https://go.dev)
 [![GoFr](https://img.shields.io/badge/Built%20with-GoFr-6C63FF?style=for-the-badge)](https://gofr.dev)
 [![License](https://img.shields.io/badge/License-Apache%202.0-green?style=for-the-badge)](LICENSE)
-[![Providers](https://img.shields.io/badge/Providers-6-orange?style=for-the-badge)](#providers)
+[![Providers](https://img.shields.io/badge/Providers-23-orange?style=for-the-badge)](#providers)
 
 [Quick Start](#quick-start) · [API Reference](#api-reference) · [Configuration](#configuration) · [Admin UI](#admin-dashboard) · [Comparison](#feature-comparison-llm-gateway-vs-litellm)
 
@@ -74,6 +74,23 @@ All providers expose the same OpenAI-compatible API. Use `provider/model` format
 | **Groq** | Yes | Yes | — | Native | Passthrough |
 | **DeepSeek** | Yes | Yes | — | Native | Passthrough |
 | **Ollama** | Yes | Yes | Yes | Supported models | Full (OpenAI ↔ Ollama) |
+| **Together AI** | Yes | Yes | — | Native | Passthrough |
+| **Fireworks** | Yes | Yes | — | Native | Passthrough |
+| **Perplexity** | Yes | Yes | — | Native | Passthrough |
+| **xAI (Grok)** | Yes | Yes | — | Native | Passthrough |
+| **Mistral** | Yes | Yes | — | Native | Passthrough |
+| **Cohere** | Yes | Yes | — | Native | Full (OpenAI ↔ Cohere) |
+| **Azure OpenAI** | Yes | Yes | — | Native | Passthrough |
+| **AWS Bedrock** | Yes | Yes | — | Native | Full (SigV4 auth) |
+| **Cerebras** | Yes | Yes | — | Native | Passthrough |
+| **SambaNova** | Yes | Yes | — | Native | Passthrough |
+| **AI21** | Yes | Yes | — | Native | Passthrough |
+| **OpenRouter** | Yes | Yes | — | Native | Passthrough |
+| **Novita AI** | Yes | Yes | — | Native | Passthrough |
+| **NVIDIA NIM** | Yes | Yes | — | Native | Passthrough |
+| **Cloudflare AI** | Yes | Yes | — | Native | Passthrough |
+| **Vertex AI** | Yes | Yes | — | Native | Full (reuses Gemini) |
+| **Hugging Face** | Yes | Yes | — | Native | Passthrough |
 
 ### Routing & Reliability
 
@@ -344,7 +361,7 @@ curl -X POST http://localhost:9000/v1/chat/completions \
 </details>
 
 <details>
-<summary><strong>Function calling (works across all 6 providers)</strong></summary>
+<summary><strong>Function calling (works across all providers)</strong></summary>
 
 ```bash
 curl -X POST http://localhost:9000/v1/chat/completions \
@@ -547,7 +564,7 @@ Access at http://localhost:3000 after starting Docker Compose (login: admin/admi
 | **Language** | Go (single binary) | Python |
 | **Memory footprint** | ~15 MB | ~200 MB+ |
 | **Startup time** | < 100 ms | ~3-5 s |
-| **Providers** | 6 | 100+ |
+| **Providers** | 23 | 100+ |
 | **Chat completions** | Yes | Yes |
 | **Embeddings** | Yes | Yes |
 | **Images / Audio / Rerank** | Yes | Yes |
@@ -571,7 +588,7 @@ Access at http://localhost:3000 after starting Docker Compose (login: admin/admi
 | **Grafana dashboard** | Yes (54 panels, auto-provisioned) | Community dashboards |
 | **Config hot-reload** | Yes (file watcher + SIGHUP) | Partial |
 | **YAML config** | Yes | Yes |
-| **Azure / Bedrock** | Not yet | Yes |
+| **Azure / Bedrock** | Yes | Yes |
 
 ---
 
