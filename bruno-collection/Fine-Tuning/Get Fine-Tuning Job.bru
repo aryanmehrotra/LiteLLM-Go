@@ -1,0 +1,15 @@
+meta {
+  name: Get Fine-Tuning Job
+  type: http
+  seq: 3
+}
+
+get {
+  url: {{baseUrl}}/v1/fine_tuning/jobs/ftjob-abc123
+  body: none
+  auth: none
+}
+
+headers {
+  Authorization: Bearer {{gatewayKey}}
+}

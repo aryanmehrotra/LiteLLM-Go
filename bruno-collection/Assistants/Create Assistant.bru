@@ -1,0 +1,42 @@
+meta {
+  name: Create Assistant
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{baseUrl}}/v1/assistants
+  body: json
+  auth: none
+}
+
+headers {
+  Authorization: Bearer {{gatewayKey}}
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "model": "openai/gpt-4o",
+    "name": "My Research Assistant",
+    "description": "An AI assistant that can search the web and analyze information",
+    "instructions": "You are a helpful research assistant. Always be thorough and cite your sources.",
+    "tools": [
+      {"type": "code_interpreter"},
+      {
+        "type": "function",
+        "function": {
+          "name": "web_search",
+          "description": "Search the web",
+          "parameters": {
+            "type": "object",
+            "properties": {
+              "query": {"type": "string"}
+            },
+            "required": ["query"]
+          }
+        }
+      }
+    ]
+  }
+}

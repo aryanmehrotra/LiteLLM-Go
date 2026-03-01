@@ -1,0 +1,29 @@
+meta {
+  name: Create Response (Multi-turn)
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{baseUrl}}/v1/responses
+  body: json
+  auth: none
+}
+
+headers {
+  Authorization: Bearer {{gatewayKey}}
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "model": "openai/gpt-4o",
+    "input": [
+      {
+        "role": "user",
+        "content": [{"type": "input_text", "text": "What is the capital of France?"}]
+      }
+    ],
+    "instructions": "Answer concisely."
+  }
+}

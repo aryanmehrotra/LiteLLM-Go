@@ -55,6 +55,13 @@ func formatAsSystemMessage(results []SearchResult, contextSize string) models.Me
 	}
 }
 
+// FormatResults converts search results to a plain text context string
+// suitable for injection into LLM prompts (used by Responses API handler).
+func FormatResults(results []SearchResult) string {
+	msg := formatAsSystemMessage(results, "medium")
+	return msg.Content
+}
+
 // buildAnnotations creates citation annotations from search results.
 func buildAnnotations(results []SearchResult) []models.Annotation {
 	annotations := make([]models.Annotation, 0, len(results))

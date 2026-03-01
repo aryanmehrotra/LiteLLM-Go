@@ -1,0 +1,22 @@
+meta {
+  name: Create Run (Execute Assistant on Thread)
+  type: http
+  seq: 3
+}
+
+post {
+  url: {{baseUrl}}/v1/threads/thread_abc123/runs
+  body: json
+  auth: none
+}
+
+headers {
+  Authorization: Bearer {{gatewayKey}}
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "assistant_id": "asst_abc123"
+  }
+}

@@ -1,0 +1,15 @@
+meta {
+  name: List Assistants
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{baseUrl}}/v1/assistants
+  body: none
+  auth: none
+}
+
+headers {
+  Authorization: Bearer {{gatewayKey}}
+}

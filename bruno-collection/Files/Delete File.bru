@@ -1,0 +1,15 @@
+meta {
+  name: Delete File
+  type: http
+  seq: 4
+}
+
+delete {
+  url: {{baseUrl}}/v1/files/file-abc123
+  body: none
+  auth: none
+}
+
+headers {
+  Authorization: Bearer {{gatewayKey}}
+}

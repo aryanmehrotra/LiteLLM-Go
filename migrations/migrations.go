@@ -19,6 +19,13 @@ func All() map[int64]migration.Migrate {
 		12: addOrgAdminEmail(),
 		13: createProviderConfigTable(),
 		14: addUserRoleAndOrgConstraints(),
+		15: createGatewayFilesTable(),
+		16: createFineTuningJobsTable(),
+		17: createFineTuningEventsTable(),
+		18: createAssistantsTable(),
+		19: createThreadsTable(),
+		20: createThreadMessagesTable(),
+		21: createRunsTable(),
 	}
 }
 
@@ -287,6 +294,127 @@ func addUserRoleAndOrgConstraints() migration.Migrate {
 
 			// Backfill empty org_id on virtual_keys
 			_, err = d.SQL.Exec(`UPDATE virtual_keys SET org_id = (SELECT CAST(id AS VARCHAR) FROM organizations ORDER BY id LIMIT 1) WHERE org_id IS NULL OR org_id = ''`)
+			return err
+		},
+	}
+}
+
+func createGatewayFilesTable() migration.Migrate {
+	return migration.Migrate{
+		UP: func(d migration.Datasource) error {
+			_, err := d.SQL.Exec(`CREATE TABLE IF NOT EXISTS gateway_files (
+				id VARCHAR(64) PRIMARY KEY,
+				filename VARCHAR(512) NOT NULL,
+				purpose VARCHAR(64) NOT NULL DEFAULT 'assistants',
+				bytes BIGINT NOT NULL DEFAULT 0,
+				content_b64 TEXT,
+				created_at BIGINT NOT NULL DEFAULT 0
+			)`)
+			return err
+		},
+	}
+}
+
+func createFineTuningJobsTable() migration.Migrate {
+	return migration.Migrate{
+		UP: func(d migration.Datasource) error {
+			_, err := d.SQL.Exec(`CREATE TABLE IF NOT EXISTS fine_tuning_jobs (
+				id VARCHAR(64) PRIMARY KEY,
+				model VARCHAR(255) NOT NULL,
+				training_file VARCHAR(255) NOT NULL,
+				validation_file VARCHAR(255),
+				hyperparameters TEXT DEFAULT '{}',
+				status VARCHAR(50) DEFAULT 'queued',
+				provider VARCHAR(100),
+				fine_tuned_model VARCHAR(255),
+				trained_tokens INT,
+				created_at BIGINT NOT NULL DEFAULT 0,
+				finished_at BIGINT
+			)`)
+			return err
+		},
+	}
+}
+
+func createFineTuningEventsTable() migration.Migrate {
+	return migration.Migrate{
+		UP: func(d migration.Datasource) error {
+			_, err := d.SQL.Exec(`CREATE TABLE IF NOT EXISTS fine_tuning_events (
+				id VARCHAR(64) PRIMARY KEY,
+				job_id VARCHAR(64) NOT NULL REFERENCES fine_tuning_jobs(id),
+				level VARCHAR(20) DEFAULT 'info',
+				message TEXT,
+				created_at BIGINT NOT NULL DEFAULT 0
+			)`)
+			return err
+		},
+	}
+}
+
+func createAssistantsTable() migration.Migrate {
+	return migration.Migrate{
+		UP: func(d migration.Datasource) error {
+			_, err := d.SQL.Exec(`CREATE TABLE IF NOT EXISTS assistants (
+				id VARCHAR(64) PRIMARY KEY,
+				name VARCHAR(255),
+				description TEXT,
+				model VARCHAR(255) NOT NULL,
+				instructions TEXT,
+				tools TEXT DEFAULT '[]',
+				metadata TEXT DEFAULT '{}',
+				created_at BIGINT NOT NULL DEFAULT 0
+			)`)
+			return err
+		},
+	}
+}
+
+func createThreadsTable() migration.Migrate {
+	return migration.Migrate{
+		UP: func(d migration.Datasource) error {
+			_, err := d.SQL.Exec(`CREATE TABLE IF NOT EXISTS threads (
+				id VARCHAR(64) PRIMARY KEY,
+				metadata TEXT DEFAULT '{}',
+				created_at BIGINT NOT NULL DEFAULT 0
+			)`)
+			return err
+		},
+	}
+}
+
+func createThreadMessagesTable() migration.Migrate {
+	return migration.Migrate{
+		UP: func(d migration.Datasource) error {
+			_, err := d.SQL.Exec(`CREATE TABLE IF NOT EXISTS thread_messages (
+				id VARCHAR(64) PRIMARY KEY,
+				thread_id VARCHAR(64) NOT NULL REFERENCES threads(id) ON DELETE CASCADE,
+				role VARCHAR(20) NOT NULL DEFAULT 'user',
+				content TEXT NOT NULL DEFAULT '[]',
+				assistant_id VARCHAR(64),
+				run_id VARCHAR(64),
+				created_at BIGINT NOT NULL DEFAULT 0
+			)`)
+			return err
+		},
+	}
+}
+
+func createRunsTable() migration.Migrate {
+	return migration.Migrate{
+		UP: func(d migration.Datasource) error {
+			_, err := d.SQL.Exec(`CREATE TABLE IF NOT EXISTS runs (
+				id VARCHAR(64) PRIMARY KEY,
+				thread_id VARCHAR(64) NOT NULL REFERENCES threads(id) ON DELETE CASCADE,
+				assistant_id VARCHAR(64) NOT NULL,
+				model VARCHAR(255) NOT NULL,
+				instructions TEXT,
+				tools TEXT DEFAULT '[]',
+				status VARCHAR(50) DEFAULT 'queued',
+				created_at BIGINT NOT NULL DEFAULT 0,
+				started_at BIGINT,
+				completed_at BIGINT,
+				failed_at BIGINT
+			)`)
 			return err
 		},
 	}

@@ -1,0 +1,30 @@
+meta {
+  name: Create Response (Responses API)
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{baseUrl}}/v1/responses
+  body: json
+  auth: none
+}
+
+headers {
+  Authorization: Bearer {{gatewayKey}}
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "model": "openai/gpt-4o",
+    "input": "What are the latest developments in AI?",
+    "instructions": "You are a helpful research assistant.",
+    "tools": [
+      {
+        "type": "web_search_preview",
+        "search_context_size": "medium"
+      }
+    ]
+  }
+}
