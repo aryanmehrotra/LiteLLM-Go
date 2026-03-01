@@ -20,19 +20,31 @@ Go-native LiteLLM alternative built with [GoFr](https://gofr.dev). Items marked 
 
 ## Phase 3: More Providers
 
+**23 providers now implemented** (14 added in the previous two sessions):
+
 ### Tier 1 — Major cloud providers
-- [ ] **Azure OpenAI** (`azure/gpt-4o`) — OpenAI-compatible + API version header
-- [ ] **AWS Bedrock** (`bedrock/anthropic.claude-3-sonnet`) — Converse API, SigV4 auth
+- [x] **Azure OpenAI** (`azure/gpt-4o`) — OpenAI-compatible + API version header
+- [x] **AWS Bedrock** (`bedrock/anthropic.claude-3-sonnet`) — Converse API, SigV4 auth
+- [x] **Google Vertex AI** (`vertex/gemini-2.0-flash-001`) — Gemini-format API, Bearer token auth
 
 ### Tier 2 — Fast inference & open models
-- [ ] **Together AI** (`together/meta-llama/Llama-3-70b`) — OpenAI-compatible
-- [ ] **Fireworks AI** (`fireworks/llama-v3-70b`) — OpenAI-compatible
+- [x] **Together AI** (`togetherai/meta-llama/Llama-3-70b`) — OpenAI-compatible
+- [x] **Fireworks AI** (`fireworks/llama-v3-70b`) — OpenAI-compatible
+- [x] **Cerebras** (`cerebras/llama-3.3-70b`) — OpenAI-compatible, high-speed silicon
+- [x] **SambaNova** (`sambanova/Meta-Llama-3.3-70B-Instruct`) — OpenAI-compatible, RDU hardware
+- [x] **Hugging Face** (`huggingface/mistralai/Mistral-7B-Instruct-v0.3`) — TGI Messages API, model in path
+- [x] **Nvidia NIM** (`nvidia/nvidia/llama-3.1-nemotron-70b-instruct`) — OpenAI-compatible, optimized inference
 
 ### Tier 3 — Specialized providers
-- [ ] **Cohere** (`cohere/command-r-plus`) — Command models, embeddings, rerank
-- [ ] **Mistral AI** (`mistral/mistral-large-latest`) — Custom API format
-- [ ] **Perplexity** (`perplexity/sonar-pro`) — Search-augmented models
-- [ ] **xAI** (`xai/grok-2`) — OpenAI-compatible
+- [x] **Cohere** (`cohere/command-r-plus`) — Command models, v2 Chat API with streaming
+- [x] **Mistral AI** (`mistral/mistral-large-latest`) — OpenAI-compatible
+- [x] **Perplexity** (`perplexity/sonar-pro`) — Search-augmented models
+- [x] **xAI** (`xai/grok-3`) — OpenAI-compatible
+- [x] **DeepSeek** (`deepseek/deepseek-chat`) — OpenAI-compatible
+- [x] **AI21** (`ai21/jamba-1.5-large`) — Jamba models, OpenAI-compatible
+- [x] **OpenRouter** (`openrouter/openai/gpt-4o`) — Meta-router to 200+ models
+- [x] **Novita AI** (`novita/meta-llama/llama-3.3-70b-instruct`) — Open-model marketplace
+- [x] **Cloudflare Workers AI** (`cloudflare/@cf/meta/llama-3.3-70b-instruct-fp8-fast`) — Account ID in path
 
 ### Infrastructure
 - [ ] **Dynamic model discovery** — Query provider APIs for available models at startup
@@ -229,7 +241,7 @@ model_list:
 
 | Phase | Remaining | GoFr Helps |
 |---|---|---|
-| 3. Providers | 10 | OpenAI-compatible base makes most trivial |
+| 3. Providers | 2 (dynamic discovery, custom provider) | OpenAI-compatible base makes most trivial |
 | 4. Routing | 7 | Pub/Sub for queuing |
 | 5. Endpoints | 11 | — |
 | 6. Tools | 4 | — |
@@ -241,7 +253,7 @@ model_list:
 | 12. Guardrails | 11 | — |
 | 13. Admin | 5 | Swagger UI, OAuth/JWT, RBAC, HTML templates, static files |
 | 14. Advanced | 9 | File abstraction |
-| **Total** | **~101** | **~30 items significantly easier via GoFr** |
+| **Total** | **~93** | **~30 items significantly easier via GoFr** |
 
 ---
 

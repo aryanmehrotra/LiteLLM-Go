@@ -61,6 +61,61 @@ func TestNewProviders(t *testing.T) {
 			wantName:   "bedrock",
 			minModels:  4,
 		},
+		// New providers
+		{
+			name:       "Cerebras",
+			providerFn: func() Provider { return NewCerebras("key", 0) },
+			wantName:   "cerebras",
+			minModels:  2,
+		},
+		{
+			name:       "SambaNova",
+			providerFn: func() Provider { return NewSambaNova("key", 0) },
+			wantName:   "sambanova",
+			minModels:  3,
+		},
+		{
+			name:       "AI21",
+			providerFn: func() Provider { return NewAI21("key", 0) },
+			wantName:   "ai21",
+			minModels:  2,
+		},
+		{
+			name:       "OpenRouter",
+			providerFn: func() Provider { return NewOpenRouter("key", 0) },
+			wantName:   "openrouter",
+			minModels:  4,
+		},
+		{
+			name:       "Novita",
+			providerFn: func() Provider { return NewNovita("key", 0) },
+			wantName:   "novita",
+			minModels:  3,
+		},
+		{
+			name:       "Nvidia NIM",
+			providerFn: func() Provider { return NewNvidianim("key", 0) },
+			wantName:   "nvidia",
+			minModels:  3,
+		},
+		{
+			name:       "Cloudflare",
+			providerFn: func() Provider { return NewCloudflare("token", "acct123", 0) },
+			wantName:   "cloudflare",
+			minModels:  3,
+		},
+		{
+			name:       "Vertex",
+			providerFn: func() Provider { return NewVertex("proj", "us-central1", "token", 0) },
+			wantName:   "vertex",
+			minModels:  3,
+		},
+		{
+			name:       "HuggingFace",
+			providerFn: func() Provider { return NewHuggingFace("key", 0) },
+			wantName:   "huggingface",
+			minModels:  4,
+		},
 	}
 
 	for _, tt := range tests {
@@ -216,5 +271,71 @@ func TestTranslateBedrockStopReason(t *testing.T) {
 		if got != tt.want {
 			t.Errorf("translateBedrockStopReason(%q) = %q, want %q", tt.input, got, tt.want)
 		}
+	}
+}
+
+func TestCloudflareAccountIDInPath(t *testing.T) {
+	accountID := "abc123def456"
+	p := NewCloudflare("token", accountID, 0)
+
+	wantPath := "client/v4/accounts/" + accountID + "/ai/v1/chat/completions"
+	if p.chatPath != wantPath {
+		t.Errorf("Cloudflare chatPath = %q, want %q", p.chatPath, wantPath)
+	}
+
+	if p.chatCompletionsPath() != wantPath {
+		t.Errorf("chatCompletionsPath() = %q, want %q", p.chatCompletionsPath(), wantPath)
+	}
+}
+
+func TestOpenRouterPath(t *testing.T) {
+	p := NewOpenRouter("key", 0)
+
+	if p.chatPath != "api/v1/chat/completions" {
+		t.Errorf("OpenRouter chatPath = %q, want %q", p.chatPath, "api/v1/chat/completions")
+	}
+}
+
+func TestNovitaPath(t *testing.T) {
+	p := NewNovita("key", 0)
+
+	if p.chatPath != "v3/openai/chat/completions" {
+		t.Errorf("Novita chatPath = %q, want %q", p.chatPath, "v3/openai/chat/completions")
+	}
+}
+
+func TestVertexPaths(t *testing.T) {
+	v := NewVertex("my-project", "europe-west4", "access-token", 0)
+
+	model := "gemini-2.0-flash-001"
+
+	wantPath := "v1/projects/my-project/locations/europe-west4/publishers/google/models/gemini-2.0-flash-001:generateContent"
+	if got := v.vertexPath(model); got != wantPath {
+		t.Errorf("vertexPath() = %q, want %q", got, wantPath)
+	}
+
+	wantStream := wantPath[:len(wantPath)-len(":generateContent")] + ":streamGenerateContent?alt=sse"
+	if got := v.vertexStreamPath(model); got != wantStream {
+		t.Errorf("vertexStreamPath() = %q, want %q", got, wantStream)
+	}
+}
+
+func TestVertexDefaultLocation(t *testing.T) {
+	v := NewVertex("proj", "", "token", 0)
+
+	if v.location != "us-central1" {
+		t.Errorf("default location = %q, want %q", v.location, "us-central1")
+	}
+}
+
+func TestHuggingFaceName(t *testing.T) {
+	h := NewHuggingFace("key", 0)
+
+	if h.Name() != "huggingface" {
+		t.Errorf("Name() = %q, want %q", h.Name(), "huggingface")
+	}
+
+	if len(h.Models()) < 4 {
+		t.Errorf("expected at least 4 models, got %d", len(h.Models()))
 	}
 }

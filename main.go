@@ -45,6 +45,18 @@ func main() {
 	awsAccessKey := app.Config.GetOrDefault("AWS_ACCESS_KEY_ID", "")
 	awsSecretKey := app.Config.GetOrDefault("AWS_SECRET_ACCESS_KEY", "")
 	awsRegion := app.Config.GetOrDefault("AWS_REGION", "us-east-1")
+	cerebrasKey := app.Config.GetOrDefault("CEREBRAS_API_KEY", "")
+	sambanovaKey := app.Config.GetOrDefault("SAMBANOVA_API_KEY", "")
+	ai21Key := app.Config.GetOrDefault("AI21_API_KEY", "")
+	openrouterKey := app.Config.GetOrDefault("OPENROUTER_API_KEY", "")
+	novitaKey := app.Config.GetOrDefault("NOVITA_API_KEY", "")
+	nvidiaKey := app.Config.GetOrDefault("NVIDIA_API_KEY", "")
+	cloudflareToken := app.Config.GetOrDefault("CLOUDFLARE_API_TOKEN", "")
+	cloudflareAccountID := app.Config.GetOrDefault("CLOUDFLARE_ACCOUNT_ID", "")
+	vertexProject := app.Config.GetOrDefault("VERTEX_PROJECT", "")
+	vertexLocation := app.Config.GetOrDefault("VERTEX_LOCATION", "us-central1")
+	vertexAccessToken := app.Config.GetOrDefault("VERTEX_ACCESS_TOKEN", "")
+	hfKey := app.Config.GetOrDefault("HUGGINGFACE_API_KEY", "")
 	openaiBaseURL := app.Config.GetOrDefault("OPENAI_BASE_URL", "https://api.openai.com")
 	ollamaBaseURL := app.Config.GetOrDefault("OLLAMA_BASE_URL", "http://localhost:11434")
 	defaultProvider := app.Config.GetOrDefault("DEFAULT_PROVIDER", "openai")
@@ -84,6 +96,15 @@ func main() {
 	cohereTimeout, _ := strconv.Atoi(app.Config.GetOrDefault("COHERE_TIMEOUT_MS", "0"))
 	azureTimeout, _ := strconv.Atoi(app.Config.GetOrDefault("AZURE_TIMEOUT_MS", "0"))
 	bedrockTimeout, _ := strconv.Atoi(app.Config.GetOrDefault("BEDROCK_TIMEOUT_MS", "0"))
+	cerebrasTimeout, _ := strconv.Atoi(app.Config.GetOrDefault("CEREBRAS_TIMEOUT_MS", "0"))
+	sambanovaTimeout, _ := strconv.Atoi(app.Config.GetOrDefault("SAMBANOVA_TIMEOUT_MS", "0"))
+	ai21Timeout, _ := strconv.Atoi(app.Config.GetOrDefault("AI21_TIMEOUT_MS", "0"))
+	openrouterTimeout, _ := strconv.Atoi(app.Config.GetOrDefault("OPENROUTER_TIMEOUT_MS", "0"))
+	novitaTimeout, _ := strconv.Atoi(app.Config.GetOrDefault("NOVITA_TIMEOUT_MS", "0"))
+	nvidiaTimeout, _ := strconv.Atoi(app.Config.GetOrDefault("NVIDIA_TIMEOUT_MS", "0"))
+	cloudflareTimeout, _ := strconv.Atoi(app.Config.GetOrDefault("CLOUDFLARE_TIMEOUT_MS", "0"))
+	vertexTimeout, _ := strconv.Atoi(app.Config.GetOrDefault("VERTEX_TIMEOUT_MS", "0"))
+	hfTimeout, _ := strconv.Atoi(app.Config.GetOrDefault("HUGGINGFACE_TIMEOUT_MS", "0"))
 
 	// Batch processing configuration
 	batchWorkers, _ := strconv.Atoi(app.Config.GetOrDefault("BATCH_WORKERS", "5"))
@@ -115,6 +136,14 @@ func main() {
 	app.AddHTTPService("xai", "https://api.x.ai", poolCfg, cbCfg)
 	app.AddHTTPService("mistral", "https://api.mistral.ai", poolCfg, cbCfg)
 	app.AddHTTPService("cohere", "https://api.cohere.com", poolCfg, cbCfg)
+	app.AddHTTPService("cerebras", "https://api.cerebras.ai", poolCfg, cbCfg)
+	app.AddHTTPService("sambanova", "https://api.sambanova.ai", poolCfg, cbCfg)
+	app.AddHTTPService("ai21", "https://api.ai21.com/studio", poolCfg, cbCfg)
+	app.AddHTTPService("openrouter", "https://openrouter.ai", poolCfg, cbCfg)
+	app.AddHTTPService("novita", "https://api.novita.ai", poolCfg, cbCfg)
+	app.AddHTTPService("nvidia", "https://integrate.api.nvidia.com", poolCfg, cbCfg)
+	app.AddHTTPService("cloudflare", "https://api.cloudflare.com", poolCfg, cbCfg)
+	app.AddHTTPService("huggingface", "https://api-inference.huggingface.co", poolCfg, cbCfg)
 
 	if azureEndpoint != "" {
 		app.AddHTTPService("azure", azureEndpoint, poolCfg, cbCfg)
@@ -123,6 +152,11 @@ func main() {
 	if awsRegion != "" {
 		bedrockURL := fmt.Sprintf("https://bedrock-runtime.%s.amazonaws.com", awsRegion)
 		app.AddHTTPService("bedrock", bedrockURL, poolCfg, cbCfg)
+	}
+
+	if vertexProject != "" {
+		vertexURL := fmt.Sprintf("https://%s-aiplatform.googleapis.com", vertexLocation)
+		app.AddHTTPService("vertex", vertexURL, poolCfg, cbCfg)
 	}
 
 	// Register web search HTTP service if enabled
@@ -196,6 +230,42 @@ func main() {
 
 	if isValidKey(awsAccessKey) && awsSecretKey != "" {
 		reg.Register(provider.NewBedrock(awsAccessKey, awsSecretKey, awsRegion, time.Duration(bedrockTimeout)*time.Millisecond))
+	}
+
+	if isValidKey(cerebrasKey) {
+		reg.Register(provider.NewCerebras(cerebrasKey, time.Duration(cerebrasTimeout)*time.Millisecond))
+	}
+
+	if isValidKey(sambanovaKey) {
+		reg.Register(provider.NewSambaNova(sambanovaKey, time.Duration(sambanovaTimeout)*time.Millisecond))
+	}
+
+	if isValidKey(ai21Key) {
+		reg.Register(provider.NewAI21(ai21Key, time.Duration(ai21Timeout)*time.Millisecond))
+	}
+
+	if isValidKey(openrouterKey) {
+		reg.Register(provider.NewOpenRouter(openrouterKey, time.Duration(openrouterTimeout)*time.Millisecond))
+	}
+
+	if isValidKey(novitaKey) {
+		reg.Register(provider.NewNovita(novitaKey, time.Duration(novitaTimeout)*time.Millisecond))
+	}
+
+	if isValidKey(nvidiaKey) {
+		reg.Register(provider.NewNvidianim(nvidiaKey, time.Duration(nvidiaTimeout)*time.Millisecond))
+	}
+
+	if cloudflareAccountID != "" && isValidKey(cloudflareToken) {
+		reg.Register(provider.NewCloudflare(cloudflareToken, cloudflareAccountID, time.Duration(cloudflareTimeout)*time.Millisecond))
+	}
+
+	if vertexProject != "" && isValidKey(vertexAccessToken) {
+		reg.Register(provider.NewVertex(vertexProject, vertexLocation, vertexAccessToken, time.Duration(vertexTimeout)*time.Millisecond))
+	}
+
+	if isValidKey(hfKey) {
+		reg.Register(provider.NewHuggingFace(hfKey, time.Duration(hfTimeout)*time.Millisecond))
 	}
 
 	// Build routing components

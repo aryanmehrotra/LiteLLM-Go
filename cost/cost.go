@@ -95,6 +95,36 @@ var defaultPricing = map[string]ModelPricing{
 	// AWS Bedrock — Meta and Mistral models
 	"meta.llama3-70b-instruct-v1:0":    {InputPer1KTokens: 0.00265, OutputPer1KTokens: 0.0035},
 	"mistral.mistral-7b-instruct-v0:2": {InputPer1KTokens: 0.00015, OutputPer1KTokens: 0.0002},
+
+	// Cerebras
+	"llama-3.3-70b": {InputPer1KTokens: 0.00059, OutputPer1KTokens: 0.00059},
+	"llama-3.1-70b": {InputPer1KTokens: 0.0006, OutputPer1KTokens: 0.0006},
+	"llama-3.1-8b":  {InputPer1KTokens: 0.0001, OutputPer1KTokens: 0.0001},
+
+	// SambaNova
+	"Meta-Llama-3.3-70B-Instruct":  {InputPer1KTokens: 0.0006, OutputPer1KTokens: 0.0009},
+	"Meta-Llama-3.1-405B-Instruct": {InputPer1KTokens: 0.005, OutputPer1KTokens: 0.010},
+	"Meta-Llama-3.1-8B-Instruct":   {InputPer1KTokens: 0.0001, OutputPer1KTokens: 0.0002},
+	"DeepSeek-R1":                   {InputPer1KTokens: 0.005, OutputPer1KTokens: 0.010},
+	"Qwen2.5-72B-Instruct":          {InputPer1KTokens: 0.0006, OutputPer1KTokens: 0.0012},
+
+	// AI21 (Jamba models)
+	"jamba-1.5-large": {InputPer1KTokens: 0.002, OutputPer1KTokens: 0.008},
+	"jamba-1.5-mini":  {InputPer1KTokens: 0.0002, OutputPer1KTokens: 0.0004},
+	"jamba-mini-1.6":  {InputPer1KTokens: 0.0002, OutputPer1KTokens: 0.0004},
+
+	// Nvidia NIM
+	"nvidia/llama-3.1-nemotron-70b-instruct": {InputPer1KTokens: 0.00035, OutputPer1KTokens: 0.00040},
+	"meta/llama-3.1-405b-instruct":           {InputPer1KTokens: 0.00099, OutputPer1KTokens: 0.00099},
+	"meta/llama-3.1-70b-instruct":            {InputPer1KTokens: 0.00035, OutputPer1KTokens: 0.00040},
+	"meta/llama-3.1-8b-instruct":             {InputPer1KTokens: 0.00005, OutputPer1KTokens: 0.00005},
+	"mistralai/mixtral-8x22b-instruct-v0.1":  {InputPer1KTokens: 0.00040, OutputPer1KTokens: 0.00040},
+
+	// Vertex AI (Gemini on GCP — same pricing band as Gemini API)
+	"gemini-2.0-flash-001": {InputPer1KTokens: 0.0001, OutputPer1KTokens: 0.0004},
+	"gemini-1.5-pro-002":   {InputPer1KTokens: 0.00125, OutputPer1KTokens: 0.005},
+	"gemini-1.5-flash-002": {InputPer1KTokens: 0.000075, OutputPer1KTokens: 0.0003},
+	"gemini-1.0-pro-002":   {InputPer1KTokens: 0.0005, OutputPer1KTokens: 0.0015},
 }
 
 var (
