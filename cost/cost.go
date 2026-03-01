@@ -47,6 +47,84 @@ var defaultPricing = map[string]ModelPricing{
 	"text-embedding-3-small": {InputPer1KTokens: 0.00002, OutputPer1KTokens: 0},
 	"text-embedding-3-large": {InputPer1KTokens: 0.00013, OutputPer1KTokens: 0},
 	"text-embedding-ada-002": {InputPer1KTokens: 0.0001, OutputPer1KTokens: 0},
+
+	// Together AI
+	"meta-llama/Llama-3.3-70B-Instruct-Turbo":    {InputPer1KTokens: 0.00088, OutputPer1KTokens: 0.00088},
+	"meta-llama/Meta-Llama-3.1-8B-Instruct-Turbo": {InputPer1KTokens: 0.00018, OutputPer1KTokens: 0.00018},
+	"Qwen/Qwen2.5-72B-Instruct-Turbo":             {InputPer1KTokens: 0.0012, OutputPer1KTokens: 0.0012},
+	"mistralai/Mixtral-8x7B-Instruct-v0.1":         {InputPer1KTokens: 0.0006, OutputPer1KTokens: 0.0006},
+	"deepseek-ai/DeepSeek-R1":                      {InputPer1KTokens: 0.003, OutputPer1KTokens: 0.007},
+
+	// Fireworks AI
+	"accounts/fireworks/models/llama-v3p3-70b-instruct": {InputPer1KTokens: 0.0009, OutputPer1KTokens: 0.0009},
+	"accounts/fireworks/models/llama-v3p1-8b-instruct":  {InputPer1KTokens: 0.0002, OutputPer1KTokens: 0.0002},
+	"accounts/fireworks/models/mixtral-8x7b-instruct":   {InputPer1KTokens: 0.0005, OutputPer1KTokens: 0.0005},
+	"accounts/fireworks/models/qwen2p5-72b-instruct":    {InputPer1KTokens: 0.0009, OutputPer1KTokens: 0.0009},
+	"accounts/fireworks/models/deepseek-r1":             {InputPer1KTokens: 0.003, OutputPer1KTokens: 0.008},
+
+	// Perplexity
+	"sonar-pro":           {InputPer1KTokens: 0.003, OutputPer1KTokens: 0.015},
+	"sonar":               {InputPer1KTokens: 0.001, OutputPer1KTokens: 0.001},
+	"sonar-reasoning-pro": {InputPer1KTokens: 0.002, OutputPer1KTokens: 0.008},
+	"sonar-reasoning":     {InputPer1KTokens: 0.001, OutputPer1KTokens: 0.005},
+
+	// xAI (Grok)
+	"grok-3":             {InputPer1KTokens: 0.003, OutputPer1KTokens: 0.015},
+	"grok-3-mini":        {InputPer1KTokens: 0.0003, OutputPer1KTokens: 0.0005},
+	"grok-2-1212":        {InputPer1KTokens: 0.002, OutputPer1KTokens: 0.010},
+	"grok-2-vision-1212": {InputPer1KTokens: 0.002, OutputPer1KTokens: 0.010},
+
+	// Mistral AI
+	"mistral-large-latest": {InputPer1KTokens: 0.002, OutputPer1KTokens: 0.006},
+	"mistral-small-latest": {InputPer1KTokens: 0.0002, OutputPer1KTokens: 0.0006},
+	"codestral-latest":     {InputPer1KTokens: 0.0003, OutputPer1KTokens: 0.0009},
+	"open-mistral-nemo":    {InputPer1KTokens: 0.00015, OutputPer1KTokens: 0.00015},
+
+	// Cohere
+	"command-r-plus":    {InputPer1KTokens: 0.0025, OutputPer1KTokens: 0.010},
+	"command-r":         {InputPer1KTokens: 0.00015, OutputPer1KTokens: 0.0006},
+	"command-a-03-2025": {InputPer1KTokens: 0.0025, OutputPer1KTokens: 0.010},
+	"command-light":     {InputPer1KTokens: 0.00015, OutputPer1KTokens: 0.0006},
+
+	// AWS Bedrock — Anthropic models on Bedrock
+	"anthropic.claude-3-5-sonnet-20241022-v2:0": {InputPer1KTokens: 0.003, OutputPer1KTokens: 0.015},
+	"anthropic.claude-3-haiku-20240307-v1:0":    {InputPer1KTokens: 0.00025, OutputPer1KTokens: 0.00125},
+	// AWS Bedrock — Amazon Nova models
+	"amazon.nova-pro-v1:0":  {InputPer1KTokens: 0.0008, OutputPer1KTokens: 0.0032},
+	"amazon.nova-lite-v1:0": {InputPer1KTokens: 0.00006, OutputPer1KTokens: 0.00024},
+	// AWS Bedrock — Meta and Mistral models
+	"meta.llama3-70b-instruct-v1:0":    {InputPer1KTokens: 0.00265, OutputPer1KTokens: 0.0035},
+	"mistral.mistral-7b-instruct-v0:2": {InputPer1KTokens: 0.00015, OutputPer1KTokens: 0.0002},
+
+	// Cerebras
+	"llama-3.3-70b": {InputPer1KTokens: 0.00059, OutputPer1KTokens: 0.00059},
+	"llama-3.1-70b": {InputPer1KTokens: 0.0006, OutputPer1KTokens: 0.0006},
+	"llama-3.1-8b":  {InputPer1KTokens: 0.0001, OutputPer1KTokens: 0.0001},
+
+	// SambaNova
+	"Meta-Llama-3.3-70B-Instruct":  {InputPer1KTokens: 0.0006, OutputPer1KTokens: 0.0009},
+	"Meta-Llama-3.1-405B-Instruct": {InputPer1KTokens: 0.005, OutputPer1KTokens: 0.010},
+	"Meta-Llama-3.1-8B-Instruct":   {InputPer1KTokens: 0.0001, OutputPer1KTokens: 0.0002},
+	"DeepSeek-R1":                   {InputPer1KTokens: 0.005, OutputPer1KTokens: 0.010},
+	"Qwen2.5-72B-Instruct":          {InputPer1KTokens: 0.0006, OutputPer1KTokens: 0.0012},
+
+	// AI21 (Jamba models)
+	"jamba-1.5-large": {InputPer1KTokens: 0.002, OutputPer1KTokens: 0.008},
+	"jamba-1.5-mini":  {InputPer1KTokens: 0.0002, OutputPer1KTokens: 0.0004},
+	"jamba-mini-1.6":  {InputPer1KTokens: 0.0002, OutputPer1KTokens: 0.0004},
+
+	// Nvidia NIM
+	"nvidia/llama-3.1-nemotron-70b-instruct": {InputPer1KTokens: 0.00035, OutputPer1KTokens: 0.00040},
+	"meta/llama-3.1-405b-instruct":           {InputPer1KTokens: 0.00099, OutputPer1KTokens: 0.00099},
+	"meta/llama-3.1-70b-instruct":            {InputPer1KTokens: 0.00035, OutputPer1KTokens: 0.00040},
+	"meta/llama-3.1-8b-instruct":             {InputPer1KTokens: 0.00005, OutputPer1KTokens: 0.00005},
+	"mistralai/mixtral-8x22b-instruct-v0.1":  {InputPer1KTokens: 0.00040, OutputPer1KTokens: 0.00040},
+
+	// Vertex AI (Gemini on GCP — same pricing band as Gemini API)
+	"gemini-2.0-flash-001": {InputPer1KTokens: 0.0001, OutputPer1KTokens: 0.0004},
+	"gemini-1.5-pro-002":   {InputPer1KTokens: 0.00125, OutputPer1KTokens: 0.005},
+	"gemini-1.5-flash-002": {InputPer1KTokens: 0.000075, OutputPer1KTokens: 0.0003},
+	"gemini-1.0-pro-002":   {InputPer1KTokens: 0.0005, OutputPer1KTokens: 0.0015},
 }
 
 var (

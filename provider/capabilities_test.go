@@ -151,6 +151,122 @@ func TestHasCapability(t *testing.T) {
 			want:  false,
 		},
 
+		// Together AI models
+		{
+			name:  "Llama-3.3-70B on Together supports tools",
+			model: "meta-llama/Llama-3.3-70B-Instruct-Turbo",
+			cap:   CapTools,
+			want:  true,
+		},
+		{
+			name:  "Mixtral on Together does not support tools",
+			model: "mistralai/Mixtral-8x7B-Instruct-v0.1",
+			cap:   CapTools,
+			want:  false,
+		},
+		{
+			name:  "Together models support streaming",
+			model: "meta-llama/Llama-3.3-70B-Instruct-Turbo",
+			cap:   CapStreaming,
+			want:  true,
+		},
+
+		// Fireworks AI models
+		{
+			name:  "llama-v3p3 on Fireworks supports tools",
+			model: "accounts/fireworks/models/llama-v3p3-70b-instruct",
+			cap:   CapTools,
+			want:  true,
+		},
+		{
+			name:  "mixtral on Fireworks does not support tools",
+			model: "accounts/fireworks/models/mixtral-8x7b-instruct",
+			cap:   CapTools,
+			want:  false,
+		},
+
+		// Perplexity models
+		{
+			name:  "sonar-pro does not support tools",
+			model: "sonar-pro",
+			cap:   CapTools,
+			want:  false,
+		},
+		{
+			name:  "sonar supports streaming",
+			model: "sonar",
+			cap:   CapStreaming,
+			want:  true,
+		},
+
+		// xAI models
+		{
+			name:  "grok-3 supports tools",
+			model: "grok-3",
+			cap:   CapTools,
+			want:  true,
+		},
+		{
+			name:  "grok-2-vision-1212 supports vision",
+			model: "grok-2-vision-1212",
+			cap:   CapVision,
+			want:  true,
+		},
+		{
+			name:  "grok-2-1212 does not support vision",
+			model: "grok-2-1212",
+			cap:   CapVision,
+			want:  false,
+		},
+
+		// Mistral models
+		{
+			name:  "mistral-large-latest supports tools",
+			model: "mistral-large-latest",
+			cap:   CapTools,
+			want:  true,
+		},
+		{
+			name:  "codestral-latest does not support tools",
+			model: "codestral-latest",
+			cap:   CapTools,
+			want:  false,
+		},
+
+		// Cohere models
+		{
+			name:  "command-r-plus supports tools",
+			model: "command-r-plus",
+			cap:   CapTools,
+			want:  true,
+		},
+		{
+			name:  "command-light does not support tools",
+			model: "command-light",
+			cap:   CapTools,
+			want:  false,
+		},
+
+		// AWS Bedrock models
+		{
+			name:  "claude-3-5-sonnet on bedrock supports tools",
+			model: "anthropic.claude-3-5-sonnet-20241022-v2:0",
+			cap:   CapTools,
+			want:  true,
+		},
+		{
+			name:  "nova-pro on bedrock supports vision",
+			model: "amazon.nova-pro-v1:0",
+			cap:   CapVision,
+			want:  true,
+		},
+		{
+			name:  "mistral on bedrock does not support tools",
+			model: "mistral.mistral-7b-instruct-v0:2",
+			cap:   CapTools,
+			want:  false,
+		},
+
 		// Unknown models — HasCapability returns true (assume capable)
 		{
 			name:  "unknown model assumes tools capable",
