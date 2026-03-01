@@ -1,0 +1,8 @@
+# Compiled binary
+litellm-go
+
+# Test binary cache
+*.test
+
+# Go build artifacts
+/tmp/

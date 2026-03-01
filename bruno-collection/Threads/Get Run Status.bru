@@ -1,0 +1,15 @@
+meta {
+  name: Get Run Status
+  type: http
+  seq: 5
+}
+
+get {
+  url: {{baseUrl}}/v1/threads/thread_abc123/runs/run_xyz
+  body: none
+  auth: none
+}
+
+headers {
+  Authorization: Bearer {{gatewayKey}}
+}

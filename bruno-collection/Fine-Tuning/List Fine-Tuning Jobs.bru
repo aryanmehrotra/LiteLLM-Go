@@ -1,0 +1,19 @@
+meta {
+  name: List Fine-Tuning Jobs
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{baseUrl}}/v1/fine_tuning/jobs
+  body: none
+  auth: none
+}
+
+headers {
+  Authorization: Bearer {{gatewayKey}}
+}
+
+query {
+  limit: 20
+}

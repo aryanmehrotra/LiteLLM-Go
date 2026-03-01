@@ -1,0 +1,15 @@
+meta {
+  name: Delete Assistant
+  type: http
+  seq: 4
+}
+
+delete {
+  url: {{baseUrl}}/v1/assistants/asst_abc123
+  body: none
+  auth: none
+}
+
+headers {
+  Authorization: Bearer {{gatewayKey}}
+}

@@ -1,0 +1,15 @@
+meta {
+  name: Download File Content
+  type: http
+  seq: 5
+}
+
+get {
+  url: {{baseUrl}}/v1/files/file-abc123/content
+  body: none
+  auth: none
+}
+
+headers {
+  Authorization: Bearer {{gatewayKey}}
+}

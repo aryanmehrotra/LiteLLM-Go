@@ -1,0 +1,48 @@
+meta {
+  name: Agent Run (Built-in Web Search)
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{baseUrl}}/v1/agents/run
+  body: json
+  auth: none
+}
+
+headers {
+  Authorization: Bearer {{gatewayKey}}
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "model": "openai/gpt-4o",
+    "messages": [
+      {
+        "role": "user",
+        "content": "Search for the latest news about artificial intelligence and summarize the top 3 results."
+      }
+    ],
+    "tools": [
+      {
+        "type": "function",
+        "function": {
+          "name": "web_search",
+          "description": "Search the web for information",
+          "parameters": {
+            "type": "object",
+            "properties": {
+              "query": {
+                "type": "string",
+                "description": "The search query"
+              }
+            },
+            "required": ["query"]
+          }
+        }
+      }
+    ],
+    "max_iterations": 5
+  }
+}

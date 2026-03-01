@@ -136,6 +136,39 @@ Output ONLY the search query, nothing else.`,
 	return ""
 }
 
+// SearchDirect performs a web search for the given query, using the cache.
+// It is exported for use by handlers that need direct search access (e.g. Responses API).
+func (s *Service) SearchDirect(ctx *gofr.Context, query string, maxResults int) []SearchResult {
+	if s.Cache != nil {
+		if cached, found := s.Cache.Get(ctx, query); found {
+			return cached
+		}
+	}
+
+	client, err := s.Registry.Get(s.Config.Provider)
+	if err != nil {
+		ctx.Errorf("web search direct: %v", err)
+		return nil
+	}
+
+	n := maxResults
+	if n <= 0 {
+		n = s.Config.MaxResults
+	}
+
+	results, err := client.Search(ctx, query, n)
+	if err != nil {
+		ctx.Errorf("web search direct: %v", err)
+		return nil
+	}
+
+	if s.Cache != nil && len(results) > 0 {
+		s.Cache.Set(ctx, query, results)
+	}
+
+	return results
+}
+
 // search checks the cache first, then calls the search backend.
 func (s *Service) search(ctx *gofr.Context, query string) []SearchResult {
 	// Check cache

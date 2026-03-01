@@ -442,6 +442,10 @@ func main() {
 		Processor: bp,
 	}
 
+	assistants := &handler.AssistantHandler{
+		API: api,
+	}
+
 	// Serve admin UI — explicit handler for the root page, static files for assets
 	app.AddStaticFiles("/admin", "./admin/static")
 	app.GET("/admin", admin.AdminPage())
@@ -462,6 +466,47 @@ func main() {
 	app.GET("/health/providers", api.HealthProviders())
 	app.GET("/spend/report", admin.SpendReport())
 	app.GET("/spend/self", admin.SpendSelf())
+
+	// Responses API (OpenAI Responses API — the modern agentic format)
+	app.POST("/v1/responses", api.CreateResponse())
+
+	// Agent execution loop — runs multi-turn tool-use automatically
+	app.POST("/v1/agents/run", api.AgentRun())
+
+	// Files API
+	app.POST("/v1/files", api.UploadFile())
+	app.GET("/v1/files", api.ListFiles())
+	app.GET("/v1/files/{id}", api.GetFile())
+	app.DELETE("/v1/files/{id}", api.DeleteFile())
+	app.GET("/v1/files/{id}/content", api.GetFileContent())
+
+	// Fine-tuning API
+	app.POST("/v1/fine_tuning/jobs", api.CreateFineTuningJob())
+	app.GET("/v1/fine_tuning/jobs", api.ListFineTuningJobs())
+	app.GET("/v1/fine_tuning/jobs/{id}", api.GetFineTuningJob())
+	app.POST("/v1/fine_tuning/jobs/{id}/cancel", api.CancelFineTuningJob())
+	app.GET("/v1/fine_tuning/jobs/{id}/events", api.ListFineTuningEvents())
+
+	// Assistants API
+	app.POST("/v1/assistants", assistants.CreateAssistant())
+	app.GET("/v1/assistants", assistants.ListAssistants())
+	app.GET("/v1/assistants/{id}", assistants.GetAssistant())
+	app.DELETE("/v1/assistants/{id}", assistants.DeleteAssistant())
+
+	// Threads API
+	app.POST("/v1/threads", assistants.CreateThread())
+	app.GET("/v1/threads/{id}", assistants.GetThread())
+	app.DELETE("/v1/threads/{id}", assistants.DeleteThread())
+
+	// Thread Messages API
+	app.POST("/v1/threads/{id}/messages", assistants.CreateMessage())
+	app.GET("/v1/threads/{id}/messages", assistants.ListMessages())
+
+	// Thread Runs API
+	app.POST("/v1/threads/{id}/runs", assistants.CreateRun())
+	app.GET("/v1/threads/{id}/runs", assistants.ListRuns())
+	app.GET("/v1/threads/{id}/runs/{run_id}", assistants.GetRun())
+	app.POST("/v1/threads/{id}/runs/{run_id}/cancel", assistants.CancelRun())
 
 	// Auth check — returns role (admin vs user) for the authenticated key
 	app.GET("/auth/check", admin.AuthCheck())

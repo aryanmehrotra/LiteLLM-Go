@@ -1,0 +1,20 @@
+meta {
+  name: Upload File
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{baseUrl}}/v1/files
+  body: multipartForm
+  auth: none
+}
+
+headers {
+  Authorization: Bearer {{gatewayKey}}
+}
+
+body:multipart {
+  purpose: fine-tune
+  file: @file(training_data.jsonl)
+}

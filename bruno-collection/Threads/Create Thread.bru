@@ -1,0 +1,27 @@
+meta {
+  name: Create Thread
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{baseUrl}}/v1/threads
+  body: json
+  auth: none
+}
+
+headers {
+  Authorization: Bearer {{gatewayKey}}
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "messages": [
+      {
+        "role": "user",
+        "content": "I need help analyzing some data."
+      }
+    ]
+  }
+}

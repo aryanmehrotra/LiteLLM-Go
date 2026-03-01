@@ -1,0 +1,55 @@
+meta {
+  name: Agent Run (Webhook Tool)
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{baseUrl}}/v1/agents/run
+  body: json
+  auth: none
+}
+
+headers {
+  Authorization: Bearer {{gatewayKey}}
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "model": "openai/gpt-4o",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are an assistant that can look up customer information."
+      },
+      {
+        "role": "user",
+        "content": "Get the details for customer ID 12345."
+      }
+    ],
+    "tools": [
+      {
+        "type": "function",
+        "function": {
+          "name": "get_customer",
+          "description": "Retrieves customer information by ID",
+          "parameters": {
+            "type": "object",
+            "properties": {
+              "customer_id": {
+                "type": "string",
+                "description": "The customer ID"
+              }
+            },
+            "required": ["customer_id"]
+          }
+        }
+      }
+    ],
+    "tool_webhooks": {
+      "get_customer": "https://your-api.example.com/tools/get_customer"
+    },
+    "max_iterations": 3
+  }
+}

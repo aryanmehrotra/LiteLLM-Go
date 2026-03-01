@@ -1,0 +1,15 @@
+meta {
+  name: Cancel Fine-Tuning Job
+  type: http
+  seq: 4
+}
+
+post {
+  url: {{baseUrl}}/v1/fine_tuning/jobs/ftjob-abc123/cancel
+  body: none
+  auth: none
+}
+
+headers {
+  Authorization: Bearer {{gatewayKey}}
+}
