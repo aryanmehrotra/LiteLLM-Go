@@ -538,12 +538,6 @@ Access at http://localhost:3000 after starting Docker Compose (login: admin/admi
 <img src="https://github.com/user-attachments/assets/a6f28c09-9f0a-4ffa-b3e7-0379d93f4342" alt="Grafana — Inbound Request Routing & Response Codes" width="100%">
 </details>
 
-<details>
-<summary><strong>🤖 LLM Gateway Panels (Cost, Tokens, Providers)</strong></summary>
-<br>
-<img src="https://github.com/user-attachments/assets/d5064b1a-6bca-4258-8c43-4191d743e6a0" alt="Grafana — LLM Gateway Cost & Token Panels" width="100%">
-</details>
-
 ---
 
 ## Feature Comparison: LLM Gateway vs LiteLLM
