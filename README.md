@@ -15,7 +15,7 @@ A drop-in [LiteLLM](https://github.com/BerriAI/litellm) alternative built on [Go
 
 <br>
 
-<img src="https://github.com/user-attachments/assets/9baa6160-43c9-4d53-a9d7-6b5bea8857f7" alt="LLM Gateway Admin Dashboard" width="100%">
+<img src="https://github.com/user-attachments/assets/83f4741a-7d02-46da-af32-57656c5b9b1f" alt="LLM Gateway Admin Dashboard" width="100%">
 
 </div>
 
@@ -34,28 +34,28 @@ A drop-in [LiteLLM](https://github.com/BerriAI/litellm) alternative built on [Go
 ## Architecture
 
 ```
-                    ┌─────────────────────────────────────────────────────┐
-                    │                 LLM Gateway                         │
-                    │                                                     │
- ┌─────────┐       │  ┌──────────┐   ┌────────┐   ┌──────────────┐      │       ┌──────────┐
- │  Client  │──────▶│  │Middleware│──▶│ Router │──▶│   Provider   │──────│──────▶│  OpenAI  │
- │ (OpenAI  │       │  │(Auth,   │   │(Retry, │   │  (Translate, │      │       ├──────────┤
- │  SDK)    │◀──────│  │ Rate    │   │Cooldown│   │   Stream,    │      │       │Anthropic │
- └─────────┘       │  │ Limit,  │   │Strategy│   │   Fallback)  │──────│──────▶├──────────┤
-                    │  │ Guard-  │   └────┬───┘   └──────────────┘      │       │  Gemini  │
- ┌─────────┐       │  │ rails)  │        │              │               │       ├──────────┤
- │  Admin   │──────▶│  └────┬───┘   ┌────▼────┐   ┌────▼─────┐        │       │  Groq    │
- │   UI     │       │       │       │Trackers │   │  Cache   │        │       ├──────────┤
- └─────────┘       │  ┌────▼───┐   │(InFlight│   │ (Redis)  │        │       │DeepSeek  │
-                    │  │KeyStore│   │Latency, │   └──────────┘        │       ├──────────┤
-                    │  │(In-Mem)│   │ Usage)  │        │               │       │  Ollama  │
-                    │  └────┬───┘   └─────────┘   ┌────▼─────┐        │       └──────────┘
-                    │  ┌────▼──────────────────┐   │  Budget  │        │
-                    │  │  PostgreSQL            │   │ Tracking │        │
-                    │  │  (Keys, Teams, Audit,  │   └──────────┘        │
-                    │  │   Guardrails, Batches) │                       │
-                    │  └───────────────────────┘                       │
-                    └─────────────────────────────────────────────────────┘
+              ┌──────────────────────────────────────────────────────┐
+              │                    LLM Gateway                       │
+              │                                                      │
+┌─────────┐  │  ┌──────────┐   ┌──────────┐   ┌──────────────┐     │  ┌──────────┐
+│  Client  │──│─▶│Middleware│──▶│  Router  │──▶│   Provider   │──── │─▶│  OpenAI  │
+│ (OpenAI  │  │  │  (Auth,  │   │ (Retry,  │   │ (Translate,  │     │  ├──────────┤
+│  SDK)    │◀─│──│  Rate    │   │ Cooldown,│   │   Stream,    │──── │─▶│Anthropic │
+└─────────┘  │  │  Limit,  │   │ Strategy)│   │   Fallback)  │     │  ├──────────┤
+             │  │  Guard-  │   └─────┬────┘   └──────────────┘     │  │  Gemini  │
+┌─────────┐  │  │  rails)  │        │               │              │  ├──────────┤
+│  Admin   │──│─▶└─────┬───┘   ┌────▼─────┐   ┌────▼─────┐       │  │   Groq   │
+│   UI     │  │        │       │ Trackers  │   │  Cache   │       │  ├──────────┤
+└─────────┘  │  ┌──────▼──┐   │(InFlight, │   │ (Redis)  │       │  │ DeepSeek │
+             │  │KeyStore  │   │ Latency,  │   └──────────┘       │  ├──────────┤
+             │  │ (In-Mem) │   │  Usage)   │        │              │  │  Ollama  │
+             │  └─────┬────┘   └──────────┘   ┌────▼─────┐       │  └──────────┘
+             │  ┌─────▼───────────────────┐   │  Budget  │       │
+             │  │      PostgreSQL          │   │ Tracking │       │
+             │  │ (Keys, Teams, Audit,     │   └──────────┘       │
+             │  │  Guardrails, Batches)    │                      │
+             │  └─────────────────────────┘                      │
+             └──────────────────────────────────────────────────────┘
 ```
 
 ---
@@ -159,37 +159,37 @@ Authenticate with your master key or a virtual key. Static assets are served dir
 <details>
 <summary><strong>🔐 Login</strong></summary>
 <br>
-<img src="https://github.com/user-attachments/assets/50c8c33d-527b-46d9-86ca-a19ec8ad7dd5" alt="Login" width="100%">
+<img src="https://github.com/user-attachments/assets/30dc1476-a0be-4fe8-99c9-cf24320fe333" alt="Login" width="100%">
 </details>
 
 <details>
 <summary><strong>🔑 Virtual Keys</strong></summary>
 <br>
-<img src="https://github.com/user-attachments/assets/80a4ce93-f945-4cbe-85c9-efb1c09ee139" alt="Virtual Keys" width="100%">
+<img src="https://github.com/user-attachments/assets/2eb3082e-183a-4289-987a-8ebe75730e76" alt="Virtual Keys" width="100%">
 </details>
 
 <details>
 <summary><strong>💰 Spend & Usage</strong></summary>
 <br>
-<img src="https://github.com/user-attachments/assets/a3fccbf9-eaa4-4e67-9c83-673e051aaf71" alt="Spend & Usage" width="100%">
+<img src="https://github.com/user-attachments/assets/d8f7810d-faaa-436e-a6a3-cb9d6adde408" alt="Spend & Usage" width="100%">
 </details>
 
 <details>
 <summary><strong>🛝 Playground</strong></summary>
 <br>
-<img src="https://github.com/user-attachments/assets/69c502a7-9f85-4d60-8096-952a4d53ac39" alt="Playground" width="100%">
+<img src="https://github.com/user-attachments/assets/598f10fa-d730-4e2a-bbe5-8a3841cd087f" alt="Playground" width="100%">
 </details>
 
 <details>
 <summary><strong>📖 API Docs</strong></summary>
 <br>
-<img src="https://github.com/user-attachments/assets/5efe2e32-5c38-4e73-a6e2-df26efc594ff" alt="API Docs" width="100%">
+<img src="https://github.com/user-attachments/assets/d989fc87-6583-42de-a9e7-7c32358e6813" alt="API Docs" width="100%">
 </details>
 
 <details>
 <summary><strong>⚙️ Settings</strong></summary>
 <br>
-<img src="https://github.com/user-attachments/assets/38ebd215-af7d-4b06-97df-d25391c714c8" alt="Settings" width="100%">
+<img src="https://github.com/user-attachments/assets/990bb9a3-bed4-439f-8f26-b9f416ab7b62" alt="Settings" width="100%">
 </details>
 
 ### Observability (GoFr Built-in)
