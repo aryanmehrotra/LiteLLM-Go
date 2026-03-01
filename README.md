@@ -13,6 +13,10 @@ A drop-in [LiteLLM](https://github.com/BerriAI/litellm) alternative built on [Go
 
 [Quick Start](#quick-start) · [API Reference](#api-reference) · [Configuration](#configuration) · [Admin UI](#admin-dashboard) · [Comparison](#feature-comparison-llm-gateway-vs-litellm)
 
+<br>
+
+<img src="https://github.com/user-attachments/assets/9baa6160-43c9-4d53-a9d7-6b5bea8857f7" alt="LLM Gateway Admin Dashboard" width="100%">
+
 </div>
 
 ---
@@ -146,8 +150,47 @@ Built-in single-page admin UI at `/admin` — no separate frontend deployment ne
 - **Spend** — cost breakdown by model, provider, or team
 - **Batches** — monitor batch jobs, view progress, cancel or inspect results
 - **Guardrails** — configuration reference for env vars and per-key overrides
+- **Playground** — test API calls directly from your browser
+- **API Docs** — complete built-in documentation with examples
+- **Settings** — view and manage provider configuration, routing, and security
 
-Authenticate with your master key. Static assets are served directly by GoFr.
+Authenticate with your master key or a virtual key. Static assets are served directly by GoFr.
+
+<details>
+<summary><strong>🔐 Login</strong></summary>
+<br>
+<img src="https://github.com/user-attachments/assets/50c8c33d-527b-46d9-86ca-a19ec8ad7dd5" alt="Login" width="100%">
+</details>
+
+<details>
+<summary><strong>🔑 Virtual Keys</strong></summary>
+<br>
+<img src="https://github.com/user-attachments/assets/80a4ce93-f945-4cbe-85c9-efb1c09ee139" alt="Virtual Keys" width="100%">
+</details>
+
+<details>
+<summary><strong>💰 Spend & Usage</strong></summary>
+<br>
+<img src="https://github.com/user-attachments/assets/a3fccbf9-eaa4-4e67-9c83-673e051aaf71" alt="Spend & Usage" width="100%">
+</details>
+
+<details>
+<summary><strong>🛝 Playground</strong></summary>
+<br>
+<img src="https://github.com/user-attachments/assets/69c502a7-9f85-4d60-8096-952a4d53ac39" alt="Playground" width="100%">
+</details>
+
+<details>
+<summary><strong>📖 API Docs</strong></summary>
+<br>
+<img src="https://github.com/user-attachments/assets/5efe2e32-5c38-4e73-a6e2-df26efc594ff" alt="API Docs" width="100%">
+</details>
+
+<details>
+<summary><strong>⚙️ Settings</strong></summary>
+<br>
+<img src="https://github.com/user-attachments/assets/38ebd215-af7d-4b06-97df-d25391c714c8" alt="Settings" width="100%">
+</details>
 
 ### Observability (GoFr Built-in)
 
