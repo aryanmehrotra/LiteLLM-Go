@@ -112,6 +112,15 @@ func (m *MockLLMServer) QueueToolCall(callID, toolName, argsJSON string) {
 	m.QueueResponse(ToolCallResponse(callID, toolName, argsJSON))
 }
 
+// QueueRawResponse enqueues an arbitrary raw JSON response body.
+// Use this to mock endpoints other than chat completions (e.g. /v1/embeddings).
+func (m *MockLLMServer) QueueRawResponse(statusCode int, body []byte) {
+	m.mu.Lock()
+	defer m.mu.Unlock()
+
+	m.queue = append(m.queue, mockQueueItem{statusCode: statusCode, body: body})
+}
+
 // QueueError enqueues an HTTP error response with the given status code and message.
 func (m *MockLLMServer) QueueError(statusCode int, message string) {
 	body := fmt.Sprintf(`{"error":{"message":%q,"type":"server_error"}}`, message)
