@@ -49,6 +49,14 @@ func NewMockLLMServer(t *testing.T) *MockLLMServer {
 }
 
 func (m *MockLLMServer) handle(w http.ResponseWriter, r *http.Request) {
+	// Non-POST requests (e.g. GET /api/tags from ollamaProvider.RefreshModels,
+	// or circuit-breaker health probes) are acknowledged without consuming a
+	// queued response so they don't interfere with the test's response sequence.
+	if r.Method != http.MethodPost {
+		w.WriteHeader(http.StatusOK)
+		return
+	}
+
 	// Record the request body.
 	var rawBody json.RawMessage
 
