@@ -1,4 +1,4 @@
-module aryanmehrotra/llm-gateway
+module aryanmehrotra/litellm-go
 
 go 1.25
 

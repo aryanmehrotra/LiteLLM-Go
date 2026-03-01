@@ -8,8 +8,8 @@ import (
 	gofrHTTP "gofr.dev/pkg/gofr/http"
 	"gofr.dev/pkg/gofr/http/response"
 
-	"aryanmehrotra/llm-gateway/audit"
-	"aryanmehrotra/llm-gateway/middleware"
+	"aryanmehrotra/litellm-go/audit"
+	"aryanmehrotra/litellm-go/middleware"
 )
 
 // GuardrailConfigRequest is the request body for guardrail config CRUD.

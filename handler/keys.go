@@ -13,7 +13,7 @@ import (
 	gofrHTTP "gofr.dev/pkg/gofr/http"
 	"gofr.dev/pkg/gofr/http/response"
 
-	"aryanmehrotra/llm-gateway/middleware"
+	"aryanmehrotra/litellm-go/middleware"
 )
 
 // GenerateKeyRequest is the request body for POST /key/generate.

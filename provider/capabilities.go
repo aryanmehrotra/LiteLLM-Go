@@ -1,6 +1,6 @@
 package provider
 
-import "aryanmehrotra/llm-gateway/models"
+import "aryanmehrotra/litellm-go/models"
 
 // Capability flags for models.
 type Capability int

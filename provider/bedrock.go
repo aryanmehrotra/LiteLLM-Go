@@ -12,7 +12,7 @@ import (
 	"github.com/google/uuid"
 	"gofr.dev/pkg/gofr"
 
-	"aryanmehrotra/llm-gateway/models"
+	"aryanmehrotra/litellm-go/models"
 )
 
 const bedrockServiceName = "bedrock"

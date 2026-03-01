@@ -4,9 +4,9 @@ import (
 	"gofr.dev/pkg/gofr"
 	gofrHTTP "gofr.dev/pkg/gofr/http"
 
-	"aryanmehrotra/llm-gateway/guardrails"
-	"aryanmehrotra/llm-gateway/middleware"
-	"aryanmehrotra/llm-gateway/models"
+	"aryanmehrotra/litellm-go/guardrails"
+	"aryanmehrotra/litellm-go/middleware"
+	"aryanmehrotra/litellm-go/models"
 )
 
 // ChatCompletionStream handles WebSocket streaming at /v1/chat/completions/stream.

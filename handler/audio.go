@@ -5,7 +5,7 @@ import (
 	gofrHTTP "gofr.dev/pkg/gofr/http"
 	"gofr.dev/pkg/gofr/http/response"
 
-	"aryanmehrotra/llm-gateway/models"
+	"aryanmehrotra/litellm-go/models"
 )
 
 // SpeechProvider is an optional interface for providers supporting text-to-speech.

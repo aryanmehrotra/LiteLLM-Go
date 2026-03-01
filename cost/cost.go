@@ -5,7 +5,7 @@ import (
 	"strings"
 	"sync"
 
-	"aryanmehrotra/llm-gateway/models"
+	"aryanmehrotra/litellm-go/models"
 )
 
 // ModelPricing holds per-token pricing for a model.

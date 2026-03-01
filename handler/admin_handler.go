@@ -3,7 +3,7 @@ package handler
 import (
 	"gofr.dev/pkg/gofr"
 
-	"aryanmehrotra/llm-gateway/middleware"
+	"aryanmehrotra/litellm-go/middleware"
 )
 
 // AdminHandler groups all management endpoint handlers with their shared dependencies.

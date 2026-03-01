@@ -4,7 +4,7 @@ import (
 	"testing"
 	"time"
 
-	"aryanmehrotra/llm-gateway/routing"
+	"aryanmehrotra/litellm-go/routing"
 )
 
 func TestCreateProvider_KnownProviders(t *testing.T) {

@@ -6,7 +6,7 @@ import (
 
 	"github.com/google/uuid"
 
-	"aryanmehrotra/llm-gateway/models"
+	"aryanmehrotra/litellm-go/models"
 )
 
 // ExtractToolCalls parses tool call JSON blocks from response text content.

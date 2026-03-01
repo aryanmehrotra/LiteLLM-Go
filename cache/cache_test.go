@@ -3,7 +3,7 @@ package cache
 import (
 	"testing"
 
-	"aryanmehrotra/llm-gateway/models"
+	"aryanmehrotra/litellm-go/models"
 )
 
 func TestNew(t *testing.T) {

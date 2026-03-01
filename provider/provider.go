@@ -6,8 +6,8 @@ import (
 
 	"gofr.dev/pkg/gofr"
 
-	"aryanmehrotra/llm-gateway/models"
-	"aryanmehrotra/llm-gateway/routing"
+	"aryanmehrotra/litellm-go/models"
+	"aryanmehrotra/litellm-go/routing"
 )
 
 // Provider translates OpenAI-compatible requests into provider-specific API calls.

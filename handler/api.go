@@ -1,11 +1,11 @@
 package handler
 
 import (
-	"aryanmehrotra/llm-gateway/cache"
-	"aryanmehrotra/llm-gateway/guardrails"
-	"aryanmehrotra/llm-gateway/provider"
-	"aryanmehrotra/llm-gateway/routing"
-	"aryanmehrotra/llm-gateway/websearch"
+	"aryanmehrotra/litellm-go/cache"
+	"aryanmehrotra/litellm-go/guardrails"
+	"aryanmehrotra/litellm-go/provider"
+	"aryanmehrotra/litellm-go/routing"
+	"aryanmehrotra/litellm-go/websearch"
 )
 
 // APIHandler groups all LLM API endpoint handlers with their shared dependencies.

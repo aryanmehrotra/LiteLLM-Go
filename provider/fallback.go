@@ -5,8 +5,8 @@ import (
 
 	"gofr.dev/pkg/gofr"
 
-	"aryanmehrotra/llm-gateway/models"
-	"aryanmehrotra/llm-gateway/routing"
+	"aryanmehrotra/litellm-go/models"
+	"aryanmehrotra/litellm-go/routing"
 )
 
 // contextWindowFallbacks maps models that hit token limits to larger-context alternatives.

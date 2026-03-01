@@ -6,7 +6,7 @@ import (
 
 	"gofr.dev/pkg/gofr"
 
-	"aryanmehrotra/llm-gateway/models"
+	"aryanmehrotra/litellm-go/models"
 )
 
 // GuardrailConfig holds per-key or global guardrail settings.

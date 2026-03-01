@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"strings"
 
-	"aryanmehrotra/llm-gateway/models"
+	"aryanmehrotra/litellm-go/models"
 )
 
 // ValidateTools checks that tool definitions are well-formed.

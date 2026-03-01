@@ -4,7 +4,7 @@ import (
 	"math"
 	"testing"
 
-	"aryanmehrotra/llm-gateway/models"
+	"aryanmehrotra/litellm-go/models"
 )
 
 func TestCalculate(t *testing.T) {

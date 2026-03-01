@@ -9,7 +9,7 @@ import (
 
 	"gofr.dev/pkg/gofr"
 
-	"aryanmehrotra/llm-gateway/models"
+	"aryanmehrotra/litellm-go/models"
 )
 
 const azureServiceName = "azure"

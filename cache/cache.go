@@ -9,7 +9,7 @@ import (
 	"github.com/redis/go-redis/v9"
 	"gofr.dev/pkg/gofr"
 
-	"aryanmehrotra/llm-gateway/models"
+	"aryanmehrotra/litellm-go/models"
 )
 
 // Cache wraps Redis to cache LLM responses keyed by request content.

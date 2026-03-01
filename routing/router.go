@@ -6,7 +6,7 @@ import (
 
 	"gofr.dev/pkg/gofr"
 
-	"aryanmehrotra/llm-gateway/models"
+	"aryanmehrotra/litellm-go/models"
 )
 
 // ChatProvider is the interface that routing uses for non-streaming completions.
