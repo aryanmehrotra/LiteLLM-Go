@@ -1,0 +1,15 @@
+meta {
+  name: Rotate Key
+  type: http
+  seq: 5
+}
+
+post {
+  url: {{baseUrl}}/key/1/rotate
+  body: none
+  auth: none
+}
+
+headers {
+  Authorization: Bearer {{masterKey}}
+}

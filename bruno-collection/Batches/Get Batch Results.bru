@@ -1,0 +1,16 @@
+meta {
+  name: Get Batch Results
+  type: http
+  seq: 4
+}
+
+get {
+  url: {{baseUrl}}/v1/batches/{{batchId}}/results
+  body: none
+  auth: none
+}
+
+headers {
+  Authorization: Bearer {{masterKey}}
+  Content-Type: application/json
+}

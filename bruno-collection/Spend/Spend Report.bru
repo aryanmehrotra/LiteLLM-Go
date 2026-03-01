@@ -1,0 +1,16 @@
+meta {
+  name: Spend Report
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{baseUrl}}/spend/report?group_by=model
+  body: none
+  auth: none
+}
+
+headers {
+  Authorization: Bearer {{masterKey}}
+  Content-Type: application/json
+}

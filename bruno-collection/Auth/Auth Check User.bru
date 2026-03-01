@@ -1,0 +1,16 @@
+meta {
+  name: Auth Check User
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{baseUrl}}/auth/check
+  body: none
+  auth: none
+}
+
+headers {
+  Authorization: Bearer {{gatewayKey}}
+  Content-Type: application/json
+}

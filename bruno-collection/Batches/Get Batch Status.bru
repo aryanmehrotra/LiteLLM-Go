@@ -1,0 +1,16 @@
+meta {
+  name: Get Batch Status
+  type: http
+  seq: 3
+}
+
+get {
+  url: {{baseUrl}}/v1/batches/{{batchId}}
+  body: none
+  auth: none
+}
+
+headers {
+  Authorization: Bearer {{masterKey}}
+  Content-Type: application/json
+}

@@ -1,0 +1,16 @@
+meta {
+  name: List Guardrails
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{baseUrl}}/guardrails
+  body: none
+  auth: none
+}
+
+headers {
+  Authorization: Bearer {{masterKey}}
+  Content-Type: application/json
+}

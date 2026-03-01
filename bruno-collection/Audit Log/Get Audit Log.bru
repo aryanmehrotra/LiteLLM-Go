@@ -1,0 +1,16 @@
+meta {
+  name: Get Audit Log
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{baseUrl}}/audit/log?limit=50
+  body: none
+  auth: none
+}
+
+headers {
+  Authorization: Bearer {{masterKey}}
+  Content-Type: application/json
+}
