@@ -1,0 +1,43 @@
+model_list:
+  - model_name: gpt-4o
+    litellm_params:
+      model: openai/gpt-4o
+      api_key: os.environ/OPENAI_API_KEY
+      timeout: 30000
+      weight: 2
+
+  - model_name: gpt-4o-mini
+    litellm_params:
+      model: openai/gpt-4o-mini
+      api_key: os.environ/OPENAI_API_KEY
+      timeout: 15000
+
+  - model_name: claude-sonnet
+    litellm_params:
+      model: anthropic/claude-sonnet-4-20250514
+      api_key: os.environ/ANTHROPIC_API_KEY
+      timeout: 60000
+
+  - model_name: llama-local
+    litellm_params:
+      model: ollama/llama3.1
+      timeout: 120000
+
+router_settings:
+  routing_strategy: simple
+  num_retries: 3
+  cooldown_threshold: 5
+  cooldown_period_seconds: 60
+  latency_ema_alpha: 0.2
+  usage_reset_period_seconds: 60
+  fallback_models:
+    - openai/gpt-4o
+    - anthropic/claude-sonnet-4-20250514
+    - ollama/llama3.1
+
+general_settings:
+  cache_ttl_seconds: 300
+  model_aliases:
+    gpt4: openai/gpt-4o
+    claude: anthropic/claude-sonnet-4-20250514
+    llama: ollama/llama3.1

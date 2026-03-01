@@ -1,0 +1,130 @@
+version: "3.8"
+
+services:
+  llm-gateway:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    ports:
+      - "9000:9000"   # Application
+      - "2121:2121"   # Metrics
+    environment:
+      # --- REQUIRED CORE ---
+      HTTP_PORT: 9000
+      DEFAULT_PROVIDER: openai
+      GATEWAY_API_KEYS: sk-gateway-key-1,sk-gateway-key-2
+
+      # --- REQUIRED: Admin UI / virtual key management ---
+      GATEWAY_MASTER_KEY: ${GATEWAY_MASTER_KEY:-sk-master-admin-2026}
+
+      # --- PROVIDERS (set at least one) ---
+      # Keys default to empty; requests to unconfigured providers will fail.
+      OPENAI_API_KEY: ${OPENAI_API_KEY:-}
+      OPENAI_BASE_URL: https://api.openai.com
+      ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY:-}
+      GROQ_API_KEY: ${GROQ_API_KEY:-}
+      DEEPSEEK_API_KEY: ${DEEPSEEK_API_KEY:-}
+      GEMINI_API_KEY: ${GEMINI_API_KEY:-}
+      OLLAMA_BASE_URL: http://host.docker.internal:11434
+
+      # --- INFRASTRUCTURE ---
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      CACHE_TTL_SECONDS: 300
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_USER: postgres
+      DB_PASSWORD: postgres
+      DB_NAME: llmgw
+      DB_DIALECT: postgres
+
+      # --- ROUTING & RELIABILITY ---
+      RETRY_MAX: 3
+      RETRY_BACKOFF_BASE_MS: 500
+      COOLDOWN_THRESHOLD: 5
+      COOLDOWN_PERIOD_SECONDS: 60
+      ROUTING_STRATEGY: simple
+      CB_THRESHOLD: 5
+      CB_INTERVAL_SECONDS: 30
+      # FALLBACK_CHAIN: openai,anthropic,ollama    # comma-separated provider names
+
+      # --- GUARDRAILS (optional) ---
+      # GUARDRAIL_ENABLED: "true"
+      # GUARDRAIL_BLOCKED_KEYWORDS: hack,exploit,jailbreak
+      # GUARDRAIL_PII_ACTION: none                 # none, block, redact, log
+      # GUARDRAIL_MAX_INPUT_TOKENS: 0              # 0 = unlimited
+      # GUARDRAIL_MAX_OUTPUT_TOKENS: 0             # 0 = unlimited
+
+      # --- BATCH PROCESSING ---
+      BATCH_WORKERS: 5
+      BATCH_TASK_TIMEOUT_SECONDS: 120
+
+      # --- COST (optional) ---
+      # CUSTOM_PRICING: ""                         # model:input:output per 1K tokens
+
+      # --- WEB SEARCH (optional) ---
+      # WEBSEARCH_ENABLED: "true"
+      # WEBSEARCH_PROVIDER: searxng
+      # WEBSEARCH_BASE_URL: http://searxng:8080
+      # WEBSEARCH_MAX_RESULTS: 5
+      # WEBSEARCH_CACHE_TTL: 300
+
+      # --- OBSERVABILITY ---
+      TRACE_EXPORTER: gofr
+      LOG_LEVEL: INFO
+    depends_on:
+      - redis
+      - postgres
+    restart: unless-stopped
+
+  postgres:
+    image: postgres:16-alpine
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: llmgw
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+
+  prometheus:
+    image: prom/prometheus:latest
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+    depends_on:
+      - llm-gateway
+
+  grafana:
+    image: grafana/grafana:latest
+    ports:
+      - "3000:3000"
+    environment:
+      GF_SECURITY_ADMIN_PASSWORD: admin
+    volumes:
+      - ./grafana/provisioning:/etc/grafana/provisioning
+      - ./grafana/dashboards:/var/lib/grafana/dashboards
+    depends_on:
+      - prometheus
+
+  # SearXNG — self-hosted metasearch engine for web search augmentation (optional)
+  # Uncomment to enable web search in the gateway
+  # searxng:
+  #   image: searxng/searxng:latest
+  #   ports:
+  #     - "8080:8080"
+  #   environment:
+  #     SEARXNG_BASE_URL: http://localhost:8080/
+
+volumes:
+  postgres-data:
+  redis-data:

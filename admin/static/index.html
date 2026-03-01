@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LLM Gateway Admin</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- Login -->
+<div id="login" class="login-container">
+  <div class="login-box">
+    <h2>LLM Gateway</h2>
+    <p>Enter your master key to continue</p>
+    <input type="password" id="login-key" placeholder="Master API Key">
+    <button class="btn btn-primary" id="login-btn" style="width:100%">Sign In</button>
+  </div>
+</div>
+
+<!-- App -->
+<div id="app" class="hidden" style="display:contents">
+  <!-- Sidebar -->
+  <nav class="sidebar">
+    <div class="sidebar-header">
+      <h1>LLM Gateway</h1>
+      <small>Admin Dashboard</small>
+    </div>
+    <a class="nav-item active" id="nav-dashboard">Dashboard</a>
+    <a class="nav-item" id="nav-keys">Virtual Keys</a>
+    <a class="nav-item" id="nav-spend">Spend</a>
+    <a class="nav-item" id="nav-batches">Batches</a>
+    <a class="nav-item" id="nav-guardrails">Guardrails</a>
+  </nav>
+
+  <!-- Content -->
+  <main class="main">
+
+    <!-- Dashboard Page -->
+    <div id="page-dashboard">
+      <div class="page-header"><h2>Dashboard</h2></div>
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="label">Status</div>
+          <div class="value success" id="stat-status">-</div>
+        </div>
+        <div class="stat-card">
+          <div class="label">Models</div>
+          <div class="value accent" id="stat-models">-</div>
+        </div>
+        <div class="stat-card">
+          <div class="label">Virtual Keys</div>
+          <div class="value" id="stat-keys">-</div>
+        </div>
+        <div class="stat-card">
+          <div class="label">Recent Batches</div>
+          <div class="value" id="stat-batches">-</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Keys Page -->
+    <div id="page-keys" class="hidden">
+      <div class="page-header">
+        <h2>Virtual Keys</h2>
+        <button class="btn btn-primary" id="btn-generate-key">Generate Key</button>
+      </div>
+      <div class="card">
+        <table>
+          <thead>
+            <tr>
+              <th>Key Prefix</th>
+              <th>Name</th>
+              <th>Team</th>
+              <th>Tier</th>
+              <th>RPM Limit</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="keys-tbody">
+            <tr><td colspan="7" class="text-muted">Loading...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Spend Page -->
+    <div id="page-spend" class="hidden">
+      <div class="page-header"><h2>Spend Report</h2></div>
+      <div class="card">
+        <table>
+          <thead>
+            <tr><th>Model</th><th>Requests</th><th>Tokens</th><th>Cost</th><th>Period</th></tr>
+          </thead>
+          <tbody id="spend-tbody">
+            <tr><td colspan="5" class="text-muted">Loading...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Batches Page -->
+    <div id="page-batches" class="hidden">
+      <div class="page-header"><h2>Batch Jobs</h2></div>
+      <div class="card">
+        <table>
+          <thead>
+            <tr><th>ID</th><th>Status</th><th>Total</th><th>Progress</th><th>Created</th><th>Actions</th></tr>
+          </thead>
+          <tbody id="batches-tbody">
+            <tr><td colspan="6" class="text-muted">Loading...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Guardrails Page -->
+    <div id="page-guardrails" class="hidden">
+      <div class="page-header"><h2>Guardrails</h2></div>
+      <div class="card" id="guardrails-info">
+        <p class="text-muted">Loading...</p>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<!-- Generate Key Modal -->
+<div id="generate-key-modal" class="modal-overlay hidden">
+  <div class="modal">
+    <h3>Generate Virtual Key</h3>
+    <div class="form-group">
+      <label>Name *</label>
+      <input type="text" id="gk-name" placeholder="e.g. production-app">
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Team ID</label>
+        <input type="text" id="gk-team" placeholder="Optional">
+      </div>
+      <div class="form-group">
+        <label>Tier</label>
+        <input type="text" id="gk-tier" placeholder="default">
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>RPM Limit</label>
+        <input type="number" id="gk-rpm" placeholder="0 = unlimited">
+      </div>
+      <div class="form-group">
+        <label>Max Budget ($)</label>
+        <input type="number" id="gk-budget" step="0.01" placeholder="0 = unlimited">
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-danger" id="gk-cancel">Cancel</button>
+      <button class="btn btn-primary" id="gk-submit">Generate</button>
+    </div>
+  </div>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>

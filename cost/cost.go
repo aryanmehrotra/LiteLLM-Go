@@ -1,0 +1,123 @@
+package cost
+
+import (
+	"strconv"
+	"strings"
+	"sync"
+
+	"examples/llm-gateway/models"
+)
+
+// ModelPricing holds per-token pricing for a model.
+type ModelPricing struct {
+	InputPer1KTokens  float64
+	OutputPer1KTokens float64
+}
+
+// default pricing table for known models (USD per 1K tokens).
+var defaultPricing = map[string]ModelPricing{
+	// OpenAI
+	"gpt-4o":         {InputPer1KTokens: 0.0025, OutputPer1KTokens: 0.01},
+	"gpt-4o-mini":    {InputPer1KTokens: 0.00015, OutputPer1KTokens: 0.0006},
+	"gpt-4-turbo":    {InputPer1KTokens: 0.01, OutputPer1KTokens: 0.03},
+	"gpt-3.5-turbo":  {InputPer1KTokens: 0.0005, OutputPer1KTokens: 0.0015},
+
+	// Anthropic
+	"claude-sonnet-4-20250514":   {InputPer1KTokens: 0.003, OutputPer1KTokens: 0.015},
+	"claude-haiku-4-20250414":    {InputPer1KTokens: 0.0008, OutputPer1KTokens: 0.004},
+	"claude-3-5-sonnet-20241022": {InputPer1KTokens: 0.003, OutputPer1KTokens: 0.015},
+
+	// Groq
+	"llama-3.3-70b-versatile": {InputPer1KTokens: 0.00059, OutputPer1KTokens: 0.00079},
+	"llama-3.1-8b-instant":    {InputPer1KTokens: 0.00005, OutputPer1KTokens: 0.00008},
+	"mixtral-8x7b-32768":      {InputPer1KTokens: 0.00024, OutputPer1KTokens: 0.00024},
+	"gemma2-9b-it":            {InputPer1KTokens: 0.0002, OutputPer1KTokens: 0.0002},
+
+	// DeepSeek
+	"deepseek-chat":     {InputPer1KTokens: 0.00014, OutputPer1KTokens: 0.00028},
+	"deepseek-reasoner": {InputPer1KTokens: 0.00055, OutputPer1KTokens: 0.00219},
+
+	// Gemini
+	"gemini-2.0-flash":      {InputPer1KTokens: 0.0001, OutputPer1KTokens: 0.0004},
+	"gemini-2.0-flash-lite": {InputPer1KTokens: 0.000075, OutputPer1KTokens: 0.0003},
+	"gemini-1.5-pro":        {InputPer1KTokens: 0.00125, OutputPer1KTokens: 0.005},
+	"gemini-1.5-flash":      {InputPer1KTokens: 0.000075, OutputPer1KTokens: 0.0003},
+
+	// Embeddings
+	"text-embedding-3-small": {InputPer1KTokens: 0.00002, OutputPer1KTokens: 0},
+	"text-embedding-3-large": {InputPer1KTokens: 0.00013, OutputPer1KTokens: 0},
+	"text-embedding-ada-002": {InputPer1KTokens: 0.0001, OutputPer1KTokens: 0},
+}
+
+var (
+	overrideMu      sync.RWMutex
+	overridePricing = make(map[string]ModelPricing)
+)
+
+// SetPricing adds or overrides pricing for a model.
+func SetPricing(model string, pricing ModelPricing) {
+	overrideMu.Lock()
+	overridePricing[model] = pricing
+	overrideMu.Unlock()
+}
+
+// Calculate computes the dollar cost for a request based on the model and usage.
+// Checks custom overrides first, then falls back to default pricing.
+// Returns 0 if the model is not in any pricing table.
+func Calculate(model string, usage models.Usage) float64 {
+	pricing, ok := getPricing(model)
+	if !ok {
+		return 0
+	}
+
+	inputCost := float64(usage.PromptTokens) / 1000 * pricing.InputPer1KTokens
+	outputCost := float64(usage.CompletionTokens) / 1000 * pricing.OutputPer1KTokens
+
+	return inputCost + outputCost
+}
+
+// GetPricing returns the pricing for a model, if known.
+func GetPricing(model string) (ModelPricing, bool) {
+	return getPricing(model)
+}
+
+func getPricing(model string) (ModelPricing, bool) {
+	overrideMu.RLock()
+	if p, ok := overridePricing[model]; ok {
+		overrideMu.RUnlock()
+		return p, true
+	}
+	overrideMu.RUnlock()
+
+	p, ok := defaultPricing[model]
+	return p, ok
+}
+
+// ParseCustomPricing parses "model:input:output,model:input:output" format.
+func ParseCustomPricing(config string) {
+	if config == "" {
+		return
+	}
+
+	for _, entry := range strings.Split(config, ",") {
+		entry = strings.TrimSpace(entry)
+		parts := strings.SplitN(entry, ":", 3)
+
+		if len(parts) != 3 {
+			continue
+		}
+
+		model := strings.TrimSpace(parts[0])
+		input, err1 := strconv.ParseFloat(strings.TrimSpace(parts[1]), 64)
+		output, err2 := strconv.ParseFloat(strings.TrimSpace(parts[2]), 64)
+
+		if err1 != nil || err2 != nil {
+			continue
+		}
+
+		SetPricing(model, ModelPricing{
+			InputPer1KTokens:  input,
+			OutputPer1KTokens: output,
+		})
+	}
+}

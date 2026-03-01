@@ -1,0 +1,1484 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LLM Gateway - Admin</title>
+  <link rel="stylesheet" href="/admin/style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>">
+</head>
+<body>
+
+<!-- Login -->
+<div id="login" class="login-container">
+  <div class="login-box">
+    <div class="login-logo">
+      <div class="login-logo-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+      </div>
+    </div>
+    <h2>LLM Gateway</h2>
+    <p class="login-subtitle">Sign in with your master key or virtual key</p>
+    <div class="login-error" id="login-error">Invalid API key. Please try again.</div>
+    <input type="password" id="login-key" placeholder="Enter your API key" autocomplete="off">
+    <button class="btn btn-primary" id="login-btn">
+      <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+      Sign In
+    </button>
+    <div class="login-hint">Master key = full admin access. Virtual key = view your own key info &amp; spend.</div>
+    <div class="login-branding">
+      <a href="https://gofr.dev" target="_blank" rel="noopener">
+        <img src="/admin/gofr-logo.svg" alt="GoFr" onerror="this.style.display='none'">
+        Powered by <strong class="gofr-logo-text">GoFr</strong>
+      </a>
+    </div>
+  </div>
+</div>
+
+<!-- App -->
+<div id="app" style="display:none">
+  <!-- Sidebar -->
+  <nav class="sidebar">
+    <div class="sidebar-header">
+      <div class="sidebar-logo">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+      </div>
+      <div class="sidebar-header-text">
+        <h1>LLM Gateway</h1>
+        <small>Admin Dashboard</small>
+      </div>
+    </div>
+    <div class="sidebar-nav">
+
+      <!-- User pages (virtual key holder) -->
+      <div data-role="user">
+        <div class="nav-section-label">My Account</div>
+        <a class="nav-item" id="nav-dashboard">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/></svg>
+          Dashboard
+        </a>
+        <a class="nav-item" id="nav-mykey">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"/></svg>
+          My Key
+        </a>
+        <a class="nav-item" id="nav-myspend">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+          My Usage
+        </a>
+        <div class="nav-section-label">Tools</div>
+        <a class="nav-item" id="nav-playground">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+          Playground
+        </a>
+        <div class="nav-section-label">Help</div>
+        <a class="nav-item" id="nav-docs">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+          API Docs
+        </a>
+      </div>
+
+      <!-- Admin pages -->
+      <div data-role="admin">
+        <div class="nav-section-label">Overview</div>
+        <a class="nav-item" id="nav-dashboard">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/></svg>
+          Dashboard
+        </a>
+        <a class="nav-item" id="nav-models">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+          Models
+        </a>
+        <a class="nav-item" id="nav-spend">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+          Spend & Usage
+        </a>
+        <div class="nav-section-label">Management</div>
+        <a class="nav-item" id="nav-keys">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"/></svg>
+          Virtual Keys
+        </a>
+        <a class="nav-item" id="nav-batches">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+          Batch Jobs
+        </a>
+        <div class="nav-section-label">Organization</div>
+        <a class="nav-item" id="nav-access">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+          Access Control
+        </a>
+        <div class="nav-section-label">Security</div>
+        <a class="nav-item" id="nav-guardrails">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          Guardrails
+        </a>
+        <a class="nav-item" id="nav-audit">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+          Audit Log
+        </a>
+        <div class="nav-section-label">System</div>
+        <a class="nav-item" id="nav-settings">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9c.26.604.852.997 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+          Settings
+        </a>
+        <div class="nav-section-label">Tools</div>
+        <a class="nav-item" id="nav-playground">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+          Playground
+        </a>
+        <div class="nav-section-label">Help</div>
+        <a class="nav-item" id="nav-docs">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+          API Docs
+        </a>
+      </div>
+    </div>
+    <div class="sidebar-footer">
+      <a href="https://gofr.dev" target="_blank" rel="noopener" class="powered-by">
+        <img src="/admin/gofr-logo.svg" alt="GoFr" onerror="this.style.display='none'">
+        Powered by <span class="gofr-logo-text">GoFr</span>
+      </a>
+    </div>
+  </nav>
+
+  <!-- Main content wrapper -->
+  <div class="main-wrapper">
+    <div class="topbar">
+      <div class="topbar-left">
+        <span class="topbar-breadcrumb">Admin &rsaquo; <span id="topbar-page">Dashboard</span></span>
+      </div>
+      <div class="topbar-right">
+        <span class="topbar-role role-admin" id="topbar-role-badge">Admin</span>
+        <div class="topbar-user">
+          <div class="topbar-avatar" id="topbar-avatar">A</div>
+          <span>Admin</span>
+        </div>
+        <button class="btn-logout" id="btn-logout">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+          Logout
+        </button>
+      </div>
+    </div>
+
+    <main class="main">
+
+      <!-- ==================== ADMIN DASHBOARD ==================== -->
+      <div id="page-dashboard">
+        <!-- Admin dashboard content -->
+        <div data-role="admin">
+          <div class="page-header">
+            <div><h2>Dashboard</h2><div class="page-header-subtitle">Gateway overview and quick actions</div></div>
+            <div class="page-header-actions">
+              <button class="btn btn-secondary" id="btn-refresh-dash">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
+                Refresh
+              </button>
+            </div>
+          </div>
+          <div class="stats-grid">
+            <div class="stat-card"><div class="stat-card-header"><div class="label">Gateway Status</div><div class="stat-card-icon success"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></div></div><div class="value success" id="stat-status">&mdash;</div><div class="stat-footer">System health check</div></div>
+            <div class="stat-card"><div class="stat-card-header"><div class="label">Models</div><div class="stat-card-icon accent"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/></svg></div></div><div class="value accent" id="stat-models">&mdash;</div><div class="stat-footer">Across all providers</div></div>
+            <div class="stat-card"><div class="stat-card-header"><div class="label">Virtual Keys</div><div class="stat-card-icon purple"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5"/></svg></div></div><div class="value purple" id="stat-keys">&mdash;</div><div class="stat-footer">Active API keys</div></div>
+            <div class="stat-card"><div class="stat-card-header"><div class="label">Batch Jobs</div><div class="stat-card-icon warning"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div></div><div class="value warning" id="stat-batches">&mdash;</div><div class="stat-footer">Total submitted</div></div>
+          </div>
+          <div class="quick-actions">
+            <div class="quick-action" onclick="navigate('keys');setTimeout(showGenerateKeyModal,100)"><div class="quick-action-icon" style="background:var(--accent-glow);color:var(--accent)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div><div class="quick-action-text"><h4>Generate Key</h4><p>Create a new virtual API key</p></div></div>
+            <div class="quick-action" onclick="navigate('spend')"><div class="quick-action-icon" style="background:var(--success-glow);color:var(--success)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div><div class="quick-action-text"><h4>View Spend</h4><p>Analyze costs across models</p></div></div>
+            <div class="quick-action" onclick="navigate('access')"><div class="quick-action-icon" style="background:var(--purple-glow);color:var(--purple)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg></div><div class="quick-action-text"><h4>Access Control</h4><p>Teams, users &amp; organizations</p></div></div>
+          </div>
+          <div class="dashboard-grid">
+            <div class="card"><div class="card-header"><h3>Recent Activity</h3><button class="btn btn-ghost btn-sm" onclick="navigate('spend')">View All</button></div><div class="card-body no-pad" id="dashboard-activity"><div class="empty-state"><div class="empty-state-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div><h4>No recent activity</h4><p>Activity appears once requests flow through the gateway.</p></div></div></div>
+            <div class="card"><div class="card-header"><h3>System Info</h3></div><div class="card-body no-pad" id="dashboard-info">
+              <div class="activity-item"><div class="activity-dot accent"></div><div class="activity-text">Framework</div><div class="activity-time" style="color:var(--accent);font-weight:500">GoFr</div></div>
+              <div class="activity-item"><div class="activity-dot success"></div><div class="activity-text">Database</div><div class="activity-time">PostgreSQL</div></div>
+              <div class="activity-item"><div class="activity-dot success"></div><div class="activity-text">Cache</div><div class="activity-time">Redis</div></div>
+              <div class="activity-item"><div class="activity-dot accent"></div><div class="activity-text">Guardrails</div><div class="activity-time">Enabled</div></div>
+              <div class="activity-item"><div class="activity-dot success"></div><div class="activity-text">Teams</div><div class="activity-time" id="info-teams">&mdash;</div></div>
+              <div class="activity-item"><div class="activity-dot success"></div><div class="activity-text">Users</div><div class="activity-time" id="info-users">&mdash;</div></div>
+            </div></div>
+          </div>
+        </div>
+
+        <!-- User dashboard content -->
+        <div data-role="user">
+          <div class="page-header">
+            <div><h2>My Dashboard</h2><div class="page-header-subtitle">Your key information and usage overview</div></div>
+            <div class="page-header-actions">
+              <button class="btn btn-secondary" id="btn-refresh-dash">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
+                Refresh
+              </button>
+            </div>
+          </div>
+          <div class="stats-grid" id="user-dash-stats"></div>
+          <div class="dashboard-grid">
+            <div class="card" id="user-dash-spend"><div class="card-header"><h3>My Usage</h3></div><div class="card-body"><p class="text-muted">Loading...</p></div></div>
+            <div class="card"><div class="card-header"><h3>Key Details</h3></div><div class="card-body no-pad" id="user-dash-info"><p class="text-muted" style="padding:20px">Loading...</p></div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ==================== MY KEY (user) ==================== -->
+      <div id="page-mykey" class="hidden">
+        <div class="page-header"><div><h2>My Key</h2><div class="page-header-subtitle">Your virtual key details and limits</div></div></div>
+        <div id="mykey-content"><p class="text-muted">Loading...</p></div>
+      </div>
+
+      <!-- ==================== MY SPEND (user) ==================== -->
+      <div id="page-myspend" class="hidden">
+        <div class="page-header">
+          <div><h2>My Usage</h2><div class="page-header-subtitle">Your personal spend and token usage</div></div>
+          <div class="page-header-actions">
+            <select id="myspend-group-by" style="width:160px">
+              <option value="model">Group by Model</option>
+              <option value="provider">Group by Provider</option>
+            </select>
+            <button class="btn btn-secondary" onclick="loadMySpend()">Refresh</button>
+          </div>
+        </div>
+        <div class="spend-summary">
+          <div class="spend-card"><div class="label">My Total Spend</div><div class="value" id="myspend-total" style="color:var(--success)">$0.00</div></div>
+          <div class="spend-card"><div class="label">My Requests</div><div class="value" id="myspend-requests" style="color:var(--accent)">0</div></div>
+          <div class="spend-card"><div class="label">My Tokens</div><div class="value" id="myspend-tokens" style="color:var(--purple)">0</div></div>
+        </div>
+        <div class="card"><div class="card-header"><h3>Usage Breakdown</h3></div><div class="card-body no-pad">
+          <table><thead><tr><th id="myspend-col-group">Model</th><th>Requests</th><th>Tokens</th><th>Cost</th></tr></thead>
+          <tbody id="myspend-tbody"><tr><td colspan="4" class="text-muted" style="text-align:center;padding:40px">Loading...</td></tr></tbody></table>
+        </div></div>
+      </div>
+
+      <!-- ==================== MODELS (admin) ==================== -->
+      <div id="page-models" class="hidden">
+        <div class="page-header">
+          <div><h2>Models</h2><div class="page-header-subtitle">All available models across configured providers</div></div>
+          <div class="page-header-actions">
+            <input type="text" id="models-search" placeholder="Search models..." style="width:240px">
+            <button class="btn btn-secondary" onclick="loadModels()">Refresh</button>
+          </div>
+        </div>
+        <div class="stats-grid" id="models-provider-stats"></div>
+        <div class="card"><div class="card-body no-pad">
+          <table><thead><tr><th>Model ID</th><th>Provider</th><th>Type</th></tr></thead>
+          <tbody id="models-tbody"><tr><td colspan="3" class="text-muted" style="text-align:center;padding:40px">Loading...</td></tr></tbody></table>
+        </div></div>
+      </div>
+
+      <!-- ==================== SPEND (admin) ==================== -->
+      <div id="page-spend" class="hidden">
+        <div class="page-header">
+          <div><h2>Spend & Usage</h2><div class="page-header-subtitle">Cost breakdown across models and providers</div></div>
+          <div class="page-header-actions">
+            <select id="spend-group-by" style="width:160px"><option value="model">Group by Model</option><option value="provider">Group by Provider</option><option value="key">Group by Key</option><option value="team">Group by Team</option><option value="user">Group by User</option><option value="org">Group by Org</option></select>
+            <button class="btn btn-secondary" onclick="loadSpend()">Refresh</button>
+          </div>
+        </div>
+        <div class="spend-summary">
+          <div class="spend-card"><div class="label">Total Spend</div><div class="value" id="spend-total" style="color:var(--success)">$0.00</div></div>
+          <div class="spend-card"><div class="label">Total Requests</div><div class="value" id="spend-requests" style="color:var(--accent)">0</div></div>
+          <div class="spend-card"><div class="label">Total Tokens</div><div class="value" id="spend-tokens" style="color:var(--purple)">0</div></div>
+        </div>
+        <div class="card"><div class="card-header"><h3 id="spend-table-title">Usage by Model</h3></div><div class="card-body no-pad">
+          <table><thead><tr><th id="spend-col-group">Model</th><th>Requests</th><th>Tokens</th><th>Cost</th><th>Period</th></tr></thead>
+          <tbody id="spend-tbody"><tr><td colspan="5" class="text-muted" style="text-align:center;padding:40px">Loading...</td></tr></tbody></table>
+        </div></div>
+      </div>
+
+      <!-- ==================== KEYS (admin) ==================== -->
+      <div id="page-keys" class="hidden">
+        <div class="page-header">
+          <div><h2>Virtual Keys</h2><div class="page-header-subtitle">Manage API keys for your teams and applications</div></div>
+          <div class="page-header-actions">
+            <button class="btn btn-secondary" onclick="loadKeys()">Refresh</button>
+            <button class="btn btn-primary" id="btn-generate-key"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg> Generate Key</button>
+          </div>
+        </div>
+        <div class="card"><div class="card-body no-pad">
+          <table><thead><tr><th>Key Prefix</th><th>Name</th><th>Team</th><th>Tier</th><th>RPM Limit</th><th>Status</th><th style="text-align:right">Actions</th></tr></thead>
+          <tbody id="keys-tbody"><tr><td colspan="7" class="text-muted" style="text-align:center;padding:40px">Loading...</td></tr></tbody></table>
+        </div></div>
+      </div>
+
+      <!-- ==================== BATCHES (admin) ==================== -->
+      <div id="page-batches" class="hidden">
+        <div class="page-header"><div><h2>Batch Jobs</h2><div class="page-header-subtitle">Submit and track batch processing jobs</div></div><div class="page-header-actions"><button class="btn btn-secondary" onclick="loadBatches()">Refresh</button></div></div>
+        <div class="card"><div class="card-body no-pad">
+          <table><thead><tr><th>ID</th><th>Status</th><th>Total</th><th>Progress</th><th>Created</th><th style="text-align:right">Actions</th></tr></thead>
+          <tbody id="batches-tbody"><tr><td colspan="6" class="text-muted" style="text-align:center;padding:40px">Loading...</td></tr></tbody></table>
+        </div></div>
+      </div>
+
+      <!-- ==================== ACCESS CONTROL (admin) ==================== -->
+      <div id="page-access" class="hidden">
+        <div class="page-header">
+          <div><h2>Access Control</h2><div class="page-header-subtitle">Manage teams, users, and organizations</div></div>
+        </div>
+        <div class="tab-bar" id="access-tabs">
+          <button class="tab active" data-tab="teams" onclick="switchAccessTab('teams')">Teams</button>
+          <button class="tab" data-tab="users" onclick="switchAccessTab('users')">Users</button>
+          <button class="tab" data-tab="orgs" onclick="switchAccessTab('orgs')">Organizations</button>
+        </div>
+
+        <div id="access-tab-teams">
+          <div style="display:flex;justify-content:flex-end;gap:8px;margin-bottom:16px">
+            <button class="btn btn-secondary" onclick="loadTeams()">Refresh</button>
+            <button class="btn btn-primary" id="btn-create-team"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg> Create Team</button>
+          </div>
+          <div class="card"><div class="card-body no-pad">
+            <table><thead><tr><th>ID</th><th>Name</th><th>Org ID</th><th>Max Budget</th><th>Created</th><th style="text-align:right">Actions</th></tr></thead>
+            <tbody id="teams-tbody"><tr><td colspan="6" class="text-muted" style="text-align:center;padding:40px">Loading...</td></tr></tbody></table>
+          </div></div>
+        </div>
+
+        <div id="access-tab-users" class="hidden">
+          <div style="display:flex;justify-content:flex-end;gap:8px;margin-bottom:16px">
+            <button class="btn btn-secondary" onclick="loadUsers()">Refresh</button>
+            <button class="btn btn-primary" id="btn-create-user"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg> Create User</button>
+          </div>
+          <div class="card"><div class="card-body no-pad">
+            <table><thead><tr><th>ID</th><th>User ID</th><th>Email</th><th>Role</th><th>Team</th><th>Org</th><th>Max Budget</th><th style="text-align:right">Actions</th></tr></thead>
+            <tbody id="users-tbody"><tr><td colspan="8" class="text-muted" style="text-align:center;padding:40px">Loading...</td></tr></tbody></table>
+          </div></div>
+        </div>
+
+        <div id="access-tab-orgs" class="hidden">
+          <div style="display:flex;justify-content:flex-end;gap:8px;margin-bottom:16px">
+            <button class="btn btn-secondary" onclick="loadOrgs()">Refresh</button>
+            <button class="btn btn-primary" id="btn-create-org"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg> Create Organization</button>
+          </div>
+          <div class="card"><div class="card-body no-pad">
+            <table><thead><tr><th>ID</th><th>Name</th><th>Admin</th><th>Max Budget</th><th>Created</th><th style="text-align:right">Actions</th></tr></thead>
+            <tbody id="orgs-tbody"><tr><td colspan="6" class="text-muted" style="text-align:center;padding:40px">Loading...</td></tr></tbody></table>
+          </div></div>
+        </div>
+      </div>
+
+      <!-- ==================== GUARDRAILS (admin) ==================== -->
+      <div id="page-guardrails" class="hidden">
+        <div class="page-header">
+          <div><h2>Guardrails</h2><div class="page-header-subtitle">Content filtering and safety configurations (env defaults + DB overrides)</div></div>
+          <div class="page-header-actions">
+            <button class="btn btn-secondary" onclick="loadGuardrails()">Refresh</button>
+            <button class="btn btn-primary" id="btn-add-guardrail"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg> Add Config</button>
+          </div>
+        </div>
+        <div class="guardrail-info card">
+          <div class="card-body" style="padding:14px 20px;font-size:12px;color:var(--text-muted);line-height:1.6">
+            <strong style="color:var(--text-secondary)">How it works:</strong> Environment variables set the global defaults. DB configs (below) override them. A row with empty key_hash is the <strong>global DB override</strong>. Rows with a key_hash apply only to that specific virtual key.
+          </div>
+        </div>
+        <div class="card"><div class="card-header"><h3>Guardrail Configurations</h3></div><div class="card-body no-pad">
+          <table><thead><tr><th>Scope</th><th>PII Action</th><th>Max Input Tokens</th><th>Max Output Tokens</th><th>Blocked Keywords</th><th>Enabled</th><th style="text-align:right">Actions</th></tr></thead>
+          <tbody id="guardrails-tbody"><tr><td colspan="7" class="text-muted" style="text-align:center;padding:40px">Loading...</td></tr></tbody></table>
+        </div></div>
+      </div>
+
+      <!-- ==================== SETTINGS (admin) ==================== -->
+      <div id="page-settings" class="hidden">
+        <div class="page-header">
+          <div><h2>Settings</h2><div class="page-header-subtitle">Current gateway configuration (from environment / .env file)</div></div>
+          <div class="page-header-actions"><button class="btn btn-secondary" onclick="loadSettings()">Refresh</button></div>
+        </div>
+        <div class="card" style="margin-bottom: 20px">
+          <div class="card-header"><h3>Provider Configuration</h3><div class="card-header-subtitle" style="font-size:12px;color:var(--text-muted);margin-left:12px">Add or update provider API keys. Changes take effect on restart.</div></div>
+          <div class="card-body">
+            <div class="settings-provider-grid" id="provider-config-form">
+              <div class="form-group">
+                <label>OpenAI API Key</label>
+                <div class="settings-input-row">
+                  <input type="password" id="cfg-openai-key" placeholder="sk-..." class="settings-key-input">
+                  <button class="btn btn-sm btn-secondary" onclick="toggleKeyVisibility('cfg-openai-key')">Show</button>
+                </div>
+                <span class="settings-provider-status" id="cfg-openai-status"></span>
+              </div>
+              <div class="form-group">
+                <label>Anthropic API Key</label>
+                <div class="settings-input-row">
+                  <input type="password" id="cfg-anthropic-key" placeholder="sk-ant-...">
+                  <button class="btn btn-sm btn-secondary" onclick="toggleKeyVisibility('cfg-anthropic-key')">Show</button>
+                </div>
+                <span class="settings-provider-status" id="cfg-anthropic-status"></span>
+              </div>
+              <div class="form-group">
+                <label>Groq API Key</label>
+                <div class="settings-input-row">
+                  <input type="password" id="cfg-groq-key" placeholder="gsk_...">
+                  <button class="btn btn-sm btn-secondary" onclick="toggleKeyVisibility('cfg-groq-key')">Show</button>
+                </div>
+                <span class="settings-provider-status" id="cfg-groq-status"></span>
+              </div>
+              <div class="form-group">
+                <label>DeepSeek API Key</label>
+                <div class="settings-input-row">
+                  <input type="password" id="cfg-deepseek-key" placeholder="sk-...">
+                  <button class="btn btn-sm btn-secondary" onclick="toggleKeyVisibility('cfg-deepseek-key')">Show</button>
+                </div>
+                <span class="settings-provider-status" id="cfg-deepseek-status"></span>
+              </div>
+              <div class="form-group">
+                <label>Gemini API Key</label>
+                <div class="settings-input-row">
+                  <input type="password" id="cfg-gemini-key" placeholder="AI...">
+                  <button class="btn btn-sm btn-secondary" onclick="toggleKeyVisibility('cfg-gemini-key')">Show</button>
+                </div>
+                <span class="settings-provider-status" id="cfg-gemini-status"></span>
+              </div>
+              <div class="form-group">
+                <label>Ollama Base URL</label>
+                <div class="settings-input-row">
+                  <input type="text" id="cfg-ollama-url" placeholder="http://localhost:11434">
+                </div>
+                <span class="settings-provider-status" id="cfg-ollama-status"></span>
+              </div>
+            </div>
+            <div style="margin-top: 16px; display: flex; gap: 8px;">
+              <button class="btn btn-primary" id="save-provider-config" onclick="saveProviderConfig()">Save Provider Config</button>
+              <span id="provider-config-status" style="align-self: center; font-size: 13px; color: var(--text-secondary)"></span>
+            </div>
+          </div>
+        </div>
+        <div id="settings-content"><p class="text-muted">Loading...</p></div>
+      </div>
+
+      <!-- ==================== AUDIT LOG (admin) ==================== -->
+      <div id="page-audit" class="hidden">
+        <div class="page-header">
+          <div><h2>Audit Log</h2><div class="page-header-subtitle">Track all administrative actions</div></div>
+          <div class="page-header-actions">
+            <select id="audit-entity-filter" style="width:150px"><option value="">All Entities</option><option value="team">Teams</option><option value="user">Users</option><option value="organization">Organizations</option><option value="virtual_key">Virtual Keys</option></select>
+            <select id="audit-action-filter" style="width:150px"><option value="">All Actions</option><option value="create">Create</option><option value="delete">Delete</option><option value="rotate">Rotate</option></select>
+            <button class="btn btn-secondary" onclick="loadAudit()">Refresh</button>
+          </div>
+        </div>
+        <div class="card"><div class="card-body no-pad">
+          <table><thead><tr><th>ID</th><th>Action</th><th>Entity Type</th><th>Entity ID</th><th>Actor</th><th>Details</th><th>Timestamp</th></tr></thead>
+          <tbody id="audit-tbody"><tr><td colspan="7" class="text-muted" style="text-align:center;padding:40px">Loading...</td></tr></tbody></table>
+        </div></div>
+      </div>
+
+      <!-- ==================== PLAYGROUND ==================== -->
+      <div id="page-playground" class="hidden">
+        <div class="page-header">
+          <div><h2>API Playground</h2><div class="page-header-subtitle">Test API calls directly from your browser</div></div>
+        </div>
+        <div class="playground-layout">
+          <div class="playground-input card">
+            <div class="card-header"><h3>Request</h3></div>
+            <div class="card-body">
+              <div class="form-group">
+                <label>Model</label>
+                <select id="pg-model"><option value="">Loading models...</option></select>
+              </div>
+              <div class="form-group">
+                <label>System Prompt <span class="text-muted">(optional)</span></label>
+                <textarea id="pg-system" rows="2" placeholder="You are a helpful assistant."></textarea>
+              </div>
+              <div class="form-group">
+                <label>Message</label>
+                <textarea id="pg-message" rows="6" placeholder="Type your message here... (Ctrl+Enter to send)"></textarea>
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label>Temperature: <span id="pg-temp-value">0.7</span></label>
+                  <input type="range" id="pg-temperature" min="0" max="2" step="0.1" value="0.7">
+                </div>
+                <div class="form-group">
+                  <label>Max Tokens</label>
+                  <input type="number" id="pg-max-tokens" value="1000" min="1" max="128000">
+                </div>
+              </div>
+              <div class="form-row" style="align-items:center">
+                <div class="form-group" style="flex:0 0 auto">
+                  <label style="display:flex;align-items:center;gap:8px;cursor:pointer"><input type="checkbox" id="pg-websearch" style="width:auto"> Enable Web Search</label>
+                </div>
+                <div class="form-group" id="pg-websearch-opts" style="display:none">
+                  <label>Search Context</label>
+                  <select id="pg-search-context" style="width:auto"><option value="medium">Medium</option><option value="low">Low</option><option value="high">High</option></select>
+                </div>
+              </div>
+              <button class="btn btn-primary" id="pg-send" style="width:100%;justify-content:center">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+                Send Request
+              </button>
+            </div>
+          </div>
+          <div class="playground-output card">
+            <div class="card-header">
+              <h3>Response</h3>
+              <div class="playground-tabs">
+                <button class="playground-tab active" data-tab="response" onclick="switchPlaygroundTab('response')">Output</button>
+                <button class="playground-tab" data-tab="curl" onclick="switchPlaygroundTab('curl')">Request</button>
+              </div>
+            </div>
+            <div class="card-body">
+              <div id="pg-tab-response">
+                <div class="playground-response" id="pg-response">
+                  <div class="empty-state" style="padding:32px 16px">
+                    <div class="empty-state-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg></div>
+                    <h4>Ready to test</h4>
+                    <p>Select a model, type a message, and hit Send to see the response here.</p>
+                  </div>
+                </div>
+                <div class="playground-meta hidden" id="pg-meta">
+                  <div class="playground-meta-item"><span class="playground-meta-label">Model</span><span id="pg-meta-model">--</span></div>
+                  <div class="playground-meta-item"><span class="playground-meta-label">Latency</span><span id="pg-meta-latency">--</span></div>
+                  <div class="playground-meta-item"><span class="playground-meta-label">Prompt Tokens</span><span id="pg-meta-prompt-tokens">--</span></div>
+                  <div class="playground-meta-item"><span class="playground-meta-label">Completion Tokens</span><span id="pg-meta-completion-tokens">--</span></div>
+                  <div class="playground-meta-item"><span class="playground-meta-label">Total Tokens</span><span id="pg-meta-total-tokens">--</span></div>
+                  <div class="playground-meta-item"><span class="playground-meta-label">Cost</span><span id="pg-meta-cost">--</span></div>
+                  <div class="playground-meta-item"><span class="playground-meta-label">Cached</span><span id="pg-meta-cached">--</span></div>
+                </div>
+              </div>
+              <div id="pg-tab-curl" class="hidden">
+                <div class="playground-curl">
+                  <button class="btn btn-secondary btn-sm playground-curl-copy" id="pg-curl-copy" onclick="copyPlaygroundCurl()">
+                    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                    Copy
+                  </button>
+                  <pre id="pg-curl-content">Send a request to see the equivalent curl command here.</pre>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ==================== API DOCS ==================== -->
+      <div id="page-docs" class="hidden">
+        <div class="page-header"><div><h2>Documentation</h2><div class="page-header-subtitle">Complete guide to using the LLM Gateway</div></div></div>
+
+        <div class="docs-layout">
+        <!-- Sticky sidebar TOC -->
+        <nav class="docs-sidebar" id="docs-sidebar">
+          <div class="docs-sidebar-title">Contents</div>
+          <a onclick="docNav('docs-overview')" class="docs-nav-item active" data-doc="docs-overview">Overview</a>
+          <a onclick="docNav('docs-quickstart')" class="docs-nav-item" data-doc="docs-quickstart">Quickstart</a>
+          <a onclick="docNav('docs-usecases')" class="docs-nav-item" data-doc="docs-usecases">Use Cases</a>
+          <a onclick="docNav('docs-cost-optimization')" class="docs-nav-item" data-doc="docs-cost-optimization">Cost Optimization</a>
+          <a onclick="docNav('docs-clients')" class="docs-nav-item" data-doc="docs-clients">Client Libraries</a>
+          <div class="docs-nav-divider">API Reference</div>
+          <a onclick="docNav('docs-chat')" class="docs-nav-item" data-doc="docs-chat">Chat Completions</a>
+          <a onclick="docNav('docs-streaming')" class="docs-nav-item" data-doc="docs-streaming">Streaming</a>
+          <a onclick="docNav('docs-embeddings')" class="docs-nav-item" data-doc="docs-embeddings">Embeddings</a>
+          <a onclick="docNav('docs-models')" class="docs-nav-item" data-doc="docs-models">Models</a>
+          <a onclick="docNav('docs-images')" class="docs-nav-item" data-doc="docs-images">Images &amp; Audio</a>
+          <div class="docs-nav-divider">Platform</div>
+          <a onclick="docNav('docs-routing')" class="docs-nav-item" data-doc="docs-routing">Routing &amp; Reliability</a>
+          <a onclick="docNav('docs-keys')" class="docs-nav-item" data-doc="docs-keys">Virtual Keys</a>
+          <a onclick="docNav('docs-multitenancy')" class="docs-nav-item" data-doc="docs-multitenancy">Multi-Tenancy</a>
+          <a onclick="docNav('docs-spend')" class="docs-nav-item" data-doc="docs-spend">Spend Tracking</a>
+          <a onclick="docNav('docs-guardrails-doc')" class="docs-nav-item" data-doc="docs-guardrails-doc">Guardrails</a>
+          <a onclick="docNav('docs-batches')" class="docs-nav-item" data-doc="docs-batches">Batch Processing</a>
+          <a onclick="docNav('docs-config-ref')" class="docs-nav-item" data-doc="docs-config-ref">Configuration</a>
+        </nav>
+
+        <div class="docs-content">
+        <!-- ===== OVERVIEW ===== -->
+        <div class="docs-section" id="docs-overview">
+          <h3 class="docs-section-title">What is LLM Gateway?</h3>
+          <p class="docs-text">LLM Gateway is a <strong>unified API proxy</strong> for large language models. It sits between your application and LLM providers (OpenAI, Anthropic, Groq, DeepSeek, Gemini, Ollama), giving you a single <strong>OpenAI-compatible</strong> endpoint with built-in cost tracking, caching, rate limiting, guardrails, and multi-provider routing.</p>
+          <p class="docs-text">Think of it as a <strong>smart reverse proxy for AI</strong>. Your application sends requests to the gateway using the standard OpenAI API format. The gateway handles provider translation, retries, failover, caching, and observability &mdash; so you don't have to.</p>
+          <div class="docs-callout">
+            <strong>Key insight:</strong> You change one line &mdash; the <code>base_url</code> &mdash; in any OpenAI-compatible client library and instantly gain access to all providers, caching, budgets, and routing. No code changes beyond that.
+          </div>
+          <div class="docs-code-block">
+            <div class="docs-code-header">Architecture at a glance</div>
+            <pre>
+  Your App                    LLM Gateway                        Providers
+ +---------+    OpenAI API    +-------------------+    Native    +-----------+
+ |  Python |  ------------->  | Auth & Rate Limit |  -------->  |  OpenAI   |
+ |  Node   |                  | Cache Check       |             |  Claude   |
+ |  Go     |                  | Guardrails        |             |  Groq     |
+ |  curl   |                  | Router + Retry    |             |  DeepSeek |
+ +---------+  <-------------  | Cost Tracking     |  <--------  |  Gemini   |
+               cached/fresh   | Budget Check      |             |  Ollama   |
+                              +-------------------+             +-----------+
+                                     |
+                             +-------+-------+
+                             |  PostgreSQL   |  Redis  |
+                             |  (budgets,    | (cache, |
+                             |   keys, audit)|  RPM)   |
+                             +---------------+---------+</pre>
+          </div>
+        </div>
+
+        <!-- ===== QUICKSTART ===== -->
+        <div class="docs-section" id="docs-quickstart">
+          <h3 class="docs-section-title">Quickstart</h3>
+          <p class="docs-text">Get the gateway running and make your first request in under 5 minutes.</p>
+
+          <div class="docs-callout"><strong>Prerequisites:</strong> Go 1.25+, PostgreSQL, Redis. Provider API keys (at least one of OpenAI, Anthropic, etc.).</div>
+
+          <h4 class="docs-step-title">Step 1: Configure</h4>
+          <p class="docs-text">Create a <code>configs/.env</code> file with your provider keys and a master key for admin access:</p>
+          <div class="docs-code-block">
+            <div class="docs-code-header">configs/.env</div>
+            <pre>APP_NAME=llm-gateway
+HTTP_PORT=9000
+
+# Provider API keys (set at least one)
+OPENAI_API_KEY=sk-your-openai-key
+ANTHROPIC_API_KEY=sk-ant-your-anthropic-key
+
+# Gateway auth
+GATEWAY_API_KEYS=sk-gateway-key-1,sk-gateway-key-2
+GATEWAY_MASTER_KEY=sk-master-admin-2026
+
+# Infrastructure
+DB_HOST=localhost
+DB_PORT=5432
+DB_USER=postgres
+DB_PASSWORD=postgres
+DB_NAME=llmgw
+DB_DIALECT=postgres
+REDIS_HOST=localhost
+REDIS_PORT=6379
+
+# Cache responses for 5 minutes
+CACHE_TTL_SECONDS=300</pre>
+          </div>
+
+          <h4 class="docs-step-title">Step 2: Start</h4>
+          <div class="docs-code-block">
+            <div class="docs-code-header">Terminal</div>
+            <pre># Start dependencies
+docker compose up -d postgres redis
+
+# Run the gateway (migrations auto-apply on first start)
+go run .</pre>
+          </div>
+
+          <h4 class="docs-step-title">Step 3: Make your first request</h4>
+          <div class="docs-code-block">
+            <div class="docs-code-header">curl</div>
+            <pre>curl -X POST http://localhost:9000/v1/chat/completions \
+  -H "Authorization: Bearer sk-gateway-key-1" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "model": "openai/gpt-4o",
+    "messages": [{"role": "user", "content": "Hello!"}]
+  }'</pre>
+          </div>
+
+          <h4 class="docs-step-title">Step 4: Try another provider</h4>
+          <p class="docs-text">Same endpoint, same format &mdash; just change the model prefix:</p>
+          <div class="docs-code-block">
+            <div class="docs-code-header">Switch to Claude</div>
+            <pre>curl -X POST http://localhost:9000/v1/chat/completions \
+  -H "Authorization: Bearer sk-gateway-key-1" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "model": "anthropic/claude-sonnet-4-20250514",
+    "messages": [{"role": "user", "content": "Hello!"}]
+  }'</pre>
+          </div>
+          <div class="docs-callout">
+            <strong>Model naming:</strong> All models use <code>provider/model-name</code> format. The gateway translates the request to each provider's native API automatically. Example: <code>openai/gpt-4o</code>, <code>anthropic/claude-sonnet-4-20250514</code>, <code>groq/llama-3.3-70b-versatile</code>, <code>gemini/gemini-2.0-flash</code>, <code>ollama/llama3</code>.
+          </div>
+        </div>
+
+        <!-- ===== USE CASES ===== -->
+        <div class="docs-section" id="docs-usecases">
+          <h3 class="docs-section-title">Use Cases</h3>
+
+          <h4 class="docs-step-title">1. Multi-Provider Failover for Production Apps</h4>
+          <p class="docs-text">If your production app calls Claude and Anthropic has an outage, requests automatically fail over to OpenAI (or any fallback chain you define). No code changes, no downtime.</p>
+          <div class="docs-code-block">
+            <div class="docs-code-header">configs/.env</div>
+            <pre># Primary: Anthropic Claude. Fallback: OpenAI, then local Ollama.
+FALLBACK_CHAIN=anthropic,openai,ollama</pre>
+          </div>
+
+          <h4 class="docs-step-title">2. Cost Control for Team API Access</h4>
+          <p class="docs-text">Give each developer or team their own API key with a monthly spend budget. When the budget runs out, requests are rejected &mdash; not your credit card.</p>
+          <div class="docs-code-block">
+            <div class="docs-code-header">curl &mdash; create a $50 budget key</div>
+            <pre>curl -X POST http://localhost:9000/key/generate \
+  -H "Authorization: Bearer sk-master-admin-2026" \
+  -d '{
+    "name": "intern-project",
+    "team_id": "1",
+    "max_budget": 50.00,
+    "rate_limit_rpm": 30,
+    "allowed_models": ["openai/gpt-4o-mini", "groq/*"]
+  }'</pre>
+          </div>
+          <p class="docs-text">The intern can only use cheap models, at max 30 RPM, capped at $50 total spend. You can monitor their usage on the Spend dashboard.</p>
+
+          <h4 class="docs-step-title">3. Saving Money on Anthropic/Claude API Calls</h4>
+          <p class="docs-text">The gateway's <strong>Redis response cache</strong> saves you real money. If the same question is asked twice within the TTL window (default 5 minutes), the second call is served from cache &mdash; zero API tokens consumed.</p>
+          <div class="docs-callout">
+            <strong>Example:</strong> A customer support chatbot gets the same FAQ questions repeatedly. With caching enabled, duplicate questions cost <strong>$0.00</strong> after the first call. At $3/$15 per million tokens for Claude Sonnet 4, caching 30% of requests saves ~30% on your Claude bill.
+          </div>
+
+          <h4 class="docs-step-title">4. PII Protection Before Data Reaches the LLM</h4>
+          <p class="docs-text">Guardrails automatically detect and block (or redact) personal data before it ever leaves your network. HIPAA, GDPR, SOC2 compliance teams love this.</p>
+          <div class="docs-code-block">
+            <div class="docs-code-header">configs/.env</div>
+            <pre>GUARDRAIL_ENABLED=true
+GUARDRAIL_PII_ACTION=redact    # emails, SSNs, phone numbers, credit cards replaced
+GUARDRAIL_BLOCKED_KEYWORDS=internal,confidential,secret-project-name</pre>
+          </div>
+
+          <h4 class="docs-step-title">5. A/B Testing Models</h4>
+          <p class="docs-text">Use different routing strategies or virtual keys to send traffic to different models. Compare quality, speed, and cost from the Spend dashboard.</p>
+          <div class="docs-code-block">
+            <div class="docs-code-header">Two keys, two models, one dashboard</div>
+            <pre># Key for variant A (Claude)
+curl -X POST http://localhost:9000/key/generate \
+  -d '{"name": "ab-variant-a", "allowed_models": ["anthropic/claude-sonnet-4-20250514"]}'
+
+# Key for variant B (GPT-4o)
+curl -X POST http://localhost:9000/key/generate \
+  -d '{"name": "ab-variant-b", "allowed_models": ["openai/gpt-4o"]}'
+
+# Compare results: GET /spend/report?group_by=key</pre>
+          </div>
+
+          <h4 class="docs-step-title">6. Centralized AI for Enterprise (Multi-Tenancy)</h4>
+          <p class="docs-text">Run one gateway for your entire company. Each business unit gets an Organization, each project gets a Team, each developer gets a User &mdash; all with separate budgets, rate limits, and audit trails.</p>
+          <div class="docs-code-block">
+            <div class="docs-code-header">Hierarchy</div>
+            <pre>Organization: "Acme Corp" ($10,000/month)
+  +-- Team: "Engineering" ($5,000/month)
+  |     +-- User: "alice" ($500/month) --> Key: sk-alice-key
+  |     +-- User: "bob"   ($500/month) --> Key: sk-bob-key
+  +-- Team: "Marketing" ($2,000/month)
+        +-- User: "carol" ($200/month) --> Key: sk-carol-key</pre>
+          </div>
+
+          <h4 class="docs-step-title">7. Batch Processing for Data Pipelines</h4>
+          <p class="docs-text">Need to classify 10,000 documents? Submit them as a batch. The gateway processes them through a worker pool (configurable concurrency) and stores results in PostgreSQL. Poll for completion, then fetch results.</p>
+
+          <h4 class="docs-step-title">8. Drop-in OpenAI Replacement with Local Models</h4>
+          <p class="docs-text">Point the gateway at your local Ollama instance. Your existing OpenAI-client code works unchanged &mdash; just change the <code>base_url</code> and model prefix to <code>ollama/</code>.</p>
+        </div>
+
+        <!-- ===== COST OPTIMIZATION ===== -->
+        <div class="docs-section" id="docs-cost-optimization">
+          <h3 class="docs-section-title">Cost Optimization &amp; Token Savings</h3>
+          <p class="docs-text">The gateway provides multiple layers to reduce your LLM spend &mdash; especially valuable for expensive models like Claude Opus or GPT-4o.</p>
+
+          <h4 class="docs-step-title">1. Response Caching (biggest win)</h4>
+          <p class="docs-text">Identical requests (same model + messages + temperature + max_tokens) are served from Redis instead of calling the provider API. This is fully transparent &mdash; cached responses include <code>"cached": true</code> in the response.</p>
+          <div class="docs-code-block">
+            <div class="docs-code-header">Enable caching (configs/.env)</div>
+            <pre># Cache identical responses for 5 minutes
+CACHE_TTL_SECONDS=300
+
+# For stable prompts (e.g. classification), increase TTL
+CACHE_TTL_SECONDS=3600   # 1 hour</pre>
+          </div>
+          <div class="docs-callout">
+            <strong>When caching helps most:</strong> FAQ bots, document classification, data extraction pipelines, any workload where the same inputs repeat. At Claude Sonnet pricing ($3/$15 per 1M tokens), caching 50% of a 1M-request-per-month workload saves <strong>~$4,500/month</strong>.
+          </div>
+
+          <h4 class="docs-step-title">2. Smart Model Routing</h4>
+          <p class="docs-text">Use cheap models for simple tasks, expensive models for complex ones. Per-key <code>allowed_models</code> restrictions enforce this at the gateway level.</p>
+          <div class="docs-code-block">
+            <div class="docs-code-header">Route by task complexity</div>
+            <pre># Cheap key for classification/extraction (90% of requests)
+curl -X POST http://localhost:9000/key/generate \
+  -d '{"name": "classifier", "allowed_models": ["groq/llama-3.3-70b-versatile", "deepseek/deepseek-chat"]}'
+
+# Premium key for creative/complex tasks (10% of requests)
+curl -X POST http://localhost:9000/key/generate \
+  -d '{"name": "premium-tasks", "allowed_models": ["anthropic/claude-sonnet-4-20250514", "openai/gpt-4o"]}'</pre>
+          </div>
+          <div class="docs-code-block">
+            <div class="docs-code-header">Cost comparison per 1M tokens (input/output)</div>
+            <pre>Model                          Input     Output    Savings vs Claude Sonnet
+---                            ---       ---       ---
+groq/llama-3.3-70b             $0.59     $0.79     ~80% cheaper
+deepseek/deepseek-chat         $0.14     $0.28     ~95% cheaper
+gemini/gemini-2.0-flash        $0.10     $0.40     ~96% cheaper
+openai/gpt-4o-mini             $0.15     $0.60     ~93% cheaper
+anthropic/claude-sonnet-4      $3.00     $15.00    baseline
+openai/gpt-4o                  $2.50     $10.00    ~17% cheaper</pre>
+          </div>
+
+          <h4 class="docs-step-title">3. Fallback Chains (reliability + cost)</h4>
+          <p class="docs-text">Try a cheap provider first, fall back to premium only if it fails. Your app gets reliable responses without always paying premium prices.</p>
+          <div class="docs-code-block">
+            <div class="docs-code-header">configs/.env &mdash; cheapest first</div>
+            <pre># Try DeepSeek first ($0.14/1M), then Groq ($0.59/1M), then Claude ($3/1M)
+FALLBACK_CHAIN=deepseek,groq,anthropic</pre>
+          </div>
+
+          <h4 class="docs-step-title">4. Budget Caps</h4>
+          <p class="docs-text">Set hard spend limits per key, user, team, or org. When the budget is exhausted, requests return an error instead of running up your bill.</p>
+
+          <h4 class="docs-step-title">5. Rate Limiting</h4>
+          <p class="docs-text">Redis-backed sliding window rate limiting (RPM and TPM) prevents runaway scripts from burning through your quota. Set per virtual key.</p>
+
+          <h4 class="docs-step-title">6. Output Token Limits via Guardrails</h4>
+          <p class="docs-text">Set <code>GUARDRAIL_MAX_OUTPUT_TOKENS</code> to truncate verbose model responses. Fewer output tokens = lower cost.</p>
+        </div>
+
+        <!-- ===== CLIENT LIBRARIES ===== -->
+        <div class="docs-section" id="docs-clients">
+          <h3 class="docs-section-title">Client Integration</h3>
+          <p class="docs-text">The gateway is <strong>OpenAI API-compatible</strong>. Any library that works with OpenAI works with the gateway &mdash; just change the <code>base_url</code>. Here are examples in popular languages.</p>
+
+          <h4 class="docs-step-title">Python (OpenAI SDK)</h4>
+          <div class="docs-code-block">
+            <div class="docs-code-header">python</div>
+            <pre>from openai import OpenAI
+
+client = OpenAI(
+    base_url="http://localhost:9000/v1",
+    api_key="sk-gateway-key-1"  # your gateway key
+)
+
+# Works with any provider through the gateway
+response = client.chat.completions.create(
+    model="anthropic/claude-sonnet-4-20250514",
+    messages=[{"role": "user", "content": "Explain quantum computing in 3 sentences."}],
+    max_tokens=200
+)
+
+print(response.choices[0].message.content)
+print(f"Tokens: {response.usage.total_tokens}")
+
+# Embeddings work too
+emb = client.embeddings.create(
+    model="openai/text-embedding-3-small",
+    input=["Hello world"]
+)
+print(f"Dimensions: {len(emb.data[0].embedding)}")</pre>
+          </div>
+
+          <h4 class="docs-step-title">Python (Anthropic SDK &rarr; via Gateway)</h4>
+          <div class="docs-code-block">
+            <div class="docs-code-header">python &mdash; use Anthropic SDK through the gateway</div>
+            <pre># pip install anthropic
+import anthropic
+
+# Point Anthropic SDK at the gateway
+client = anthropic.Anthropic(
+    base_url="http://localhost:9000",
+    api_key="sk-gateway-key-1"
+)
+
+# Requests automatically route through the gateway
+# with caching, cost tracking, guardrails, etc.
+message = client.messages.create(
+    model="anthropic/claude-sonnet-4-20250514",
+    max_tokens=1024,
+    messages=[{"role": "user", "content": "Hello, Claude!"}]
+)</pre>
+          </div>
+
+          <h4 class="docs-step-title">Node.js / TypeScript</h4>
+          <div class="docs-code-block">
+            <div class="docs-code-header">typescript</div>
+            <pre>import OpenAI from 'openai';
+
+const client = new OpenAI({
+  baseURL: 'http://localhost:9000/v1',
+  apiKey: 'sk-gateway-key-1',
+});
+
+const response = await client.chat.completions.create({
+  model: 'groq/llama-3.3-70b-versatile',  // fast + cheap via Groq
+  messages: [{ role: 'user', content: 'Write a haiku about Go.' }],
+});
+
+console.log(response.choices[0].message.content);</pre>
+          </div>
+
+          <h4 class="docs-step-title">Go</h4>
+          <div class="docs-code-block">
+            <div class="docs-code-header">go</div>
+            <pre>import "github.com/sashabaranov/go-openai"
+
+cfg := openai.DefaultConfig("sk-gateway-key-1")
+cfg.BaseURL = "http://localhost:9000/v1"
+client := openai.NewClientWithConfig(cfg)
+
+resp, _ := client.CreateChatCompletion(ctx, openai.ChatCompletionRequest{
+    Model: "deepseek/deepseek-chat",
+    Messages: []openai.ChatCompletionMessage{
+        {Role: "user", Content: "Hello from Go!"},
+    },
+})</pre>
+          </div>
+
+          <h4 class="docs-step-title">curl</h4>
+          <div class="docs-code-block">
+            <div class="docs-code-header">bash</div>
+            <pre>export GATEWAY_URL="http://localhost:9000"
+export GATEWAY_KEY="sk-gateway-key-1"
+
+# Chat completion
+curl -X POST $GATEWAY_URL/v1/chat/completions \
+  -H "Authorization: Bearer $GATEWAY_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "model": "gemini/gemini-2.0-flash",
+    "messages": [{"role": "user", "content": "Hello!"}]
+  }'</pre>
+          </div>
+
+          <h4 class="docs-step-title">WebSocket Streaming (JavaScript)</h4>
+          <div class="docs-code-block">
+            <div class="docs-code-header">javascript</div>
+            <pre>const ws = new WebSocket('ws://localhost:9000/v1/chat/completions/stream');
+
+ws.onopen = () => {
+  ws.send(JSON.stringify({
+    model: 'openai/gpt-4o',
+    messages: [{ role: 'user', content: 'Tell me a story' }]
+  }));
+};
+
+ws.onmessage = (event) => {
+  if (event.data === '[DONE]') { console.log('\n--- done ---'); return; }
+  const chunk = JSON.parse(event.data);
+  const text = chunk.choices?.[0]?.delta?.content;
+  if (text) process.stdout.write(text);
+};</pre>
+          </div>
+        </div>
+
+        <!-- ===== CHAT COMPLETIONS ===== -->
+        <div class="docs-section" id="docs-chat">
+          <h3 class="docs-section-title">Chat Completions</h3>
+          <div class="docs-endpoint"><span class="docs-method post">POST</span> <code>/v1/chat/completions</code></div>
+          <p class="docs-text">The primary endpoint. Supports function calling (tools), temperature, top_p, max_tokens, stop sequences, and response format. The gateway translates this to each provider's native format.</p>
+          <div class="docs-code-block">
+            <div class="docs-code-header">Request</div>
+            <pre>curl -X POST http://localhost:9000/v1/chat/completions \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "model": "openai/gpt-4o",
+    "messages": [
+      {"role": "system", "content": "You are a helpful assistant."},
+      {"role": "user", "content": "What is 2+2?"}
+    ],
+    "temperature": 0.7,
+    "max_tokens": 1000
+  }'</pre>
+          </div>
+          <div class="docs-code-block">
+            <div class="docs-code-header">Response</div>
+            <pre>{
+  "id": "chatcmpl-abc123",
+  "object": "chat.completion",
+  "model": "gpt-4o",
+  "choices": [{
+    "index": 0,
+    "message": {"role": "assistant", "content": "2 + 2 = 4."},
+    "finish_reason": "stop"
+  }],
+  "usage": {"prompt_tokens": 25, "completion_tokens": 8, "total_tokens": 33},
+  "provider": "openai",
+  "cached": false,
+  "cost": 0.000143
+}</pre>
+          </div>
+          <div class="docs-code-block">
+            <div class="docs-code-header">With function calling (tools)</div>
+            <pre>curl -X POST http://localhost:9000/v1/chat/completions \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "model": "openai/gpt-4o",
+    "messages": [{"role": "user", "content": "What is the weather in Paris?"}],
+    "tools": [{
+      "type": "function",
+      "function": {
+        "name": "get_weather",
+        "description": "Get current weather for a location",
+        "parameters": {
+          "type": "object",
+          "properties": {"location": {"type": "string"}},
+          "required": ["location"]
+        }
+      }
+    }]
+  }'</pre>
+          </div>
+          <div class="docs-callout">
+            <strong>Tool compatibility:</strong> If a model doesn't support native function calling, the gateway automatically injects tool definitions as a system prompt and extracts structured tool calls from the response. This means function calling works with <em>every</em> model.
+          </div>
+          <div class="docs-params">
+            <h4>Parameters</h4>
+            <table><thead><tr><th>Name</th><th>Type</th><th>Required</th><th>Description</th></tr></thead><tbody>
+              <tr><td><code>model</code></td><td>string</td><td>Yes</td><td>Model ID in <code>provider/model</code> format</td></tr>
+              <tr><td><code>messages</code></td><td>array</td><td>Yes</td><td>Array of message objects with <code>role</code> and <code>content</code></td></tr>
+              <tr><td><code>temperature</code></td><td>float</td><td>No</td><td>Sampling temperature (0-2). Default: 1.0</td></tr>
+              <tr><td><code>max_tokens</code></td><td>int</td><td>No</td><td>Maximum tokens in the response</td></tr>
+              <tr><td><code>top_p</code></td><td>float</td><td>No</td><td>Nucleus sampling threshold</td></tr>
+              <tr><td><code>stop</code></td><td>array</td><td>No</td><td>Stop sequences</td></tr>
+              <tr><td><code>tools</code></td><td>array</td><td>No</td><td>Function definitions for tool calling</td></tr>
+              <tr><td><code>tool_choice</code></td><td>string/object</td><td>No</td><td><code>"auto"</code>, <code>"none"</code>, or <code>{"type":"function","function":{"name":"..."}}</code></td></tr>
+            </tbody></table>
+          </div>
+        </div>
+
+        <!-- ===== STREAMING ===== -->
+        <div class="docs-section" id="docs-streaming">
+          <h3 class="docs-section-title">Streaming (WebSocket)</h3>
+          <div class="docs-endpoint"><span class="docs-method ws">WS</span> <code>/v1/chat/completions/stream</code></div>
+          <p class="docs-text">For real-time streaming, connect via WebSocket. Send the same JSON request format. The server streams <code>chat.completion.chunk</code> objects and ends with <code>[DONE]</code>.</p>
+          <div class="docs-code-block">
+            <div class="docs-code-header">Each chunk looks like:</div>
+            <pre>{
+  "id": "chatcmpl-...",
+  "object": "chat.completion.chunk",
+  "choices": [{
+    "index": 0,
+    "delta": {"role": "assistant", "content": "token "},
+    "finish_reason": null
+  }]
+}</pre>
+          </div>
+          <div class="docs-callout"><strong>Note:</strong> The HTTP <code>/v1/chat/completions</code> endpoint does not support <code>"stream": true</code>. Use the WebSocket endpoint for streaming.</div>
+        </div>
+
+        <!-- ===== EMBEDDINGS ===== -->
+        <div class="docs-section" id="docs-embeddings">
+          <h3 class="docs-section-title">Embeddings</h3>
+          <div class="docs-endpoint"><span class="docs-method post">POST</span> <code>/v1/embeddings</code></div>
+          <p class="docs-text">Generate vector embeddings. Supports single or batch inputs. Compatible with OpenAI embedding models.</p>
+          <div class="docs-code-block">
+            <div class="docs-code-header">curl</div>
+            <pre>curl -X POST http://localhost:9000/v1/embeddings \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "model": "openai/text-embedding-3-small",
+    "input": ["Hello world", "Goodbye world"],
+    "dimensions": 1536
+  }'</pre>
+          </div>
+        </div>
+
+        <!-- ===== MODELS ===== -->
+        <div class="docs-section" id="docs-models">
+          <h3 class="docs-section-title">List Models</h3>
+          <div class="docs-endpoint"><span class="docs-method get">GET</span> <code>/v1/models</code></div>
+          <p class="docs-text">Returns all available models across all configured providers. Use this to discover which models are available.</p>
+          <div class="docs-code-block">
+            <div class="docs-code-header">curl</div>
+            <pre>curl http://localhost:9000/v1/models -H "Authorization: Bearer YOUR_API_KEY"</pre>
+          </div>
+          <div class="docs-params">
+            <h4>Available Models by Provider</h4>
+            <table><thead><tr><th>Provider</th><th>Models</th><th>Capabilities</th></tr></thead><tbody>
+              <tr><td><strong>OpenAI</strong></td><td><code>gpt-4o</code>, <code>gpt-4o-mini</code>, <code>gpt-4-turbo</code>, <code>gpt-3.5-turbo</code></td><td>Chat, Tools, Vision, Streaming, Embeddings</td></tr>
+              <tr><td><strong>Anthropic</strong></td><td><code>claude-sonnet-4-20250514</code>, <code>claude-haiku-4-20250414</code></td><td>Chat, Tools, Vision, Streaming</td></tr>
+              <tr><td><strong>Groq</strong></td><td><code>llama-3.3-70b-versatile</code>, <code>llama-3.1-8b-instant</code>, <code>mixtral-8x7b-32768</code></td><td>Chat, Some Tools, Streaming</td></tr>
+              <tr><td><strong>DeepSeek</strong></td><td><code>deepseek-chat</code>, <code>deepseek-reasoner</code></td><td>Chat, Tools, Streaming</td></tr>
+              <tr><td><strong>Gemini</strong></td><td><code>gemini-2.0-flash</code>, <code>gemini-2.0-flash-lite</code>, <code>gemini-1.5-pro</code></td><td>Chat, Tools, Streaming</td></tr>
+              <tr><td><strong>Ollama</strong></td><td><code>llama3</code>, <code>llama3.1</code>, <code>mistral</code>, <code>codellama</code>, <code>gemma2</code></td><td>Chat, Streaming (local)</td></tr>
+            </tbody></table>
+          </div>
+        </div>
+
+        <!-- ===== IMAGES & AUDIO ===== -->
+        <div class="docs-section" id="docs-images">
+          <h3 class="docs-section-title">Images, Audio &amp; More</h3>
+          <div class="docs-endpoint"><span class="docs-method post">POST</span> <code>/v1/images/generations</code></div>
+          <div class="docs-code-block">
+            <div class="docs-code-header">Image generation</div>
+            <pre>curl -X POST http://localhost:9000/v1/images/generations \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -d '{"model": "openai/dall-e-3", "prompt": "A futuristic city at sunset", "size": "1024x1024"}'</pre>
+          </div>
+          <div class="docs-params">
+            <h4>Additional Endpoints</h4>
+            <table><thead><tr><th>Endpoint</th><th>Method</th><th>Description</th></tr></thead><tbody>
+              <tr><td><code>/v1/images/edits</code></td><td>POST</td><td>Edit images with prompts</td></tr>
+              <tr><td><code>/v1/images/variations</code></td><td>POST</td><td>Generate image variations</td></tr>
+              <tr><td><code>/v1/audio/speech</code></td><td>POST</td><td>Text-to-speech (TTS)</td></tr>
+              <tr><td><code>/v1/audio/transcriptions</code></td><td>POST</td><td>Speech-to-text (STT)</td></tr>
+              <tr><td><code>/v1/moderations</code></td><td>POST</td><td>Content moderation</td></tr>
+              <tr><td><code>/v1/rerank</code></td><td>POST</td><td>Document reranking</td></tr>
+              <tr><td><code>/v1/completions</code></td><td>POST</td><td>Legacy completions (text-in/text-out)</td></tr>
+              <tr><td><code>/health</code></td><td>GET</td><td>Health check: <code>{"status":"ok","models":N}</code></td></tr>
+            </tbody></table>
+          </div>
+        </div>
+
+        <!-- ===== ROUTING & RELIABILITY ===== -->
+        <div class="docs-section" id="docs-routing">
+          <h3 class="docs-section-title">Routing &amp; Reliability</h3>
+          <p class="docs-text">The gateway includes enterprise-grade routing with retries, circuit breakers, cooldown, and multiple load-balancing strategies.</p>
+
+          <h4 class="docs-step-title">Routing Strategies</h4>
+          <div class="docs-params">
+            <table><thead><tr><th>Strategy</th><th>Config Value</th><th>Best For</th></tr></thead><tbody>
+              <tr><td><strong>Simple</strong></td><td><code>simple</code> (default)</td><td>Single-provider setups. No overhead.</td></tr>
+              <tr><td><strong>Round Robin</strong></td><td><code>round-robin</code></td><td>Even distribution across providers.</td></tr>
+              <tr><td><strong>Weighted</strong></td><td><code>weighted</code></td><td>Send more traffic to preferred providers.</td></tr>
+              <tr><td><strong>Least Busy</strong></td><td><code>least-busy</code></td><td>Route to provider with fewest in-flight requests.</td></tr>
+              <tr><td><strong>Latency</strong></td><td><code>latency</code></td><td>Route to fastest provider (EMA tracking).</td></tr>
+              <tr><td><strong>Usage</strong></td><td><code>usage</code></td><td>Balance token usage across providers.</td></tr>
+            </tbody></table>
+          </div>
+
+          <h4 class="docs-step-title">Retries &amp; Backoff</h4>
+          <p class="docs-text">Configurable exponential backoff with jitter. Network errors and 5xx responses are retried; auth errors (401/403) are not.</p>
+          <div class="docs-code-block">
+            <div class="docs-code-header">configs/.env</div>
+            <pre>RETRY_MAX=3                    # Max retry attempts
+RETRY_BACKOFF_BASE_MS=500      # Base: 500ms, then 1s, then 2s</pre>
+          </div>
+
+          <h4 class="docs-step-title">Circuit Breaker &amp; Cooldown</h4>
+          <p class="docs-text">After consecutive failures, a provider enters cooldown (requests rejected immediately) until the period expires. This prevents cascading failures.</p>
+          <div class="docs-code-block">
+            <div class="docs-code-header">configs/.env</div>
+            <pre>COOLDOWN_THRESHOLD=5           # Failures before cooldown
+COOLDOWN_PERIOD_SECONDS=60     # Cooldown duration
+CB_THRESHOLD=5                 # Circuit breaker (GoFr HTTP service level)
+CB_INTERVAL_SECONDS=30</pre>
+          </div>
+
+          <h4 class="docs-step-title">Per-Key Fallback Override</h4>
+          <p class="docs-text">Different keys can have different fallback chains:</p>
+          <div class="docs-code-block">
+            <div class="docs-code-header">configs/.env</div>
+            <pre># Key sk-key-1 fails over openai->anthropic; sk-key-2 uses anthropic->ollama
+GATEWAY_KEY_CONFIG=sk-key-1:openai,anthropic;sk-key-2:anthropic,ollama</pre>
+          </div>
+        </div>
+
+        <!-- ===== VIRTUAL KEYS ===== -->
+        <div class="docs-section" id="docs-keys">
+          <h3 class="docs-section-title">Virtual Keys</h3>
+          <p class="docs-text">Virtual keys are scoped API keys with model restrictions, rate limits, budgets, and team membership. The master key creates and manages virtual keys.</p>
+          <div class="docs-code-block">
+            <div class="docs-code-header">Generate a key with restrictions</div>
+            <pre>curl -X POST http://localhost:9000/key/generate \
+  -H "Authorization: Bearer MASTER_KEY" \
+  -d '{
+    "name": "production-app",
+    "team_id": "1",
+    "org_id": "1",
+    "tier": "premium",
+    "rate_limit_rpm": 100,
+    "rate_limit_tpm": 90000,
+    "max_budget": 50.00,
+    "allowed_models": ["openai/*", "anthropic/*"],
+    "expires_in_days": 90
+  }'</pre>
+          </div>
+          <div class="docs-params">
+            <h4>Key Management Endpoints</h4>
+            <table><thead><tr><th>Endpoint</th><th>Method</th><th>Auth</th><th>Description</th></tr></thead><tbody>
+              <tr><td><code>/key/generate</code></td><td>POST</td><td>Master</td><td>Create a new virtual key</td></tr>
+              <tr><td><code>/keys</code></td><td>GET</td><td>Master</td><td>List all keys</td></tr>
+              <tr><td><code>/key/info?id=N</code></td><td>GET</td><td>Master</td><td>Get key details</td></tr>
+              <tr><td><code>/key/{id}/rotate</code></td><td>POST</td><td>Master</td><td>Rotate (deactivate old, generate new)</td></tr>
+              <tr><td><code>/key/{id}</code></td><td>DELETE</td><td>Master</td><td>Delete a key</td></tr>
+              <tr><td><code>/key/self</code></td><td>GET</td><td>Any key</td><td>View your own key info</td></tr>
+            </tbody></table>
+          </div>
+          <div class="docs-callout">
+            <strong>Rate limiting:</strong> Per-key RPM (requests per minute) uses a Redis sliding window. TPM (tokens per minute) tracks total token consumption. Both are enforced before the request reaches the provider.
+          </div>
+        </div>
+
+        <!-- ===== MULTI-TENANCY ===== -->
+        <div class="docs-section" id="docs-multitenancy">
+          <h3 class="docs-section-title">Multi-Tenancy</h3>
+          <p class="docs-text">The gateway supports a 4-level hierarchy for enterprise deployments. Each level can have an independent budget cap.</p>
+          <div class="docs-code-block">
+            <div class="docs-code-header">Hierarchy</div>
+            <pre>Organization ($10,000)  -->  Team ($5,000)  -->  User ($500)  -->  Virtual Key ($50)
+      |                          |                    |                    |
+   budget cap              budget cap            budget cap          rate limits
+   admin_email             org_id ref            team_id ref         model restrictions
+                                                 org_id ref          budget cap</pre>
+          </div>
+          <div class="docs-params">
+            <h4>Management Endpoints (all require Master Key)</h4>
+            <table><thead><tr><th>Resource</th><th>Create</th><th>List</th><th>Delete</th></tr></thead><tbody>
+              <tr><td>Organizations</td><td><code>POST /organizations</code></td><td><code>GET /organizations</code></td><td><code>DELETE /organizations/{id}</code></td></tr>
+              <tr><td>Teams</td><td><code>POST /teams</code></td><td><code>GET /teams</code></td><td><code>DELETE /teams/{id}</code></td></tr>
+              <tr><td>Users</td><td><code>POST /users</code></td><td><code>GET /users</code></td><td><code>DELETE /users/{id}</code></td></tr>
+            </tbody></table>
+          </div>
+          <div class="docs-callout"><strong>Validation:</strong> When creating a team, the <code>org_id</code> must reference an existing organization. When creating a user, both <code>org_id</code> and <code>team_id</code> are validated. The same applies when generating virtual keys.</div>
+          <p class="docs-text">All management actions are logged to the <strong>audit log</strong> (<code>GET /audit/log</code>), filterable by entity type and action.</p>
+        </div>
+
+        <!-- ===== SPEND TRACKING ===== -->
+        <div class="docs-section" id="docs-spend">
+          <h3 class="docs-section-title">Spend &amp; Usage Tracking</h3>
+          <p class="docs-text">Every chat completion request is logged with token counts and computed cost (based on built-in pricing tables). Query spend data with flexible grouping.</p>
+          <div class="docs-code-block">
+            <div class="docs-code-header">Spend reports</div>
+            <pre># By model (which models cost the most?)
+curl "http://localhost:9000/spend/report?group_by=model" \
+  -H "Authorization: Bearer MASTER_KEY"
+
+# By team (which team spends the most?)
+curl "http://localhost:9000/spend/report?group_by=team" \
+  -H "Authorization: Bearer MASTER_KEY"
+
+# Group by: model | provider | key | team | user | org
+# Date filters: ?start_date=2026-01-01&amp;end_date=2026-01-31
+
+# Self-service (any key holder can see their own spend)
+curl "http://localhost:9000/spend/self?group_by=model" \
+  -H "Authorization: Bearer YOUR_VIRTUAL_KEY"</pre>
+          </div>
+          <div class="docs-callout">
+            <strong>Custom pricing:</strong> Override default token prices for custom or fine-tuned models:<br>
+            <code>CUSTOM_PRICING=my-fine-tuned-model:0.005:0.015,another-model:0.001:0.002</code><br>
+            Format: <code>model:input_per_1k:output_per_1k</code>
+          </div>
+        </div>
+
+        <!-- ===== GUARDRAILS ===== -->
+        <div class="docs-section" id="docs-guardrails-doc">
+          <h3 class="docs-section-title">Guardrails &amp; Content Filtering</h3>
+          <p class="docs-text">Guardrails run <strong>pre-call</strong> (validate input) and <strong>post-call</strong> (filter output) on every chat completion. Configure globally via env vars, or per-key via the database.</p>
+
+          <h4 class="docs-step-title">What Gets Checked</h4>
+          <div class="docs-params">
+            <table><thead><tr><th>Check</th><th>Phase</th><th>Description</th></tr></thead><tbody>
+              <tr><td><strong>Keyword Blocking</strong></td><td>Pre-call</td><td>Rejects requests containing blocked words (case-insensitive)</td></tr>
+              <tr><td><strong>PII Detection</strong></td><td>Pre &amp; Post</td><td>Detects emails, phone numbers, SSNs, credit cards, IPs</td></tr>
+              <tr><td><strong>Input Token Limit</strong></td><td>Pre-call</td><td>Rejects if input exceeds max tokens</td></tr>
+              <tr><td><strong>Output Truncation</strong></td><td>Post-call</td><td>Truncates output if it exceeds max tokens</td></tr>
+              <tr><td><strong>PII Redaction</strong></td><td>Post-call</td><td>Replaces PII in model output with <code>[REDACTED_TYPE]</code></td></tr>
+            </tbody></table>
+          </div>
+
+          <div class="docs-code-block">
+            <div class="docs-code-header">Global defaults (configs/.env)</div>
+            <pre>GUARDRAIL_ENABLED=true
+GUARDRAIL_PII_ACTION=redact          # block | redact | log | none
+GUARDRAIL_BLOCKED_KEYWORDS=hack,exploit,jailbreak,password
+GUARDRAIL_MAX_INPUT_TOKENS=4096      # 0 = unlimited
+GUARDRAIL_MAX_OUTPUT_TOKENS=4096</pre>
+          </div>
+
+          <h4 class="docs-step-title">Per-Key Overrides (Database)</h4>
+          <p class="docs-text">Manage via the admin UI (Guardrails page) or the API:</p>
+          <div class="docs-code-block">
+            <div class="docs-code-header">API</div>
+            <pre># Create/update a guardrail config
+curl -X POST http://localhost:9000/guardrails \
+  -H "Authorization: Bearer MASTER_KEY" \
+  -d '{
+    "key_hash": "sha256_of_virtual_key",
+    "pii_action": "block",
+    "max_input_tokens": 8192,
+    "blocked_keywords": "confidential,internal",
+    "enabled": true
+  }'
+
+# List all configs
+curl http://localhost:9000/guardrails -H "Authorization: Bearer MASTER_KEY"
+
+# Delete a config
+curl -X DELETE http://localhost:9000/guardrails/1 -H "Authorization: Bearer MASTER_KEY"</pre>
+          </div>
+          <div class="docs-callout">
+            <strong>Priority:</strong> Per-key DB config > Global DB config (key_hash=NULL) > Environment variable defaults.
+          </div>
+        </div>
+
+        <!-- ===== BATCH PROCESSING ===== -->
+        <div class="docs-section" id="docs-batches">
+          <h3 class="docs-section-title">Batch Processing</h3>
+          <p class="docs-text">Submit multiple requests as a batch for asynchronous processing. Useful for data pipelines, bulk classification, or any workload where you don't need instant responses.</p>
+
+          <div class="docs-code-block">
+            <div class="docs-code-header">Submit a batch</div>
+            <pre>curl -X POST http://localhost:9000/v1/batches \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -d '{
+    "requests": [
+      {
+        "custom_id": "classify-1",
+        "method": "POST",
+        "url": "/v1/chat/completions",
+        "body": {
+          "model": "groq/llama-3.3-70b-versatile",
+          "messages": [{"role":"user","content":"Classify: positive or negative? I love this product"}]
+        }
+      },
+      {
+        "custom_id": "classify-2",
+        "method": "POST",
+        "url": "/v1/chat/completions",
+        "body": {
+          "model": "groq/llama-3.3-70b-versatile",
+          "messages": [{"role":"user","content":"Classify: positive or negative? Terrible experience"}]
+        }
+      }
+    ]
+  }'</pre>
+          </div>
+          <div class="docs-code-block">
+            <div class="docs-code-header">Check status &amp; get results</div>
+            <pre># Poll status
+curl http://localhost:9000/v1/batches/BATCH_ID -H "Authorization: Bearer KEY"
+# {"id":"...","status":"completed","total_requests":2,"completed_requests":2}
+
+# Get results
+curl http://localhost:9000/v1/batches/BATCH_ID/results -H "Authorization: Bearer KEY"
+
+# List all batches
+curl http://localhost:9000/v1/batches?limit=50 -H "Authorization: Bearer KEY"
+
+# Cancel a running batch
+curl -X POST http://localhost:9000/v1/batches/BATCH_ID/cancel -H "Authorization: Bearer KEY"</pre>
+          </div>
+          <div class="docs-callout">
+            <strong>Worker pool:</strong> Batch requests are processed by a configurable worker pool (default: 5 workers, 120s timeout per task). Adjust via <code>BATCH_WORKERS</code> and <code>BATCH_TASK_TIMEOUT_SECONDS</code>.
+          </div>
+        </div>
+
+        <!-- ===== CONFIGURATION REFERENCE ===== -->
+        <div class="docs-section" id="docs-config-ref">
+          <h3 class="docs-section-title">Configuration Reference</h3>
+          <p class="docs-text">All configuration is via environment variables in <code>configs/.env</code>. The gateway reads these at startup.</p>
+
+          <div class="docs-params">
+            <h4>Provider Keys &amp; URLs</h4>
+            <table><thead><tr><th>Variable</th><th>Default</th><th>Description</th></tr></thead><tbody>
+              <tr><td><code>OPENAI_API_KEY</code></td><td><em>empty</em></td><td>OpenAI API key</td></tr>
+              <tr><td><code>ANTHROPIC_API_KEY</code></td><td><em>empty</em></td><td>Anthropic API key</td></tr>
+              <tr><td><code>GROQ_API_KEY</code></td><td><em>empty</em></td><td>Groq API key</td></tr>
+              <tr><td><code>DEEPSEEK_API_KEY</code></td><td><em>empty</em></td><td>DeepSeek API key</td></tr>
+              <tr><td><code>GEMINI_API_KEY</code></td><td><em>empty</em></td><td>Google Gemini API key</td></tr>
+              <tr><td><code>OPENAI_BASE_URL</code></td><td><code>https://api.openai.com</code></td><td>Custom OpenAI-compatible endpoint</td></tr>
+              <tr><td><code>OLLAMA_BASE_URL</code></td><td><code>http://localhost:11434</code></td><td>Local Ollama server</td></tr>
+            </tbody></table>
+          </div>
+
+          <div class="docs-params">
+            <h4>Per-Provider Timeouts (milliseconds, 0 = no timeout)</h4>
+            <table><thead><tr><th>Variable</th><th>Default</th></tr></thead><tbody>
+              <tr><td><code>OPENAI_TIMEOUT_MS</code></td><td>0</td></tr>
+              <tr><td><code>ANTHROPIC_TIMEOUT_MS</code></td><td>0</td></tr>
+              <tr><td><code>GROQ_TIMEOUT_MS</code></td><td>0</td></tr>
+              <tr><td><code>DEEPSEEK_TIMEOUT_MS</code></td><td>0</td></tr>
+              <tr><td><code>GEMINI_TIMEOUT_MS</code></td><td>0</td></tr>
+              <tr><td><code>OLLAMA_TIMEOUT_MS</code></td><td>0</td></tr>
+            </tbody></table>
+          </div>
+
+          <div class="docs-params">
+            <h4>Gateway &amp; Auth</h4>
+            <table><thead><tr><th>Variable</th><th>Default</th><th>Description</th></tr></thead><tbody>
+              <tr><td><code>DEFAULT_PROVIDER</code></td><td><code>openai</code></td><td>Provider used when no prefix given</td></tr>
+              <tr><td><code>GATEWAY_API_KEYS</code></td><td><em>empty</em></td><td>Comma-separated static API keys</td></tr>
+              <tr><td><code>GATEWAY_MASTER_KEY</code></td><td><em>empty</em></td><td>Admin master key for management endpoints</td></tr>
+              <tr><td><code>GATEWAY_KEY_CONFIG</code></td><td><em>empty</em></td><td>Per-key fallback overrides (<code>key:p1,p2;key2:p3,p4</code>)</td></tr>
+            </tbody></table>
+          </div>
+
+          <div class="docs-params">
+            <h4>Routing &amp; Reliability</h4>
+            <table><thead><tr><th>Variable</th><th>Default</th><th>Description</th></tr></thead><tbody>
+              <tr><td><code>ROUTING_STRATEGY</code></td><td><code>simple</code></td><td>simple | round-robin | weighted | least-busy | latency | usage</td></tr>
+              <tr><td><code>RETRY_MAX</code></td><td><code>3</code></td><td>Maximum retry attempts</td></tr>
+              <tr><td><code>RETRY_BACKOFF_BASE_MS</code></td><td><code>500</code></td><td>Base backoff in milliseconds (exponential)</td></tr>
+              <tr><td><code>COOLDOWN_THRESHOLD</code></td><td><code>5</code></td><td>Consecutive failures before cooldown</td></tr>
+              <tr><td><code>COOLDOWN_PERIOD_SECONDS</code></td><td><code>60</code></td><td>Cooldown duration</td></tr>
+              <tr><td><code>FALLBACK_CHAIN</code></td><td><em>empty</em></td><td>Comma-separated fallback providers</td></tr>
+              <tr><td><code>REQUEST_QUEUE_ENABLED</code></td><td><code>false</code></td><td>Enable request queuing</td></tr>
+              <tr><td><code>REQUEST_QUEUE_SIZE</code></td><td><code>100</code></td><td>Queue buffer size</td></tr>
+            </tbody></table>
+          </div>
+
+          <div class="docs-params">
+            <h4>Cache, Batch &amp; Metrics</h4>
+            <table><thead><tr><th>Variable</th><th>Default</th><th>Description</th></tr></thead><tbody>
+              <tr><td><code>CACHE_TTL_SECONDS</code></td><td><code>300</code></td><td>Redis response cache TTL</td></tr>
+              <tr><td><code>BATCH_WORKERS</code></td><td><code>5</code></td><td>Concurrent batch workers</td></tr>
+              <tr><td><code>BATCH_TASK_TIMEOUT_SECONDS</code></td><td><code>120</code></td><td>Per-task timeout for batch processing</td></tr>
+              <tr><td><code>CUSTOM_PRICING</code></td><td><em>empty</em></td><td>Custom pricing: <code>model:in:out,model2:in:out</code></td></tr>
+            </tbody></table>
+          </div>
+        </div>
+
+        </div><!-- /.docs-content -->
+        </div><!-- /.docs-layout -->
+      </div>
+
+    </main>
+  </div>
+</div>
+
+<!-- ==================== MODALS ==================== -->
+
+<!-- Generate Key Modal -->
+<div id="generate-key-modal" class="modal-overlay hidden">
+  <div class="modal"><h3>Generate Virtual Key</h3><p class="modal-desc">Create a new API key with custom limits and team assignment.</p>
+    <div class="form-group"><label>Name *</label><input type="text" id="gk-name" placeholder="e.g. production-app"></div>
+    <div class="form-row"><div class="form-group"><label>Organization *</label><select id="gk-org" data-dropdown="orgs"><option value="">— Select Org —</option></select></div><div class="form-group"><label>Tier</label><input type="text" id="gk-tier" placeholder="default"></div></div>
+    <div class="form-row"><div class="form-group"><label>Team</label><select id="gk-team" data-dropdown="teams"><option value="">— None —</option></select></div><div class="form-group"><label>User ID</label><input type="text" id="gk-user" placeholder="Optional"></div></div>
+    <div class="form-row"><div class="form-group"><label>RPM Limit</label><input type="number" id="gk-rpm" placeholder="0 = unlimited"></div><div class="form-group"><label>Max Budget ($)</label><input type="number" id="gk-budget" step="0.01" placeholder="0 = unlimited"></div></div>
+    <div class="form-row"><div class="form-group"><label>Allowed Models</label><input type="text" id="gk-models" placeholder="Comma-separated, empty = all"></div><div class="form-group"><label>Expires In (days)</label><input type="number" id="gk-expires" placeholder="0 = never"></div></div>
+    <div class="modal-actions"><button class="btn btn-secondary" id="gk-cancel">Cancel</button><button class="btn btn-primary" id="gk-submit">Generate</button></div>
+  </div>
+</div>
+
+<!-- Key Reveal Modal -->
+<div id="key-reveal-modal" class="modal-overlay hidden">
+  <div class="modal"><h3>Key Generated</h3><p class="modal-desc">Copy this key now. It will not be shown again.</p>
+    <div class="key-reveal"><code id="key-reveal-value" style="background:none;border:none;padding:0;color:var(--cyan);word-break:break-all"></code><button class="btn btn-secondary btn-sm copy-btn" onclick="copyKey()">Copy</button></div>
+    <div class="modal-actions"><button class="btn btn-primary" id="key-reveal-close">Done</button></div>
+  </div>
+</div>
+
+<!-- Create Team Modal -->
+<div id="create-team-modal" class="modal-overlay hidden">
+  <div class="modal"><h3>Create Team</h3><p class="modal-desc">Add a new team for grouping keys and tracking budgets.</p>
+    <div class="form-group"><label>Team Name *</label><input type="text" id="ct-name" placeholder="e.g. engineering"></div>
+    <div class="form-row"><div class="form-group"><label>Organization *</label><select id="ct-org" data-dropdown="orgs"><option value="">— Select —</option></select></div><div class="form-group"><label>Max Budget ($)</label><input type="number" id="ct-budget" step="0.01" placeholder="0 = unlimited"></div></div>
+    <div class="modal-actions"><button class="btn btn-secondary" id="ct-cancel">Cancel</button><button class="btn btn-primary" id="ct-submit">Create Team</button></div>
+  </div>
+</div>
+
+<!-- Create User Modal -->
+<div id="create-user-modal" class="modal-overlay hidden">
+  <div class="modal"><h3>Create User</h3><p class="modal-desc">Add a new user with optional team and org membership.</p>
+    <div class="form-row"><div class="form-group"><label>User ID *</label><input type="text" id="cu-userid" placeholder="e.g. user-123"></div><div class="form-group"><label>Email</label><input type="email" id="cu-email" placeholder="user@example.com"></div></div>
+    <div class="form-row"><div class="form-group"><label>Organization *</label><select id="cu-org" data-dropdown="orgs"><option value="">— Select —</option></select></div><div class="form-group"><label>Team</label><select id="cu-team" data-dropdown="teams"><option value="">— None —</option></select></div></div>
+    <div class="form-row"><div class="form-group"><label>Role</label><select id="cu-role"><option value="member">Member</option><option value="admin">Admin</option></select></div><div class="form-group"><label>Max Budget ($)</label><input type="number" id="cu-budget" step="0.01" placeholder="0 = unlimited"></div></div>
+    <div class="modal-actions"><button class="btn btn-secondary" id="cu-cancel">Cancel</button><button class="btn btn-primary" id="cu-submit">Create User</button></div>
+  </div>
+</div>
+
+<!-- Create Org Modal -->
+<div id="create-org-modal" class="modal-overlay hidden">
+  <div class="modal"><h3>Create Organization</h3><p class="modal-desc">Add a top-level organization for multi-tenant isolation.</p>
+    <div class="form-group"><label>Organization Name *</label><input type="text" id="co-name" placeholder="e.g. Acme Corp"></div>
+    <div class="form-row"><div class="form-group"><label>Admin Email</label><input type="email" id="co-admin-email" placeholder="admin@example.com"></div><div class="form-group"><label>Max Budget ($)</label><input type="number" id="co-budget" step="0.01" placeholder="0 = unlimited"></div></div>
+    <div class="modal-actions"><button class="btn btn-secondary" id="co-cancel">Cancel</button><button class="btn btn-primary" id="co-submit">Create Organization</button></div>
+  </div>
+</div>
+
+<!-- Guardrail Config Modal -->
+<div id="guardrail-modal" class="modal-overlay hidden">
+  <div class="modal"><h3 id="gr-modal-title">Add Guardrail Config</h3><p class="modal-desc">Set content filtering rules. Leave key hash empty for global defaults.</p>
+    <div class="form-group"><label>Key Hash (empty = global)</label><input type="text" id="gr-keyhash" placeholder="Leave empty for global config"></div>
+    <div class="form-row"><div class="form-group"><label>PII Action</label><select id="gr-pii"><option value="none">None</option><option value="block">Block</option><option value="redact">Redact</option><option value="log">Log</option></select></div><div class="form-group"><label>Enabled</label><select id="gr-enabled"><option value="true">Yes</option><option value="false">No</option></select></div></div>
+    <div class="form-row"><div class="form-group"><label>Max Input Tokens (0 = unlimited)</label><input type="number" id="gr-max-in" placeholder="0"></div><div class="form-group"><label>Max Output Tokens (0 = unlimited)</label><input type="number" id="gr-max-out" placeholder="0"></div></div>
+    <div class="form-group"><label>Blocked Keywords (comma-separated)</label><input type="text" id="gr-keywords" placeholder="e.g. hack,exploit,jailbreak"></div>
+    <div class="modal-actions"><button class="btn btn-secondary" id="gr-cancel">Cancel</button><button class="btn btn-primary" id="gr-submit">Save</button></div>
+  </div>
+</div>
+
+<!-- Batch Results Modal -->
+<div id="results-modal" class="modal-overlay hidden">
+  <div class="modal" style="width:640px"><h3>Batch Results</h3><p class="modal-desc" id="results-modal-desc">Results for batch job</p>
+    <div style="max-height:400px;overflow-y:auto;background:var(--bg-primary);border:1px solid var(--border);border-radius:var(--radius-sm);padding:16px"><pre id="results-content" style="font-family:var(--mono);font-size:12px;color:var(--text-secondary);white-space:pre-wrap;margin:0"></pre></div>
+    <div class="modal-actions"><button class="btn btn-primary" id="results-close">Close</button></div>
+  </div>
+</div>
+
+<div class="toast-container" id="toast-container"></div>
+<script src="/admin/app.js"></script>
+</body>
+</html>

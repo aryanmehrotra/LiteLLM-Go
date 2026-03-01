@@ -1,0 +1,10 @@
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+
+scrape_configs:
+  - job_name: "llm-gateway"
+    metrics_path: /metrics
+    static_configs:
+      - targets: ["llm-gateway:2121"]
+    scrape_interval: 5s
