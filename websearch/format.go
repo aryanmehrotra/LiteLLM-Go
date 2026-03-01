@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"strings"
 
-	"examples/llm-gateway/models"
+	"aryanmehrotra/llm-gateway/models"
 )
 
 // formatAsSystemMessage converts search results into a system message for injection.

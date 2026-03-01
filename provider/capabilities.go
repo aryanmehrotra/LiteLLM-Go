@@ -1,15 +1,15 @@
 package provider
 
-import "examples/llm-gateway/models"
+import "aryanmehrotra/llm-gateway/models"
 
 // Capability flags for models.
 type Capability int
 
 const (
-	CapTools        Capability = 1 << iota // supports function calling
-	CapVision                              // supports image input
-	CapJSON                                // supports JSON mode
-	CapStreaming                            // supports streaming
+	CapTools     Capability = 1 << iota // supports function calling
+	CapVision                           // supports image input
+	CapJSON                             // supports JSON mode
+	CapStreaming                        // supports streaming
 )
 
 // modelCapabilities maps model names to their capability flags.
@@ -49,9 +49,9 @@ var modelCapabilities = map[string]Capability{
 	"gemma2":    CapStreaming,
 
 	// Together AI
-	"meta-llama/Llama-3.3-70B-Instruct-Turbo":   CapTools | CapStreaming,
+	"meta-llama/Llama-3.3-70B-Instruct-Turbo":     CapTools | CapStreaming,
 	"meta-llama/Meta-Llama-3.1-8B-Instruct-Turbo": CapTools | CapStreaming,
-	"Qwen/Qwen2.5-72B-Instruct-Turbo":            CapTools | CapStreaming,
+	"Qwen/Qwen2.5-72B-Instruct-Turbo":             CapTools | CapStreaming,
 	"mistralai/Mixtral-8x7B-Instruct-v0.1":        CapStreaming,
 	"deepseek-ai/DeepSeek-R1":                     CapStreaming,
 
@@ -63,15 +63,15 @@ var modelCapabilities = map[string]Capability{
 	"accounts/fireworks/models/deepseek-r1":             CapStreaming,
 
 	// Perplexity — search-augmented, streaming only (no tool calling on sonar models)
-	"sonar-pro":          CapStreaming,
-	"sonar":              CapStreaming,
+	"sonar-pro":           CapStreaming,
+	"sonar":               CapStreaming,
 	"sonar-reasoning-pro": CapStreaming,
-	"sonar-reasoning":    CapStreaming,
+	"sonar-reasoning":     CapStreaming,
 
 	// xAI (Grok)
-	"grok-3":            CapTools | CapStreaming,
-	"grok-3-mini":       CapTools | CapStreaming,
-	"grok-2-1212":       CapTools | CapStreaming,
+	"grok-3":             CapTools | CapStreaming,
+	"grok-3-mini":        CapTools | CapStreaming,
+	"grok-2-1212":        CapTools | CapStreaming,
 	"grok-2-vision-1212": CapTools | CapVision | CapStreaming,
 
 	// Mistral AI
@@ -89,10 +89,10 @@ var modelCapabilities = map[string]Capability{
 	// AWS Bedrock
 	"anthropic.claude-3-5-sonnet-20241022-v2:0": CapTools | CapVision | CapStreaming,
 	"anthropic.claude-3-haiku-20240307-v1:0":    CapTools | CapVision | CapStreaming,
-	"amazon.nova-pro-v1:0":                       CapTools | CapVision | CapStreaming,
-	"amazon.nova-lite-v1:0":                      CapTools | CapStreaming,
-	"meta.llama3-70b-instruct-v1:0":              CapTools | CapStreaming,
-	"mistral.mistral-7b-instruct-v0:2":           CapStreaming,
+	"amazon.nova-pro-v1:0":                      CapTools | CapVision | CapStreaming,
+	"amazon.nova-lite-v1:0":                     CapTools | CapStreaming,
+	"meta.llama3-70b-instruct-v1:0":             CapTools | CapStreaming,
+	"mistral.mistral-7b-instruct-v0:2":          CapStreaming,
 
 	// Cerebras — fast inference, tools on Llama 3.3+
 	"llama-3.3-70b": CapTools | CapStreaming,
@@ -103,8 +103,8 @@ var modelCapabilities = map[string]Capability{
 	"Meta-Llama-3.3-70B-Instruct":  CapTools | CapStreaming,
 	"Meta-Llama-3.1-405B-Instruct": CapTools | CapStreaming,
 	"Meta-Llama-3.1-8B-Instruct":   CapTools | CapStreaming,
-	"DeepSeek-R1":                   CapStreaming,
-	"Qwen2.5-72B-Instruct":          CapTools | CapStreaming,
+	"DeepSeek-R1":                  CapStreaming,
+	"Qwen2.5-72B-Instruct":         CapTools | CapStreaming,
 
 	// AI21 (Jamba models)
 	"jamba-1.5-large": CapTools | CapStreaming,
@@ -112,12 +112,12 @@ var modelCapabilities = map[string]Capability{
 	"jamba-mini-1.6":  CapTools | CapStreaming,
 
 	// OpenRouter — pass-through, assume fully capable for all listed models
-	"openai/gpt-4o":                          CapTools | CapVision | CapJSON | CapStreaming,
-	"anthropic/claude-3-5-sonnet":            CapTools | CapVision | CapStreaming,
-	"google/gemini-2.0-flash-001":            CapTools | CapVision | CapStreaming,
-	"meta-llama/llama-3.3-70b-instruct":      CapTools | CapStreaming,
-	"deepseek/deepseek-r1":                   CapStreaming,
-	"mistralai/mistral-large-2411":           CapTools | CapStreaming,
+	"openai/gpt-4o":                     CapTools | CapVision | CapJSON | CapStreaming,
+	"anthropic/claude-3-5-sonnet":       CapTools | CapVision | CapStreaming,
+	"google/gemini-2.0-flash-001":       CapTools | CapVision | CapStreaming,
+	"meta-llama/llama-3.3-70b-instruct": CapTools | CapStreaming,
+	"deepseek/deepseek-r1":              CapStreaming,
+	"mistralai/mistral-large-2411":      CapTools | CapStreaming,
 
 	// Novita — only entries unique to Novita (others overlap with OpenRouter)
 	"mistralai/mistral-7b-instruct": CapStreaming,
@@ -132,10 +132,10 @@ var modelCapabilities = map[string]Capability{
 
 	// Cloudflare Workers AI
 	"@cf/meta/llama-3.3-70b-instruct-fp8-fast": CapTools | CapStreaming,
-	"@cf/meta/llama-3.1-70b-instruct":           CapTools | CapStreaming,
-	"@cf/meta/llama-3.1-8b-instruct":            CapTools | CapStreaming,
-	"@cf/mistral/mistral-7b-instruct-v0.2":      CapStreaming,
-	"@cf/qwen/qwen1.5-14b-chat-awq":             CapStreaming,
+	"@cf/meta/llama-3.1-70b-instruct":          CapTools | CapStreaming,
+	"@cf/meta/llama-3.1-8b-instruct":           CapTools | CapStreaming,
+	"@cf/mistral/mistral-7b-instruct-v0.2":     CapStreaming,
+	"@cf/qwen/qwen1.5-14b-chat-awq":            CapStreaming,
 
 	// Vertex AI (Gemini models on GCP)
 	"gemini-2.0-flash-001": CapTools | CapVision | CapStreaming,
@@ -148,7 +148,7 @@ var modelCapabilities = map[string]Capability{
 	"meta-llama/Llama-3.3-70B-Instruct":  CapTools | CapStreaming,
 	"meta-llama/Llama-3.1-8B-Instruct":   CapTools | CapStreaming,
 	"Qwen/Qwen2.5-72B-Instruct":          CapTools | CapStreaming,
-	"microsoft/Phi-3.5-mini-instruct":     CapStreaming,
+	"microsoft/Phi-3.5-mini-instruct":    CapStreaming,
 }
 
 // HasCapability checks if a model has a specific capability.

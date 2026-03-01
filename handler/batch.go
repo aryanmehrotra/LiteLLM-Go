@@ -10,9 +10,9 @@ import (
 	gofrHTTP "gofr.dev/pkg/gofr/http"
 	"gofr.dev/pkg/gofr/http/response"
 
-	"examples/llm-gateway/batch"
-	"examples/llm-gateway/middleware"
-	"examples/llm-gateway/models"
+	"aryanmehrotra/llm-gateway/batch"
+	"aryanmehrotra/llm-gateway/middleware"
+	"aryanmehrotra/llm-gateway/models"
 )
 
 // BatchHandler groups all batch processing endpoint handlers.

@@ -11,7 +11,7 @@ import (
 	"github.com/google/uuid"
 	"gofr.dev/pkg/gofr"
 
-	"examples/llm-gateway/models"
+	"aryanmehrotra/llm-gateway/models"
 )
 
 const geminiServiceName = "gemini"
@@ -68,9 +68,9 @@ type geminiContent struct {
 }
 
 type geminiPart struct {
-	Text             string                `json:"text,omitempty"`
-	FunctionCall     *geminiFunctionCall   `json:"functionCall,omitempty"`
-	FunctionResponse *geminiFunctionResp   `json:"functionResponse,omitempty"`
+	Text             string              `json:"text,omitempty"`
+	FunctionCall     *geminiFunctionCall `json:"functionCall,omitempty"`
+	FunctionResponse *geminiFunctionResp `json:"functionResponse,omitempty"`
 }
 
 type geminiFunctionCall struct {
@@ -95,7 +95,7 @@ type geminiGenConfig struct {
 }
 
 type geminiResponse struct {
-	Candidates    []geminiCandidate   `json:"candidates"`
+	Candidates    []geminiCandidate    `json:"candidates"`
 	UsageMetadata *geminiUsageMetadata `json:"usageMetadata,omitempty"`
 }
 
@@ -126,7 +126,7 @@ func (g *Gemini) ChatCompletion(ctx *gofr.Context, req models.ChatCompletionRequ
 	path := fmt.Sprintf("v1beta/models/%s:generateContent", req.Model)
 
 	headers := map[string]string{
-		"Content-Type":  "application/json",
+		"Content-Type":   "application/json",
 		"x-goog-api-key": g.apiKey,
 	}
 
@@ -172,9 +172,9 @@ func (g *Gemini) ChatCompletionStream(ctx *gofr.Context, req models.ChatCompleti
 	path := fmt.Sprintf("v1beta/models/%s:streamGenerateContent?alt=sse", req.Model)
 
 	headers := map[string]string{
-		"Content-Type":  "application/json",
+		"Content-Type":   "application/json",
 		"x-goog-api-key": g.apiKey,
-		"Accept":        "text/event-stream",
+		"Accept":         "text/event-stream",
 	}
 
 	resp, err := svc.PostWithHeaders(ctx, path, nil, body, headers)

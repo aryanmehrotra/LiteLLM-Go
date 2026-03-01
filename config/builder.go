@@ -6,8 +6,8 @@ import (
 
 	"gofr.dev/pkg/gofr"
 
-	"examples/llm-gateway/provider"
-	"examples/llm-gateway/routing"
+	"aryanmehrotra/llm-gateway/provider"
+	"aryanmehrotra/llm-gateway/routing"
 )
 
 // BuildFromConfig creates a Registry and Router from a parsed YAML config.

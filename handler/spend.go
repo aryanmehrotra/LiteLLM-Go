@@ -10,17 +10,17 @@ import (
 	gofrHTTP "gofr.dev/pkg/gofr/http"
 	"gofr.dev/pkg/gofr/http/response"
 
-	"examples/llm-gateway/middleware"
+	"aryanmehrotra/llm-gateway/middleware"
 )
 
 // SpendReportRow represents a single row in the spend report.
 type SpendReportRow struct {
-	GroupBy           string  `json:"group_by"`
-	TotalCost         float64 `json:"total_cost"`
-	TotalTokens       int     `json:"total_tokens"`
-	PromptTokens      int     `json:"prompt_tokens"`
-	CompletionTokens  int     `json:"completion_tokens"`
-	RequestCount      int     `json:"request_count"`
+	GroupBy          string  `json:"group_by"`
+	TotalCost        float64 `json:"total_cost"`
+	TotalTokens      int     `json:"total_tokens"`
+	PromptTokens     int     `json:"prompt_tokens"`
+	CompletionTokens int     `json:"completion_tokens"`
+	RequestCount     int     `json:"request_count"`
 }
 
 var validGroupBy = map[string]string{

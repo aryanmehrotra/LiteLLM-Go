@@ -5,7 +5,7 @@ import (
 	gofrHTTP "gofr.dev/pkg/gofr/http"
 	"gofr.dev/pkg/gofr/http/response"
 
-	"examples/llm-gateway/models"
+	"aryanmehrotra/llm-gateway/models"
 )
 
 // RerankProvider is an optional interface for providers supporting reranking.

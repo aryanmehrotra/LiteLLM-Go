@@ -4,7 +4,7 @@ import (
 	"math"
 	"testing"
 
-	"examples/llm-gateway/models"
+	"aryanmehrotra/llm-gateway/models"
 )
 
 func TestCalculate(t *testing.T) {
@@ -140,11 +140,11 @@ func TestGetPricing(t *testing.T) {
 
 func TestSetPricing(t *testing.T) {
 	tests := []struct {
-		name        string
-		model       string
-		pricing     ModelPricing
-		wantInput   float64
-		wantOutput  float64
+		name       string
+		model      string
+		pricing    ModelPricing
+		wantInput  float64
+		wantOutput float64
 	}{
 		{
 			name:  "adds custom pricing for new model",
@@ -232,12 +232,12 @@ func TestSetPricing_OverrideTakesPrecedence(t *testing.T) {
 
 func TestParseCustomPricing(t *testing.T) {
 	tests := []struct {
-		name        string
-		config      string
-		checkModel  string
-		wantOK      bool
-		wantInput   float64
-		wantOutput  float64
+		name       string
+		config     string
+		checkModel string
+		wantOK     bool
+		wantInput  float64
+		wantOutput float64
 	}{
 		{
 			name:       "parses single entry",

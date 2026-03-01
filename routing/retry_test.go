@@ -8,7 +8,7 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
-	"examples/llm-gateway/models"
+	"aryanmehrotra/llm-gateway/models"
 )
 
 func TestRetryPolicy_Execute_SucceedsOnFirstAttempt(t *testing.T) {
@@ -179,9 +179,9 @@ func TestRetryPolicy_Backoff(t *testing.T) {
 		}
 
 		tests := []struct {
-			attempt  int
-			wantMin  time.Duration
-			wantMax  time.Duration
+			attempt int
+			wantMin time.Duration
+			wantMax time.Duration
 		}{
 			{attempt: 0, wantMin: 100 * time.Millisecond, wantMax: 100 * time.Millisecond},
 			{attempt: 1, wantMin: 200 * time.Millisecond, wantMax: 200 * time.Millisecond},

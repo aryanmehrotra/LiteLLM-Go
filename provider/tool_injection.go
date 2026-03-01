@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"strings"
 
-	"examples/llm-gateway/models"
+	"aryanmehrotra/llm-gateway/models"
 )
 
 // InjectToolsAsPrompt converts tool definitions into a system prompt and clears the tools field.

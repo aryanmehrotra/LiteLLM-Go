@@ -5,10 +5,10 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
-	"examples/llm-gateway/cache"
-	"examples/llm-gateway/provider"
-	"examples/llm-gateway/routing"
-	"examples/llm-gateway/workerpool"
+	"aryanmehrotra/llm-gateway/cache"
+	"aryanmehrotra/llm-gateway/provider"
+	"aryanmehrotra/llm-gateway/routing"
+	"aryanmehrotra/llm-gateway/workerpool"
 )
 
 func TestNewProcessor(t *testing.T) {

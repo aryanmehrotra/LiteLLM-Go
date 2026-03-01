@@ -3,9 +3,9 @@ package websearch
 import (
 	"gofr.dev/pkg/gofr"
 
-	"examples/llm-gateway/models"
-	"examples/llm-gateway/provider"
-	"examples/llm-gateway/routing"
+	"aryanmehrotra/llm-gateway/models"
+	"aryanmehrotra/llm-gateway/provider"
+	"aryanmehrotra/llm-gateway/routing"
 )
 
 // Service encapsulates all web search orchestration.

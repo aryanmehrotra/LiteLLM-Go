@@ -7,8 +7,8 @@ import (
 	gofrHTTP "gofr.dev/pkg/gofr/http"
 	"gofr.dev/pkg/gofr/http/response"
 
-	"examples/llm-gateway/audit"
-	"examples/llm-gateway/middleware"
+	"aryanmehrotra/llm-gateway/audit"
+	"aryanmehrotra/llm-gateway/middleware"
 )
 
 // UserRequest is the request body for user CRUD.

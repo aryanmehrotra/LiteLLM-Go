@@ -4,7 +4,7 @@ import (
 	"gofr.dev/pkg/gofr"
 	"gofr.dev/pkg/gofr/http/response"
 
-	"examples/llm-gateway/middleware"
+	"aryanmehrotra/llm-gateway/middleware"
 )
 
 // AdminPage serves the admin dashboard HTML at GET /admin using GoFr templates.

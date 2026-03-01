@@ -5,7 +5,7 @@ import (
 	"strings"
 	"sync"
 
-	"examples/llm-gateway/models"
+	"aryanmehrotra/llm-gateway/models"
 )
 
 // ModelPricing holds per-token pricing for a model.
@@ -17,10 +17,10 @@ type ModelPricing struct {
 // default pricing table for known models (USD per 1K tokens).
 var defaultPricing = map[string]ModelPricing{
 	// OpenAI
-	"gpt-4o":         {InputPer1KTokens: 0.0025, OutputPer1KTokens: 0.01},
-	"gpt-4o-mini":    {InputPer1KTokens: 0.00015, OutputPer1KTokens: 0.0006},
-	"gpt-4-turbo":    {InputPer1KTokens: 0.01, OutputPer1KTokens: 0.03},
-	"gpt-3.5-turbo":  {InputPer1KTokens: 0.0005, OutputPer1KTokens: 0.0015},
+	"gpt-4o":        {InputPer1KTokens: 0.0025, OutputPer1KTokens: 0.01},
+	"gpt-4o-mini":   {InputPer1KTokens: 0.00015, OutputPer1KTokens: 0.0006},
+	"gpt-4-turbo":   {InputPer1KTokens: 0.01, OutputPer1KTokens: 0.03},
+	"gpt-3.5-turbo": {InputPer1KTokens: 0.0005, OutputPer1KTokens: 0.0015},
 
 	// Anthropic
 	"claude-sonnet-4-20250514":   {InputPer1KTokens: 0.003, OutputPer1KTokens: 0.015},
@@ -49,11 +49,11 @@ var defaultPricing = map[string]ModelPricing{
 	"text-embedding-ada-002": {InputPer1KTokens: 0.0001, OutputPer1KTokens: 0},
 
 	// Together AI
-	"meta-llama/Llama-3.3-70B-Instruct-Turbo":    {InputPer1KTokens: 0.00088, OutputPer1KTokens: 0.00088},
+	"meta-llama/Llama-3.3-70B-Instruct-Turbo":     {InputPer1KTokens: 0.00088, OutputPer1KTokens: 0.00088},
 	"meta-llama/Meta-Llama-3.1-8B-Instruct-Turbo": {InputPer1KTokens: 0.00018, OutputPer1KTokens: 0.00018},
 	"Qwen/Qwen2.5-72B-Instruct-Turbo":             {InputPer1KTokens: 0.0012, OutputPer1KTokens: 0.0012},
-	"mistralai/Mixtral-8x7B-Instruct-v0.1":         {InputPer1KTokens: 0.0006, OutputPer1KTokens: 0.0006},
-	"deepseek-ai/DeepSeek-R1":                      {InputPer1KTokens: 0.003, OutputPer1KTokens: 0.007},
+	"mistralai/Mixtral-8x7B-Instruct-v0.1":        {InputPer1KTokens: 0.0006, OutputPer1KTokens: 0.0006},
+	"deepseek-ai/DeepSeek-R1":                     {InputPer1KTokens: 0.003, OutputPer1KTokens: 0.007},
 
 	// Fireworks AI
 	"accounts/fireworks/models/llama-v3p3-70b-instruct": {InputPer1KTokens: 0.0009, OutputPer1KTokens: 0.0009},
@@ -105,8 +105,8 @@ var defaultPricing = map[string]ModelPricing{
 	"Meta-Llama-3.3-70B-Instruct":  {InputPer1KTokens: 0.0006, OutputPer1KTokens: 0.0009},
 	"Meta-Llama-3.1-405B-Instruct": {InputPer1KTokens: 0.005, OutputPer1KTokens: 0.010},
 	"Meta-Llama-3.1-8B-Instruct":   {InputPer1KTokens: 0.0001, OutputPer1KTokens: 0.0002},
-	"DeepSeek-R1":                   {InputPer1KTokens: 0.005, OutputPer1KTokens: 0.010},
-	"Qwen2.5-72B-Instruct":          {InputPer1KTokens: 0.0006, OutputPer1KTokens: 0.0012},
+	"DeepSeek-R1":                  {InputPer1KTokens: 0.005, OutputPer1KTokens: 0.010},
+	"Qwen2.5-72B-Instruct":         {InputPer1KTokens: 0.0006, OutputPer1KTokens: 0.0012},
 
 	// AI21 (Jamba models)
 	"jamba-1.5-large": {InputPer1KTokens: 0.002, OutputPer1KTokens: 0.008},

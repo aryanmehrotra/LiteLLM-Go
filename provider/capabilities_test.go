@@ -3,7 +3,7 @@ package provider
 import (
 	"testing"
 
-	"examples/llm-gateway/models"
+	"aryanmehrotra/llm-gateway/models"
 )
 
 func TestHasCapability(t *testing.T) {

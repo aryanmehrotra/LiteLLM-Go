@@ -9,7 +9,7 @@ import (
 
 	"gofr.dev/pkg/gofr"
 
-	"examples/llm-gateway/models"
+	"aryanmehrotra/llm-gateway/models"
 )
 
 const azureServiceName = "azure"
@@ -53,8 +53,8 @@ func NewAzure(apiKey, apiVersion, deployments string, timeout time.Duration) *Az
 	}
 }
 
-func (*Azure) Name() string        { return "azure" }
-func (a *Azure) Models() []string  { return a.modelList }
+func (*Azure) Name() string       { return "azure" }
+func (a *Azure) Models() []string { return a.modelList }
 
 // ChatCompletion sends a request to Azure OpenAI.
 // The model field is treated as the deployment name.

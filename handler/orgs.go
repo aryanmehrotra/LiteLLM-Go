@@ -8,8 +8,8 @@ import (
 	gofrHTTP "gofr.dev/pkg/gofr/http"
 	"gofr.dev/pkg/gofr/http/response"
 
-	"examples/llm-gateway/audit"
-	"examples/llm-gateway/middleware"
+	"aryanmehrotra/llm-gateway/audit"
+	"aryanmehrotra/llm-gateway/middleware"
 )
 
 // OrgRequest is the request body for organization CRUD.
@@ -96,7 +96,7 @@ func (h *AdminHandler) DeleteOrg() gofr.Handler {
 		// Prevent deleting the last organization — at least one must always exist
 		var orgCount int
 		_ = ctx.SQL.QueryRowContext(ctx,
-			"SELECT COUNT(*) FROM organizations", ).Scan(&orgCount)
+			"SELECT COUNT(*) FROM organizations").Scan(&orgCount)
 
 		if orgCount <= 1 {
 			return nil, ErrBadRequest("cannot delete the last organization; at least one must exist")

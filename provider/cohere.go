@@ -11,7 +11,7 @@ import (
 	"github.com/google/uuid"
 	"gofr.dev/pkg/gofr"
 
-	"examples/llm-gateway/models"
+	"aryanmehrotra/llm-gateway/models"
 )
 
 const cohereServiceName = "cohere"
@@ -52,8 +52,8 @@ type cohereMessage struct {
 }
 
 type cohereTool struct {
-	Type     string            `json:"type"`
-	Function cohereToolFn      `json:"function"`
+	Type     string       `json:"type"`
+	Function cohereToolFn `json:"function"`
 }
 
 type cohereToolFn struct {
@@ -63,10 +63,10 @@ type cohereToolFn struct {
 }
 
 type cohereResponse struct {
-	ID           string          `json:"id"`
-	Message      cohereRespMsg   `json:"message"`
-	FinishReason string          `json:"finish_reason"`
-	Usage        cohereUsage     `json:"usage"`
+	ID           string        `json:"id"`
+	Message      cohereRespMsg `json:"message"`
+	FinishReason string        `json:"finish_reason"`
+	Usage        cohereUsage   `json:"usage"`
 }
 
 type cohereRespMsg struct {
@@ -81,8 +81,8 @@ type cohereContentBlock struct {
 }
 
 type cohereToolCall struct {
-	ID       string          `json:"id"`
-	Type     string          `json:"type"`
+	ID       string           `json:"id"`
+	Type     string           `json:"type"`
 	Function cohereToolFnCall `json:"function"`
 }
 
@@ -103,16 +103,16 @@ type cohereTokenCounts struct {
 
 // cohereStreamEvent is a single SSE event from the Cohere streaming API.
 type cohereStreamEvent struct {
-	Type         string `json:"type"`
-	ID           string `json:"id"`
-	Index        int    `json:"index"`
-	Delta        struct {
+	Type  string `json:"type"`
+	ID    string `json:"id"`
+	Index int    `json:"index"`
+	Delta struct {
 		Type         string `json:"type"`
 		Text         string `json:"text"`
 		FinishReason string `json:"finish_reason"`
 		ToolCall     *struct {
-			ID       string          `json:"id"`
-			Type     string          `json:"type"`
+			ID       string           `json:"id"`
+			Type     string           `json:"type"`
 			Function cohereToolFnCall `json:"function"`
 		} `json:"tool_call"`
 		Usage *cohereUsage `json:"usage"`

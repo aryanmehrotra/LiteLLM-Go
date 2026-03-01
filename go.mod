@@ -1,4 +1,4 @@
-module examples/llm-gateway
+module aryanmehrotra/llm-gateway
 
 go 1.25
 

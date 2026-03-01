@@ -11,12 +11,12 @@ import (
 	gofrHTTP "gofr.dev/pkg/gofr/http"
 	"gofr.dev/pkg/gofr/http/response"
 
-	"examples/llm-gateway/budget"
-	"examples/llm-gateway/cost"
-	"examples/llm-gateway/guardrails"
-	"examples/llm-gateway/middleware"
-	"examples/llm-gateway/models"
-	"examples/llm-gateway/provider"
+	"aryanmehrotra/llm-gateway/budget"
+	"aryanmehrotra/llm-gateway/cost"
+	"aryanmehrotra/llm-gateway/guardrails"
+	"aryanmehrotra/llm-gateway/middleware"
+	"aryanmehrotra/llm-gateway/models"
+	"aryanmehrotra/llm-gateway/provider"
 )
 
 // ChatCompletion handles POST /v1/chat/completions.

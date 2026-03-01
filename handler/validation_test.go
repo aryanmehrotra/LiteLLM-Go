@@ -4,7 +4,7 @@ import (
 	"strings"
 	"testing"
 
-	"examples/llm-gateway/models"
+	"aryanmehrotra/llm-gateway/models"
 )
 
 func TestValidateTools(t *testing.T) {

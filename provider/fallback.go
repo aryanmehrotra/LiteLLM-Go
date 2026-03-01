@@ -5,22 +5,22 @@ import (
 
 	"gofr.dev/pkg/gofr"
 
-	"examples/llm-gateway/models"
-	"examples/llm-gateway/routing"
+	"aryanmehrotra/llm-gateway/models"
+	"aryanmehrotra/llm-gateway/routing"
 )
 
 // contextWindowFallbacks maps models that hit token limits to larger-context alternatives.
 var contextWindowFallbacks = map[string]string{
-	"gpt-4o":                        "gpt-4-turbo",
-	"gpt-4o-mini":                   "gpt-4o",
-	"gpt-3.5-turbo":                 "gpt-4o",
-	"claude-haiku-4-20250414":       "claude-sonnet-4-20250514",
-	"claude-3-5-sonnet-20241022":    "claude-sonnet-4-20250514",
-	"gemini-2.0-flash-lite":         "gemini-2.0-flash",
-	"gemini-2.0-flash":              "gemini-1.5-pro",
-	"gemini-1.5-flash":              "gemini-1.5-pro",
-	"llama-3.1-8b-instant":          "llama-3.3-70b-versatile",
-	"deepseek-chat":                 "deepseek-reasoner",
+	"gpt-4o":                     "gpt-4-turbo",
+	"gpt-4o-mini":                "gpt-4o",
+	"gpt-3.5-turbo":              "gpt-4o",
+	"claude-haiku-4-20250414":    "claude-sonnet-4-20250514",
+	"claude-3-5-sonnet-20241022": "claude-sonnet-4-20250514",
+	"gemini-2.0-flash-lite":      "gemini-2.0-flash",
+	"gemini-2.0-flash":           "gemini-1.5-pro",
+	"gemini-1.5-flash":           "gemini-1.5-pro",
+	"llama-3.1-8b-instant":       "llama-3.3-70b-versatile",
+	"deepseek-chat":              "deepseek-reasoner",
 }
 
 // FallbackProvider tries multiple providers in sequence, falling through on errors.

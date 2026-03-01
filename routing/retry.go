@@ -6,7 +6,7 @@ import (
 	"math/rand/v2"
 	"time"
 
-	"examples/llm-gateway/models"
+	"aryanmehrotra/llm-gateway/models"
 )
 
 // RetryPolicy controls application-level retries with exponential backoff and jitter.

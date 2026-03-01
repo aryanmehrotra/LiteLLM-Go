@@ -10,7 +10,7 @@ import (
 	"github.com/google/uuid"
 	"gofr.dev/pkg/gofr"
 
-	"examples/llm-gateway/models"
+	"aryanmehrotra/llm-gateway/models"
 )
 
 const ollamaServiceName = "ollama"

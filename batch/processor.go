@@ -8,11 +8,11 @@ import (
 
 	"gofr.dev/pkg/gofr"
 
-	"examples/llm-gateway/cache"
-	"examples/llm-gateway/models"
-	"examples/llm-gateway/provider"
-	"examples/llm-gateway/routing"
-	"examples/llm-gateway/workerpool"
+	"aryanmehrotra/llm-gateway/cache"
+	"aryanmehrotra/llm-gateway/models"
+	"aryanmehrotra/llm-gateway/provider"
+	"aryanmehrotra/llm-gateway/routing"
+	"aryanmehrotra/llm-gateway/workerpool"
 )
 
 // DB abstracts the database operations needed by the batch processor.

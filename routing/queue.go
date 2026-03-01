@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"time"
 
-	"examples/llm-gateway/models"
+	"aryanmehrotra/llm-gateway/models"
 )
 
 // QueuedRequest represents a request waiting in the queue.

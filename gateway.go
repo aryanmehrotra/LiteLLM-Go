@@ -3,8 +3,8 @@ package main
 import (
 	"sync"
 
-	"examples/llm-gateway/provider"
-	"examples/llm-gateway/routing"
+	"aryanmehrotra/llm-gateway/provider"
+	"aryanmehrotra/llm-gateway/routing"
 )
 
 // Gateway provides thread-safe access to the registry and router,

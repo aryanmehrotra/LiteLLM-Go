@@ -8,7 +8,7 @@ import (
 
 	"gofr.dev/pkg/gofr"
 
-	"examples/llm-gateway/models"
+	"aryanmehrotra/llm-gateway/models"
 )
 
 const vertexServiceName = "vertex"

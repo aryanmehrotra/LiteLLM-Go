@@ -12,7 +12,7 @@ import (
 	"github.com/google/uuid"
 	"gofr.dev/pkg/gofr"
 
-	"examples/llm-gateway/models"
+	"aryanmehrotra/llm-gateway/models"
 )
 
 const bedrockServiceName = "bedrock"
@@ -56,10 +56,10 @@ func (*Bedrock) Models() []string {
 // --- Bedrock Converse API request/response types ---
 
 type bedrockRequest struct {
-	Messages       []bedrockMessage      `json:"messages"`
-	System         []bedrockSystemBlock  `json:"system,omitempty"`
+	Messages        []bedrockMessage     `json:"messages"`
+	System          []bedrockSystemBlock `json:"system,omitempty"`
 	InferenceConfig *bedrockInferCfg     `json:"inferenceConfig,omitempty"`
-	ToolConfig     *bedrockToolConfig    `json:"toolConfig,omitempty"`
+	ToolConfig      *bedrockToolConfig   `json:"toolConfig,omitempty"`
 }
 
 type bedrockMessage struct {
@@ -72,8 +72,8 @@ type bedrockSystemBlock struct {
 }
 
 type bedrockContentItem struct {
-	Text      string            `json:"text,omitempty"`
-	ToolUse   *bedrockToolUse   `json:"toolUse,omitempty"`
+	Text       string             `json:"text,omitempty"`
+	ToolUse    *bedrockToolUse    `json:"toolUse,omitempty"`
 	ToolResult *bedrockToolResult `json:"toolResult,omitempty"`
 }
 
@@ -110,9 +110,9 @@ type bedrockToolSpec struct {
 }
 
 type bedrockResponse struct {
-	Output    bedrockOutput `json:"output"`
-	StopReason string       `json:"stopReason"`
-	Usage     bedrockUsage  `json:"usage"`
+	Output     bedrockOutput `json:"output"`
+	StopReason string        `json:"stopReason"`
+	Usage      bedrockUsage  `json:"usage"`
 }
 
 type bedrockOutput struct {
@@ -364,7 +364,7 @@ func (b *Bedrock) sigV4Headers(method, host, uriPath string, body []byte) map[st
 
 	return map[string]string{
 		"Content-Type":         "application/json",
-		"X-Amz-Date":          amzDate,
+		"X-Amz-Date":           amzDate,
 		"X-Amz-Content-Sha256": bodyHash,
 		"Authorization":        authorization,
 	}

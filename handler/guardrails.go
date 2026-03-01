@@ -8,8 +8,8 @@ import (
 	gofrHTTP "gofr.dev/pkg/gofr/http"
 	"gofr.dev/pkg/gofr/http/response"
 
-	"examples/llm-gateway/audit"
-	"examples/llm-gateway/middleware"
+	"aryanmehrotra/llm-gateway/audit"
+	"aryanmehrotra/llm-gateway/middleware"
 )
 
 // GuardrailConfigRequest is the request body for guardrail config CRUD.
@@ -49,15 +49,15 @@ func (h *AdminHandler) ListGuardrails() gofr.Handler {
 			}
 
 			configs = append(configs, map[string]any{
-				"id":               id,
-				"key_hash":         nullStr(keyHash),
+				"id":                id,
+				"key_hash":          nullStr(keyHash),
 				"max_input_tokens":  maxIn,
 				"max_output_tokens": maxOut,
 				"blocked_keywords":  nullStr(keywords),
-				"pii_action":       nullStr(action),
-				"enabled":          enabled,
-				"created_at":       nullTime(createdAt),
-				"updated_at":       nullTime(updatedAt),
+				"pii_action":        nullStr(action),
+				"enabled":           enabled,
+				"created_at":        nullTime(createdAt),
+				"updated_at":        nullTime(updatedAt),
 			})
 		}
 
@@ -128,9 +128,9 @@ func (h *AdminHandler) UpsertGuardrail() gofr.Handler {
 		audit.Log(ctx, "upsert", "guardrail_config", fmt.Sprintf("%d", id), middleware.GetAuthKey(ctx), label)
 
 		return response.Raw{Data: map[string]any{
-			"id":      id,
-			"status":  "saved",
-			"scope":   label,
+			"id":     id,
+			"status": "saved",
+			"scope":  label,
 		}}, nil
 	}
 }

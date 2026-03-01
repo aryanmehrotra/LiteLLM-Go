@@ -6,7 +6,7 @@ import (
 
 	"gofr.dev/pkg/gofr"
 
-	"examples/llm-gateway/models"
+	"aryanmehrotra/llm-gateway/models"
 )
 
 // ChatProvider is the interface that routing uses for non-streaming completions.
@@ -26,12 +26,12 @@ type StreamChatProvider interface {
 // Router wraps retry + cooldown + strategy into a single call for chat completions.
 // Handlers call the Router instead of calling providers directly.
 type Router struct {
-	RetryPolicy    *RetryPolicy
-	Cooldown       *CooldownTracker
-	Strategy       Strategy
-	InFlight       *InFlightTracker
-	Latency        *LatencyTracker
-	Usage          *UsageTracker
+	RetryPolicy *RetryPolicy
+	Cooldown    *CooldownTracker
+	Strategy    Strategy
+	InFlight    *InFlightTracker
+	Latency     *LatencyTracker
+	Usage       *UsageTracker
 }
 
 // NewRouter creates a Router with the given components.

@@ -11,7 +11,7 @@ import (
 	"github.com/google/uuid"
 	"gofr.dev/pkg/gofr"
 
-	"examples/llm-gateway/models"
+	"aryanmehrotra/llm-gateway/models"
 )
 
 const anthropicServiceName = "anthropic"
@@ -190,10 +190,10 @@ type anthropicSSEEvent struct {
 		Name string `json:"name,omitempty"`
 	} `json:"content_block"`
 	Delta struct {
-		Type         string `json:"type"`
-		Text         string `json:"text"`
-		PartialJSON  string `json:"partial_json"`
-		StopReason   string `json:"stop_reason"`
+		Type        string `json:"type"`
+		Text        string `json:"text"`
+		PartialJSON string `json:"partial_json"`
+		StopReason  string `json:"stop_reason"`
 	} `json:"delta"`
 }
 

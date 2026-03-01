@@ -12,7 +12,7 @@ import (
 	"github.com/google/uuid"
 	"gofr.dev/pkg/gofr"
 
-	"examples/llm-gateway/models"
+	"aryanmehrotra/llm-gateway/models"
 )
 
 // OpenAICompatible is a shared base for providers that use the OpenAI API format.
@@ -39,7 +39,7 @@ func NewOpenAICompatible(name, serviceName, apiKey string, modelsList []string, 
 	}
 }
 
-func (o *OpenAICompatible) Name() string    { return o.providerName }
+func (o *OpenAICompatible) Name() string     { return o.providerName }
 func (o *OpenAICompatible) Models() []string { return o.modelList }
 
 // SetChatPath overrides the default "v1/chat/completions" path.

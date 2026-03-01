@@ -5,7 +5,7 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
-	"examples/llm-gateway/models"
+	"aryanmehrotra/llm-gateway/models"
 
 	"gofr.dev/pkg/gofr"
 )

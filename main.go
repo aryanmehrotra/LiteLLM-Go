@@ -10,17 +10,17 @@ import (
 	"gofr.dev/pkg/gofr"
 	"gofr.dev/pkg/gofr/service"
 
-	"examples/llm-gateway/batch"
-	"examples/llm-gateway/cache"
-	"examples/llm-gateway/cost"
-	"examples/llm-gateway/guardrails"
-	"examples/llm-gateway/handler"
-	"examples/llm-gateway/middleware"
-	"examples/llm-gateway/migrations"
-	"examples/llm-gateway/provider"
-	"examples/llm-gateway/routing"
-	"examples/llm-gateway/websearch"
-	"examples/llm-gateway/workerpool"
+	"aryanmehrotra/llm-gateway/batch"
+	"aryanmehrotra/llm-gateway/cache"
+	"aryanmehrotra/llm-gateway/cost"
+	"aryanmehrotra/llm-gateway/guardrails"
+	"aryanmehrotra/llm-gateway/handler"
+	"aryanmehrotra/llm-gateway/middleware"
+	"aryanmehrotra/llm-gateway/migrations"
+	"aryanmehrotra/llm-gateway/provider"
+	"aryanmehrotra/llm-gateway/routing"
+	"aryanmehrotra/llm-gateway/websearch"
+	"aryanmehrotra/llm-gateway/workerpool"
 )
 
 func main() {
