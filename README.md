@@ -13,6 +13,10 @@ A drop-in [LiteLLM](https://github.com/BerriAI/litellm) alternative built on [Go
 
 [Quick Start](#quick-start) · [API Reference](#api-reference) · [Configuration](#configuration) · [Admin UI](#admin-dashboard) · [Comparison](#feature-comparison-llm-gateway-vs-litellm)
 
+<br>
+
+<img src="https://github.com/user-attachments/assets/83f4741a-7d02-46da-af32-57656c5b9b1f" alt="LLM Gateway Admin Dashboard" width="100%">
+
 </div>
 
 ---
@@ -30,28 +34,28 @@ A drop-in [LiteLLM](https://github.com/BerriAI/litellm) alternative built on [Go
 ## Architecture
 
 ```
-                    ┌─────────────────────────────────────────────────────┐
-                    │                 LLM Gateway                         │
-                    │                                                     │
- ┌─────────┐       │  ┌──────────┐   ┌────────┐   ┌──────────────┐      │       ┌──────────┐
- │  Client  │──────▶│  │Middleware│──▶│ Router │──▶│   Provider   │──────│──────▶│  OpenAI  │
- │ (OpenAI  │       │  │(Auth,   │   │(Retry, │   │  (Translate, │      │       ├──────────┤
- │  SDK)    │◀──────│  │ Rate    │   │Cooldown│   │   Stream,    │      │       │Anthropic │
- └─────────┘       │  │ Limit,  │   │Strategy│   │   Fallback)  │──────│──────▶├──────────┤
-                    │  │ Guard-  │   └────┬───┘   └──────────────┘      │       │  Gemini  │
- ┌─────────┐       │  │ rails)  │        │              │               │       ├──────────┤
- │  Admin   │──────▶│  └────┬───┘   ┌────▼────┐   ┌────▼─────┐        │       │  Groq    │
- │   UI     │       │       │       │Trackers │   │  Cache   │        │       ├──────────┤
- └─────────┘       │  ┌────▼───┐   │(InFlight│   │ (Redis)  │        │       │DeepSeek  │
-                    │  │KeyStore│   │Latency, │   └──────────┘        │       ├──────────┤
-                    │  │(In-Mem)│   │ Usage)  │        │               │       │  Ollama  │
-                    │  └────┬───┘   └─────────┘   ┌────▼─────┐        │       └──────────┘
-                    │  ┌────▼──────────────────┐   │  Budget  │        │
-                    │  │  PostgreSQL            │   │ Tracking │        │
-                    │  │  (Keys, Teams, Audit,  │   └──────────┘        │
-                    │  │   Guardrails, Batches) │                       │
-                    │  └───────────────────────┘                       │
-                    └─────────────────────────────────────────────────────┘
+              ┌──────────────────────────────────────────────────────┐
+              │                    LLM Gateway                       │
+              │                                                      │
+┌──────────┐  │  ┌──────────┐   ┌──────────┐   ┌──────────────┐      │  ┌──────────┐
+│  Client  │──│─▶│Middleware│──▶│  Router  │──▶│   Provider   │───── │─▶│  OpenAI  │
+│ (OpenAI  │  │  │  (Auth,  │   │ (Retry,  │   │ (Translate,  │      │  ├──────────┤
+│  SDK)    │◀─│──│  Rate    │   │ Cooldown,│   │   Stream,    │───── │─▶│Anthropic │
+└──────────┘  │  │  Limit,  │   │ Strategy)│   │   Fallback)  │      │  ├──────────┤
+              │  │  Guard-  │   └─────┬────┘   └──────────────┘      │  │  Gemini  │
+┌─────────┐   │  │  rails)  │         │               │              │  ├──────────┤
+│  Admin   │──│─▶└─────┬────┘    ┌────▼─────┐     ┌────▼─────┐       │  │   Groq   │
+│   UI     │  │        │         │ Trackers │     │  Cache   │       │  ├──────────┤
+└─────────┘   │  ┌─────▼────┐    │(InFlight,│     │ (Redis)  │       │  │ DeepSeek │
+              │  │ KeyStore │    │ Latency, │     └──────────┘       │  ├──────────┤
+              │  │ (In-Mem) │    │  Usage)  │          │             │  │  Ollama  │
+              │  └─────┬────┘    └──────────┘     ┌────▼─────┐       │  └──────────┘
+              │  ┌─────▼───────────────────┐      │  Budget  │       │
+              │  │      PostgreSQL         │      │ Tracking │       │
+              │  │ (Keys, Teams, Audit,    │      └──────────┘       │
+              │  │  Guardrails, Batches)   │                         │
+              │  └─────────────────────────┘                         │
+              └──────────────────────────────────────────────────────┘
 ```
 
 ---
@@ -146,8 +150,43 @@ Built-in single-page admin UI at `/admin` — no separate frontend deployment ne
 - **Spend** — cost breakdown by model, provider, or team
 - **Batches** — monitor batch jobs, view progress, cancel or inspect results
 - **Guardrails** — configuration reference for env vars and per-key overrides
+- **Playground** — test API calls directly from your browser
+- **API Docs** — complete built-in documentation with examples
+- **Settings** — view and manage provider configuration, routing, and security
 
-Authenticate with your master key. Static assets are served directly by GoFr.
+Authenticate with your master key or a virtual key. Static assets are served directly by GoFr.
+
+#### 🔑 Virtual Keys
+
+<img src="https://github.com/user-attachments/assets/2eb3082e-183a-4289-987a-8ebe75730e76" alt="Virtual Keys" width="100%">
+
+#### 💰 Spend & Usage
+
+<img src="https://github.com/user-attachments/assets/d8f7810d-faaa-436e-a6a3-cb9d6adde408" alt="Spend & Usage" width="100%">
+
+<details>
+<summary><strong>🔐 Login</strong></summary>
+<br>
+<img src="https://github.com/user-attachments/assets/30dc1476-a0be-4fe8-99c9-cf24320fe333" alt="Login" width="100%">
+</details>
+
+<details>
+<summary><strong>🛝 Playground</strong></summary>
+<br>
+<img src="https://github.com/user-attachments/assets/598f10fa-d730-4e2a-bbe5-8a3841cd087f" alt="Playground" width="100%">
+</details>
+
+<details>
+<summary><strong>📖 API Docs</strong></summary>
+<br>
+<img src="https://github.com/user-attachments/assets/d989fc87-6583-42de-a9e7-7c32358e6813" alt="API Docs" width="100%">
+</details>
+
+<details>
+<summary><strong>⚙️ Settings</strong></summary>
+<br>
+<img src="https://github.com/user-attachments/assets/990bb9a3-bed4-439f-8f26-b9f416ab7b62" alt="Settings" width="100%">
+</details>
 
 ### Observability (GoFr Built-in)
 
@@ -491,6 +530,14 @@ The gateway ships with a pre-configured Grafana dashboard (54 panels) auto-provi
 
 Access at http://localhost:3000 after starting Docker Compose (login: admin/admin).
 
+<img src="https://github.com/user-attachments/assets/b9b4573d-3cfa-4f86-9c01-15cfeeb2e34b" alt="Grafana Dashboard — App Info, System Metrics & Inbound Requests" width="100%">
+
+<details>
+<summary><strong>📊 Request Routing & HTTP Metrics</strong></summary>
+<br>
+<img src="https://github.com/user-attachments/assets/a6f28c09-9f0a-4ffa-b3e7-0379d93f4342" alt="Grafana — Inbound Request Routing & Response Codes" width="100%">
+</details>
+
 ---
 
 ## Feature Comparison: LLM Gateway vs LiteLLM
@@ -685,7 +732,3 @@ docker build -t llm-gateway -f docker/Dockerfile .
 ```
 
 ---
-
-## License
-
-Part of the [GoFr](https://gofr.dev) examples collection.
