@@ -27,12 +27,29 @@ func (h *AdminHandler) Settings(cfg *SettingsConfig) gofr.Handler {
 		dbProviders := loadProviderConfigsFromDB(ctx)
 
 		providerStatus := map[string]any{
-			"openai":    map[string]any{"configured": isConfigured(get("OPENAI_API_KEY", ""), dbProviders["openai"]), "base_url": get("OPENAI_BASE_URL", "https://api.openai.com"), "timeout_ms": get("OPENAI_TIMEOUT_MS", "0")},
-			"anthropic": map[string]any{"configured": isConfigured(get("ANTHROPIC_API_KEY", ""), dbProviders["anthropic"]), "timeout_ms": get("ANTHROPIC_TIMEOUT_MS", "0")},
-			"groq":      map[string]any{"configured": isConfigured(get("GROQ_API_KEY", ""), dbProviders["groq"]), "timeout_ms": get("GROQ_TIMEOUT_MS", "0")},
-			"deepseek":  map[string]any{"configured": isConfigured(get("DEEPSEEK_API_KEY", ""), dbProviders["deepseek"]), "timeout_ms": get("DEEPSEEK_TIMEOUT_MS", "0")},
-			"gemini":    map[string]any{"configured": isConfigured(get("GEMINI_API_KEY", ""), dbProviders["gemini"]), "timeout_ms": get("GEMINI_TIMEOUT_MS", "0")},
-			"ollama":    map[string]any{"configured": true, "base_url": get("OLLAMA_BASE_URL", "http://localhost:11434"), "timeout_ms": get("OLLAMA_TIMEOUT_MS", "0")},
+			"openai":      map[string]any{"configured": isConfigured(get("OPENAI_API_KEY", ""), dbProviders["openai"]), "base_url": get("OPENAI_BASE_URL", "https://api.openai.com"), "timeout_ms": get("OPENAI_TIMEOUT_MS", "0")},
+			"anthropic":   map[string]any{"configured": isConfigured(get("ANTHROPIC_API_KEY", ""), dbProviders["anthropic"]), "timeout_ms": get("ANTHROPIC_TIMEOUT_MS", "0")},
+			"groq":        map[string]any{"configured": isConfigured(get("GROQ_API_KEY", ""), dbProviders["groq"]), "timeout_ms": get("GROQ_TIMEOUT_MS", "0")},
+			"deepseek":    map[string]any{"configured": isConfigured(get("DEEPSEEK_API_KEY", ""), dbProviders["deepseek"]), "timeout_ms": get("DEEPSEEK_TIMEOUT_MS", "0")},
+			"gemini":      map[string]any{"configured": isConfigured(get("GEMINI_API_KEY", ""), dbProviders["gemini"]), "timeout_ms": get("GEMINI_TIMEOUT_MS", "0")},
+			"ollama":      map[string]any{"configured": true, "base_url": get("OLLAMA_BASE_URL", "http://localhost:11434"), "timeout_ms": get("OLLAMA_TIMEOUT_MS", "0")},
+			"togetherai":  map[string]any{"configured": isConfigured(get("TOGETHER_API_KEY", ""), dbProviders["togetherai"]), "timeout_ms": get("TOGETHER_TIMEOUT_MS", "0")},
+			"fireworks":   map[string]any{"configured": isConfigured(get("FIREWORKS_API_KEY", ""), dbProviders["fireworks"]), "timeout_ms": get("FIREWORKS_TIMEOUT_MS", "0")},
+			"perplexity":  map[string]any{"configured": isConfigured(get("PERPLEXITY_API_KEY", ""), dbProviders["perplexity"]), "timeout_ms": get("PERPLEXITY_TIMEOUT_MS", "0")},
+			"xai":         map[string]any{"configured": isConfigured(get("XAI_API_KEY", ""), dbProviders["xai"]), "timeout_ms": get("XAI_TIMEOUT_MS", "0")},
+			"mistral":     map[string]any{"configured": isConfigured(get("MISTRAL_API_KEY", ""), dbProviders["mistral"]), "timeout_ms": get("MISTRAL_TIMEOUT_MS", "0")},
+			"cohere":      map[string]any{"configured": isConfigured(get("COHERE_API_KEY", ""), dbProviders["cohere"]), "timeout_ms": get("COHERE_TIMEOUT_MS", "0")},
+			"azure":       map[string]any{"configured": isConfigured(get("AZURE_OPENAI_API_KEY", ""), dbProviders["azure"]), "timeout_ms": get("AZURE_TIMEOUT_MS", "0")},
+			"bedrock":     map[string]any{"configured": isConfigured(get("AWS_ACCESS_KEY_ID", ""), dbProviders["bedrock"]), "timeout_ms": get("BEDROCK_TIMEOUT_MS", "0")},
+			"cerebras":    map[string]any{"configured": isConfigured(get("CEREBRAS_API_KEY", ""), dbProviders["cerebras"]), "timeout_ms": get("CEREBRAS_TIMEOUT_MS", "0")},
+			"sambanova":   map[string]any{"configured": isConfigured(get("SAMBANOVA_API_KEY", ""), dbProviders["sambanova"]), "timeout_ms": get("SAMBANOVA_TIMEOUT_MS", "0")},
+			"ai21":        map[string]any{"configured": isConfigured(get("AI21_API_KEY", ""), dbProviders["ai21"]), "timeout_ms": get("AI21_TIMEOUT_MS", "0")},
+			"openrouter":  map[string]any{"configured": isConfigured(get("OPENROUTER_API_KEY", ""), dbProviders["openrouter"]), "timeout_ms": get("OPENROUTER_TIMEOUT_MS", "0")},
+			"novita":      map[string]any{"configured": isConfigured(get("NOVITA_API_KEY", ""), dbProviders["novita"]), "timeout_ms": get("NOVITA_TIMEOUT_MS", "0")},
+			"nvidia":      map[string]any{"configured": isConfigured(get("NVIDIA_API_KEY", ""), dbProviders["nvidia"]), "timeout_ms": get("NVIDIA_TIMEOUT_MS", "0")},
+			"cloudflare":  map[string]any{"configured": isConfigured(get("CLOUDFLARE_API_TOKEN", ""), dbProviders["cloudflare"]), "timeout_ms": get("CLOUDFLARE_TIMEOUT_MS", "0")},
+			"vertex":      map[string]any{"configured": isConfigured(get("VERTEX_PROJECT", ""), dbProviders["vertex"]), "timeout_ms": get("VERTEX_TIMEOUT_MS", "0")},
+			"huggingface": map[string]any{"configured": isConfigured(get("HUGGINGFACE_API_KEY", ""), dbProviders["huggingface"]), "timeout_ms": get("HUGGINGFACE_TIMEOUT_MS", "0")},
 		}
 
 		settings := map[string]any{
