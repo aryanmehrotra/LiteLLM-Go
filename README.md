@@ -27,7 +27,7 @@ A drop-in [LiteLLM](https://github.com/BerriAI/litellm) alternative built on [Go
 - **~15 MB memory** — vs ~200 MB+ for Python-based proxies.
 - **< 100 ms startup** — vs 3-5 seconds for LiteLLM.
 - **Batteries included** — routing, retries, circuit breakers, caching, guardrails, budgets, virtual keys, batch API, and admin UI in one binary.
-- **OpenAI-compatible** — swap `base_url` in any OpenAI SDK and go.
+- **OpenAI-compatible** — swap `base_url` in any OpenAI SDK.
 
 ---
 
@@ -44,8 +44,8 @@ A drop-in [LiteLLM](https://github.com/BerriAI/litellm) alternative built on [Go
 └──────────┘  │  │  Limit,  │   │ Strategy)│   │   Fallback)  │      │  ├──────────┤
               │  │  Guard-  │   └─────┬────┘   └──────────────┘      │  │  Gemini  │
 ┌─────────┐   │  │  rails)  │         │               │              │  ├──────────┤
-│  Admin   │──│─▶└─────┬────┘    ┌────▼─────┐     ┌────▼─────┐       │  │   Groq   │
-│   UI     │  │        │         │ Trackers │     │  Cache   │       │  ├──────────┤
+│  Admin  │───│─▶└─────┬────┘    ┌────▼─────┐     ┌────▼─────┐       │  │   Groq   │
+│   UI    │   │        │         │ Trackers │     │  Cache   │       │  ├──────────┤
 └─────────┘   │  ┌─────▼────┐    │(InFlight,│     │ (Redis)  │       │  │ DeepSeek │
               │  │ KeyStore │    │ Latency, │     └──────────┘       │  ├──────────┤
               │  │ (In-Mem) │    │  Usage)  │          │             │  │  Ollama  │
